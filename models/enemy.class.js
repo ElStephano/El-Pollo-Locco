@@ -1,4 +1,4 @@
-class Enemy extends MovableObject{
+class Enemy extends MovableObject {
     height = 90
     width = 90
     y = 330
@@ -19,10 +19,10 @@ class Enemy extends MovableObject{
     animate() {
         setInterval(() => {
             this.moveLeft()
-            let i = this.currentImage % this.IMAGES_WALKING.length
-            let path = this.IMAGES_WALKING[i]
-            this.img = this.imageCache[path]
-            this.currentImage++
+        }, 1000 / 60)
+
+        setInterval(() => {
+            this.playAnimation(this.IMAGES_WALKING)
         }, 200);
     }
 }

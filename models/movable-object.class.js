@@ -10,47 +10,99 @@ class MovableObject {
     otherDirection = false
     speedY = 0
     accelaration = 1
-    
+    lastHit = 0
+
+
     applyGravity() {
         setInterval(() => {
-            if(this.isAboveGround()) {
-            this.y -= this.speedY
-            this.speedY -= this.accelaration
+            if (this.isAboveGround() || this.speedY > 0) {
+                this.y -= this.speedY
+                this.speedY -= this.accelaration
             }
-        }, 1000/25) 
+        }, 1000 / 25)
     }
 
+
     isAboveGround() {
-        return  this.y < 165
+        return this.y < 165
     }
+
 
     loadImage(path) {
         this.img = new Image()
         this.img.src = path
     }
 
+
     loadImages(arr) {
         arr.forEach((path) => {
-        let img = new Image()
-        img.src = path
-        this.imageCache[path] = img
+            let img = new Image()
+            img.src = path
+            this.imageCache[path] = img
         })
     }
 
-    moveRight() {
-    
+
+    draw(ctx) {
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
+
+
+    drawFrame(ctx) {
+        if (this instanceof Character || this instanceof Enemy) {
+            ctx.beginPath()
+            ctx.lineWidth = '1'
+            ctx.strokeStyle = 'blue'
+            ctx.rect(this.x, this.y, this.width, this.height)
+            ctx.stroke()
+        }
+    }
+
+
+    isColliding(mo) {
+        return this.x + this.width > mo.x &&
+            this.y + this.height > mo.y &&
+            this.x < mo.x + mo.width &&
+            this.y < mo.y + mo.height
+    }
+
+
+    moveRight() {
+        this.x += this.speed
+    }
+
 
     moveLeft() {
-        setInterval(() => {
-            this.x -= this.speed
-            }, 1000/60)
+        this.x -= this.speed
     }
 
+
     playAnimation(images) {
-        let i = this.currentImage % this.IMAGES_WALKING.length
+        let i = this.currentImage % images.length
         let path = images[i]
         this.img = this.imageCache[path]
         this.currentImage++
+    }
+
+
+    hit() {
+        this.energy -= 10;
+        if (this.energy < 0) {
+            this.energy = 0;
+        } else {
+            this.lastHit = new Date().getTime()
+        }
+    }
+
+
+    isDead() {
+        return this.energy == 0;
+    }
+
+    
+    isHurt() {
+        let timePassed = new Date().getTime() - this.lastHit
+        timePassed = timePassed / 1000
+        return timePassed < 1;
     }
 }
