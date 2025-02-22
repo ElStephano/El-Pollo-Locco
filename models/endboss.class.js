@@ -14,10 +14,18 @@ class Endboss extends MovableObject {
         '../img/4_enemie_boss_chicken/2_alert/G12.png'
     ]
 
+    offset = {
+        'top': 80,
+        'right': 40,
+        'bottom':100,
+        'left': 20
+    }
+
+
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0])
         this.loadImages(this.IMAGES_WALKING)
-        this.x = 2450
+        this.x = 1000
         this.animate()
     }
 

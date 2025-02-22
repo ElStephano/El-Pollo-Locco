@@ -5,8 +5,21 @@ class World {
     canvas
     keyboard
     camera_x = 0
-    statusBar = new StatusBar()
-    bottleStatusBar = new BottleStatusBar()
+    healthStatusBar = new StatusbarHealth()
+    bottleStatusBar = new StatusBarBottle()
+    coinStatusBar = new StatusBarCoin()
+    collectibleObject = [
+        new CollectibleBottles(),
+        new CollectibleBottles(),
+        new CollectibleBottles(),
+        new CollectibleBottles(),
+        new Coins(),
+        new Coins(),
+        new Coins(),
+        new Coins()
+    ]
+    throwableObjects = []
+
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d')
@@ -14,7 +27,7 @@ class World {
         this.keyboard = keyboard
         this.draw()
         this.setWorld()
-        this.checkCollisions()
+        this.run()
     }
 
     setWorld() {
@@ -22,15 +35,29 @@ class World {
     }
 
 
-    checkCollisions() {
-        setInterval(() => {
-            this.level.enemies.forEach((enemy) => {
-                if(this.character.isColliding(enemy)) {
-                    this.character.hit()
-                    this.statusBar.setPercentage(this.character.energy)
-                }
-            })
-    }, 1000)
+    run() {
+        setInterval(() => { 
+            this.checkColissions()
+            this.checkThrowObjects()
+        }, 500)
+    }
+
+
+    checkThrowObjects() {
+        if(this.keyboard.SPACE) {
+            let bottle = new ThrowableObject(this.character.x, this.character.y)
+            this.throwableObjects.push(bottle)
+        }
+    }
+
+
+    checkColissions() {
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy)) {
+                this.character.hit()
+                this.healthStatusBar.setPercentage(this.character.energy)
+            }
+        })
     }
 
 
@@ -41,12 +68,14 @@ class World {
         this.addObjectsToMap(this.level.backgroundObjects)
 
         this.ctx.translate(-this.camera_x, 0)
-        this.addToMap(this.statusBar)
+        this.addToMap(this.healthStatusBar)
+        this.addToMap(this.bottleStatusBar)
+        this.addToMap(this.coinStatusBar)   
         this.ctx.translate(this.camera_x, 0)
 
-        this.ctx.translate(-this.camera_x, 0)
-        this.addToMap(this.bottleStatusBar)
-        this.ctx.translate(this.camera_x, 0)
+        this.addObjectsToMap(this.collectibleObject)
+
+        this.addObjectsToMap(this.throwableObjects)
 
         this.addObjectsToMap(this.level.clouds)
         this.addObjectsToMap(this.level.enemies)
@@ -54,41 +83,42 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0)
 
-        
+
         let self = this;
-        requestAnimationFrame(function() {
+        requestAnimationFrame(function () {
             self.draw();
         });
+    }
+
+    addToMap(mo) {
+        if (mo.otherDirection) {
+            this.flipImage(mo)
         }
 
-        addToMap(mo) {
-            if(mo.otherDirection) {
-                this.flipImage(mo)
-            }
+        mo.draw(this.ctx)
+        mo.drawFrame(this.ctx)
+        mo.drawInnerFrame(this.ctx)
 
-            mo.draw(this.ctx)
-            mo.drawFrame(this.ctx)
+        if (mo.otherDirection) {
+            this.flipImageBack(mo)
+        }
+    }
 
-            if(mo.otherDirection) {
-                this.flipImageBack(mo)
-            }
-        }
-        
-        flipImage(mo) {
-            this.ctx.save()
-            this.ctx.translate(mo.width, 0)
-            this.ctx.scale(-1, 1)
-            mo.x = mo.x * -1
-        }
+    flipImage(mo) {
+        this.ctx.save()
+        this.ctx.translate(mo.width, 0)
+        this.ctx.scale(-1, 1)
+        mo.x = mo.x * -1
+    }
 
-        flipImageBack(mo) {
-            this.ctx.restore()
-            mo.x = mo.x * -1
-        }
+    flipImageBack(mo) {
+        this.ctx.restore()
+        mo.x = mo.x * -1
+    }
 
-        addObjectsToMap(objects) {
-            objects.forEach(o => {
-                this.addToMap(o)
-            })
-        }
+    addObjectsToMap(objects) {
+        objects.forEach(o => {
+            this.addToMap(o)
+        })
+    }
 }

@@ -1,4 +1,4 @@
-class BottleStatusBar extends DrawableObject {
+class StatusBarBottle extends StatusBar {
     IMAGES_BOTTLE = [
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/0.png',
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/20.png',
@@ -9,39 +9,36 @@ class BottleStatusBar extends DrawableObject {
     ]
 
 
-    percentage = 100
+    bottleAmount = 1
 
 
     constructor() {
         super()
         this.loadImages(this.IMAGES_BOTTLE)
-        this.x = 280
-        this.y = 0
-        this.width = 200
-        this.height = 50
-        this.setPercentage(this.percentage)
+        this.x = 270
+        this.setBottleAmount(this.bottleAmount)
     }
 
 
-    setPercentage(percentage) {
-        this.percentage = percentage
+    setBottleAmount(amount) {
+        this.bottleAmount = amount
         let path = this.IMAGES_BOTTLE[this.resolveImageIndex()]
         this.img = this.imageCache[path]
     }
 
 
     resolveImageIndex() {
-        if (this.percentage == 100) {
+        if (this.bottleAmount == 10 || this.bottleAmount == 9) {
             return 5
-        } else if (this.percentage > 80) {
+        } else if (this.bottleAmount == 8 || this.bottleAmount == 7) {
             return 4
-        } else if (this.percentage > 60) {
+        } else if (this.bottleAmount == 6 || this.bottleAmount == 5) {
             return 3
-        } else if (this.percentage > 40) {
+        } else if (this.bottleAmount == 4 || this.bottleAmount == 3) {
             return 2
-        } else if (this.percentage > 20) {
+        } else if (this.bottleAmount == 2 || this.bottleAmount == 1) {
             return 1
-        } else {
+        } else if (this.bottleAmount > 1) {
             return 0
         }
     }

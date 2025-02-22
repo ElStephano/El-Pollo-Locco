@@ -1,4 +1,4 @@
-class MovableObject extends DrawableObject{
+class MovableObject extends DrawableObject {
     speed = 0.15
     otherDirection = false
     speedY = 0
@@ -17,15 +17,19 @@ class MovableObject extends DrawableObject{
 
 
     isAboveGround() {
-        return this.y < 165
+        if (this instanceof ThrowableObject) {
+            return true
+        } else {
+            return this.y < 165
+        }
     }
 
 
     isColliding(mo) {
-        return this.x + this.width > mo.x &&
-            this.y + this.height > mo.y &&
-            this.x < mo.x + mo.width &&
-            this.y < mo.y + mo.height
+        return this.x + this.width - this.offset.left > mo.x + mo.offset.left &&      // enemy = mo
+            this.y + this.height - 10 > mo.y + mo.offset.left &&
+            this.x + this.offset.left < mo.x + mo.width - mo.offset.left &&
+            this.y + this.offset.top < mo.y + mo.height + this.offset.top
     }
 
 
@@ -61,10 +65,15 @@ class MovableObject extends DrawableObject{
         return this.energy == 0;
     }
 
-    
+
     isHurt() {
         let timePassed = new Date().getTime() - this.lastHit
         timePassed = timePassed / 1000
         return timePassed < 1;
     }
+
+
+    // throwBottle() {
+    //     throwAble = new ThrowableObject
+    // }
 }

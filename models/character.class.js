@@ -2,6 +2,17 @@ class Character extends MovableObject {
     height = 260
     width = 125
     y = 165
+    world
+    speed = 10
+    energy = 100
+
+    offset = {
+        'top': 120,
+        'right': 40,
+        'bottom': 130,
+        'left': 20
+    }
+
     IMAGES_WALKING = [
         '../img/2_character_pepe/2_walk/W-21.png',
         '../img/2_character_pepe/2_walk/W-22.png',
@@ -35,9 +46,7 @@ class Character extends MovableObject {
         'img/2_character_pepe/4_hurt/H-42.png',
         'img/2_character_pepe/4_hurt/H-43.png'
     ]
-    world
-    speed = 10
-    energy = 100
+
 
     constructor() {
         super().loadImage('../img/2_character_pepe/2_walk/W-21.png')
@@ -60,9 +69,13 @@ class Character extends MovableObject {
                 this.otherDirection = true
             }
 
-            if(this.world.keyboard.SPACE && !this.isAboveGround()) {
+            if(this.world.keyboard.UP && !this.isAboveGround()) {
                 this.jump()
             }
+
+            // if(this.world.keyboard.SPACE) {
+            //     this.throwBottle()
+            // }
 
             this.world.camera_x = -this.x + 100
         }, 1000 / 60)
@@ -81,6 +94,7 @@ class Character extends MovableObject {
             }
         }, 50);
     }
+
 
     jump() {
         this.speedY = 20
