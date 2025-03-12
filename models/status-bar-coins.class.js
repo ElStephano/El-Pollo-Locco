@@ -9,12 +9,15 @@ class StatusBarCoin extends StatusBar {
     ]
 
 
+    coinAmount = 1
+
+
     constructor () {
         super()
         this.loadImages(this.IMAGES_COIN_STATUSBAR)
         this.x = 500
-        this.setCoins(4)
-        this.coinAmount 
+        this.setCoins(0)
+
     }
 
 

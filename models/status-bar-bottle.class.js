@@ -9,7 +9,7 @@ class StatusBarBottle extends StatusBar {
     ]
 
 
-    bottleAmount = 1
+    bottleAmount = 3
 
 
     constructor() {
@@ -24,11 +24,12 @@ class StatusBarBottle extends StatusBar {
         this.bottleAmount = amount
         let path = this.IMAGES_BOTTLE[this.resolveImageIndex()]
         this.img = this.imageCache[path]
+
     }
 
 
     resolveImageIndex() {
-        if (this.bottleAmount == 10 || this.bottleAmount == 9) {
+        if (this.bottleAmount >= 9) {
             return 5
         } else if (this.bottleAmount == 8 || this.bottleAmount == 7) {
             return 4
@@ -36,9 +37,9 @@ class StatusBarBottle extends StatusBar {
             return 3
         } else if (this.bottleAmount == 4 || this.bottleAmount == 3) {
             return 2
-        } else if (this.bottleAmount == 2 || this.bottleAmount == 1) {
+        } else if (this.bottleAmount == 1 || this.bottleAmount == 2) {
             return 1
-        } else if (this.bottleAmount > 1) {
+        } else if (this.bottleAmount == 0) {
             return 0
         }
     }

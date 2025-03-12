@@ -20,7 +20,7 @@ class DrawableObject {
 
 
     drawFrame(ctx) {
-        if (this instanceof Enemy || this instanceof CollectibleObject || this instanceof Character || this instanceof Endboss) {
+        if (this instanceof Enemy || this instanceof CollectibleObject || this instanceof Character || this instanceof Endboss || this instanceof ThrowableObject) {
             ctx.beginPath()
             ctx.lineWidth = '1'
             ctx.strokeStyle = 'blue'
@@ -37,7 +37,13 @@ class DrawableObject {
             this.drawInnerRectEnemyOrCollectible(ctx);
         } else if (this instanceof Endboss) {
             this.drawInnerRectEndboss(ctx);
+        } else if (this instanceof ThrowableObject) {
+            this.drawInnerRectThrowableObject(ctx);
         }
+    }
+
+    drawInnerRectThrowableObject(ctx) {
+        this.drawRedRect(ctx)
     }
 
 
@@ -71,10 +77,10 @@ class DrawableObject {
 
 
     loadImages(arr) {
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path
-            this.imageCache[path] = img
+        arr.forEach((path) => {                 //für jedes Bild aus dem Array der loadImages(Bilder)
+            let img = new Image()               //ein neues IMG wird erstellt
+            img.src = path                      //dem img wird der pfad(URL) zugewiesen
+            this.imageCache[path] = img         //speichert das geladene 
         })
     }
 }

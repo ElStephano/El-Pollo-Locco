@@ -4,10 +4,17 @@ class MovableObject extends DrawableObject {
     speedY = 0
     accelaration = 1
     lastHit = 0
+    gravityInterval = 0
+    currentJumpingImage = 0
+    isJumping = false
+    endbossIntervals = []
+    startEndboss = false
+    isEndbossWalking = false
+    singleRunAnimation = false
 
 
     applyGravity() {
-        setInterval(() => {
+        this.gravityInterval = setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY
                 this.speedY -= this.accelaration
@@ -19,8 +26,10 @@ class MovableObject extends DrawableObject {
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return true
-        } else {
+        } else if (this instanceof Character) {
             return this.y < 165
+        } else {
+            return this.y < 40
         }
     }
 
@@ -62,7 +71,7 @@ class MovableObject extends DrawableObject {
 
 
     isDead() {
-        return this.energy == 0;
+        return this.energy === 0;
     }
 
 
@@ -73,7 +82,7 @@ class MovableObject extends DrawableObject {
     }
 
 
-    // throwBottle() {
-    //     throwAble = new ThrowableObject
-    // }
+    isAlive() {
+        return this.energy > 0
+    }
 }

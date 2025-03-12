@@ -4,7 +4,9 @@ class Character extends MovableObject {
     y = 165
     world
     speed = 10
-    energy = 100
+    energy = 1000
+    isJumping = false
+
 
     offset = {
         'top': 120,
@@ -68,35 +70,62 @@ class Character extends MovableObject {
                 this.moveLeft()
                 this.otherDirection = true
             }
-
-            if(this.world.keyboard.UP && !this.isAboveGround()) {
+            if (this.world.keyboard.UP && this.isJumping === false) {
                 this.jump()
             }
-
-            // if(this.world.keyboard.SPACE) {
-            //     this.throwBottle()
-            // }
-
+            
+            if(this.x === 1500) {
+                let endbossIndex = this.world.level.enemies.length - 1
+                let endboss = this.world.level.enemies[endbossIndex]
+                endboss.startEndboss = true
+            }
             this.world.camera_x = -this.x + 100
-        }, 1000 / 60)
+        }, 1000 / 30);
 
         setInterval(() => {
-            if(this.isDead()) {
+            if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
-            } else if (this.isHurt()){
+            } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT)
-            } else if (this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_JUMPING)
-            } else {
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+            }  else {
+
+                if (this.isJumping === true) {
+                    this.playSingleJumpAnimation(this.IMAGES_JUMPING) 
+                }
+                if (this.world.keyboard.RIGHT && !this.isAboveGround() || this.world.keyboard.LEFT && !this.isAboveGround()) {
                     this.playAnimation(this.IMAGES_WALKING)
                 }
             }
-        }, 50);
+        }, 150);
+    }
+
+
+    playSingleJumpAnimation(images) {
+        if (this.currentImage < images.length) {
+            this.singleJumpingFrames(images)
+        } else if (!this.isAboveGround()) {
+            this.resetJumpAnimation()
+        }
+    }
+
+
+    singleJumpingFrames(images){
+        let path = images[this.currentImage]
+        this.img = this.imageCache[path]
+        this.currentImage++
+    }
+
+
+    resetJumpAnimation() {
+        this.isJumping = false
+        this.currentImage = 0
     }
 
 
     jump() {
         this.speedY = 20
+        if (this.isJumping === false) {
+            this.isJumping = true
+        }
     }
 }
