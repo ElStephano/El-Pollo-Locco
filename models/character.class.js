@@ -4,7 +4,7 @@ class Character extends MovableObject {
     y = 165
     world
     speed = 10
-    energy = 1000
+    energy = 100
     isJumping = false
 
 
@@ -61,55 +61,87 @@ class Character extends MovableObject {
     }
 
     animate() {
-        setInterval(() => {
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+        let moveInterval = setInterval(() => {
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.isAlive()) {
                 this.moveRight()
                 this.otherDirection = false
             }
-            if (this.world.keyboard.LEFT && this.x > 0) {
+            if (this.world.keyboard.LEFT && this.x > 0 && this.isAlive()) {
                 this.moveLeft()
                 this.otherDirection = true
             }
-            if (this.world.keyboard.UP && this.isJumping === false) {
+            if (this.world.keyboard.UP && !this.isJumping && this.isAlive()) {
                 this.jump()
             }
-            
-            if(this.x === 1500) {
+
+            if (this.x === 1500) {
                 let endbossIndex = this.world.level.enemies.length - 1
                 let endboss = this.world.level.enemies[endbossIndex]
                 endboss.startEndboss = true
             }
             this.world.camera_x = -this.x + 100
         }, 1000 / 30);
+        this.characterIntervals.push(moveInterval)
 
-        setInterval(() => {
-            if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD)
-            } else if (this.isHurt()) {
+        let animationInterval = setInterval(() => {
+            if (this.isHurt() && this.isAlive()) {
                 this.playAnimation(this.IMAGES_HURT)
-            }  else {
-
-                if (this.isJumping === true) {
-                    this.playSingleJumpAnimation(this.IMAGES_JUMPING) 
-                }
-                if (this.world.keyboard.RIGHT && !this.isAboveGround() || this.world.keyboard.LEFT && !this.isAboveGround()) {
-                    this.playAnimation(this.IMAGES_WALKING)
-                }
             }
-        }, 150);
+            //  else {
+
+            if (this.isJumping === true && this.isAlive()) {
+                this.playSingleJumpAnimation(this.IMAGES_JUMPING)
+            }
+            if (this.world.keyboard.RIGHT && !this.isAboveGround() && this.isAlive() ||
+                this.world.keyboard.LEFT && !this.isAboveGround() && this.isAlive()) {
+                this.playAnimation(this.IMAGES_WALKING)
+            }
+            if (this.isDead()) {
+                if (!MovableObject.charcterDead) {
+                    this.currentImage = 0
+                    MovableObject.charcterDead = true
+                    console.log(this.characterDead);
+                }
+                this.playSingleDeadAnimation(this.IMAGES_DEAD)
+            }
+            // }
+        }, 1000 / 20);
+        this.characterIntervals.push(animationInterval)
     }
 
 
     playSingleJumpAnimation(images) {
+
+
         if (this.currentImage < images.length) {
-            this.singleJumpingFrames(images)
+            this.singleRunFrames(images)
         } else if (!this.isAboveGround()) {
             this.resetJumpAnimation()
         }
     }
 
 
-    singleJumpingFrames(images){
+    playSingleDeadAnimation(images) {
+        // console.log(this.currentImage);
+        if (this.currentImage < images.length) {
+            this.singleRunFrames(images)
+            this.y += 30
+            // console.log(this.currentImage);
+        }
+        //  else if (this.currentImage === images.length) {
+        //     this.gameOverScreen()            
+        // }
+    }
+
+
+    // gameOverScreen() {
+    //     this.stopAllCharacterIntervals()
+    //     this.stopAllEndbossIntervals()
+    //     this.stopAllEnemyIntervals()
+    // }
+
+
+    singleRunFrames(images) {
         let path = images[this.currentImage]
         this.img = this.imageCache[path]
         this.currentImage++

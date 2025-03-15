@@ -4,7 +4,6 @@ class Enemy extends MovableObject {
     height = 90
     width = 90
     y = 330
-    enemyIntervals = []
     isHit = false
 
 
@@ -39,14 +38,14 @@ class Enemy extends MovableObject {
 
     animate() {
         let enemyMoveInterval = setInterval(() => {
-            if (!this.isHit) {
+            if (!this.isHit && !MovableObject.charcterDead) {
                 this.moveLeft()
             }
-        }, 1000 / 60)
+        }, 1000 / 10)
         this.enemyIntervals.push(enemyMoveInterval)
 
         let enemyAnimationInterval = setInterval(() => {
-            if (!this.isHit) {
+            if (!this.isHit && !MovableObject.charcterDead) {
                 this.playAnimation(this.IMAGES_WALKING)
             } else if (this.isHit) {
                 this.img.src = this.IMAGE_DEAD
@@ -54,10 +53,5 @@ class Enemy extends MovableObject {
         }, 200);
         this.enemyIntervals.push(enemyAnimationInterval)
 
-    }
-
-
-    stopAllEnemyIntervals() {
-        this.enemyIntervals.forEach(interval => clearInterval(interval))
     }
 }

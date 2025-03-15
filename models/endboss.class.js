@@ -88,10 +88,10 @@ class Endboss extends MovableObject {
 
     checkAnimation() {
         setInterval(() => {
-            if (this.startEndboss && this.isAlive() && this.isAlert) {
+            if (this.startEndboss && this.isAlive() && this.isAlert && !MovableObject.charcterDead) {
                 this.endbossStart()
             }
-            if (this.isWalking && this.isAlive() && this.x === 1800) {
+            if (this.isWalking && this.isAlive() && this.x === 1800 && !MovableObject.charcterDead) {
                 this.finishWalking()
             }
             if (this.x <= 1800) {
@@ -155,7 +155,8 @@ class Endboss extends MovableObject {
 
     attackAnimationInterval() {
         let attackAnimationInterval = setInterval(() => {
-            if (this.stopAttack && this.startAttack && this.currentEndbossImage < this.IMAGES_ATTACK.length) {
+            if (this.stopAttack && this.startAttack &&
+                this.currentEndbossImage < this.IMAGES_ATTACK.length && !MovableObject.charcterDead) {
                 this.singleRunImages(this.IMAGES_ATTACK)
             } else if (this.currentEndbossImage === this.IMAGES_ATTACK.length && !this.stopAttack) {
                 this.stopAttack = true
@@ -167,7 +168,8 @@ class Endboss extends MovableObject {
 
     alertAnimationInterval() {
         let alertAnimationInterval = setInterval(() => {
-            if (this.alertAnimation && this.isAlert && this.currentEndbossImage < this.IMAGES_ALERT.length) {
+            if (this.alertAnimation && this.isAlert && this.currentEndbossImage < this.IMAGES_ALERT.length &&
+                !MovableObject.charcterDead) {
                 this.singleRunImages(this.IMAGES_ALERT)
             } else if (this.currentEndbossImage >= this.IMAGES_ALERT.length) {
                 this.isAlert = false
@@ -184,7 +186,9 @@ class Endboss extends MovableObject {
     deadAnimationInterval() {
         let deadAnimationInterval =
             setInterval(() => {
-                if (this.deadAnimation && this.hasDied && this.currentEndbossImage < this.IMAGES_DEAD.length) {
+                if (this.deadAnimation && this.hasDied
+                    && this.currentEndbossImage < this.IMAGES_DEAD.length
+                     && !MovableObject.charcterDead) {
                     this.runDeadAnimation()
                 }
                 if (this.currentEndbossImage >= this.IMAGES_DEAD.length && this.hasDied) {
@@ -209,7 +213,7 @@ class Endboss extends MovableObject {
 
     walkingAnimationInterval() {
         let walkingAnimationInterval = setInterval(() => {
-            if (this.isWalking) {
+            if (this.isWalking  && !MovableObject.charcterDead) {
                 this.walkingAnimation()
             }
         }, 200)
@@ -234,10 +238,5 @@ class Endboss extends MovableObject {
         let path = images[this.currentEndbossImage]
         this.img = this.imageCache[path]
         this.currentEndbossImage++
-    }
-
-
-    stopAllEndbossIntervals() {
-        this.endbossIntervals.forEach(interval => clearInterval(interval))
     }
 }

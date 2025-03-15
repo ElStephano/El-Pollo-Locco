@@ -8,9 +8,12 @@ class MovableObject extends DrawableObject {
     currentJumpingImage = 0
     isJumping = false
     endbossIntervals = []
+    characterIntervals = []
+    enemyIntervals = []
     startEndboss = false
     isEndbossWalking = false
     singleRunAnimation = false
+    static charcterDead = false
 
 
     applyGravity() {
@@ -84,5 +87,20 @@ class MovableObject extends DrawableObject {
 
     isAlive() {
         return this.energy > 0
+    }
+
+
+    stopAllEndbossIntervals() {
+        this.endbossIntervals.forEach(interval => clearInterval(interval))
+    }
+
+
+    stopAllCharacterIntervals() {
+        this.characterIntervals.forEach(interval => clearInterval(interval))
+    }
+
+
+    stopAllEnemyIntervals() {
+        this.enemyIntervals.forEach(interval => clearInterval(interval))
     }
 }

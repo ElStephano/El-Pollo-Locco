@@ -36,7 +36,6 @@ class World {
 
     checkCollisionBottles() {
         let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss)
-
         this.throwableObjects.forEach((throwable) => {
             this.level.enemies.forEach((enemy) => {
                 if (throwable.isColliding(enemy)) {
@@ -69,7 +68,6 @@ class World {
             const index = this.level.enemies.indexOf(enemy)
             const bottleIndex = this.throwableObjects.indexOf(throwable)
             if (index !== -1 && bottleIndex !== -1 && !enemy.isHit) {
-                // enemy.stopAllEnemyIntervals()
                 enemy.isHit = true
                 setTimeout(() => {
                     this.level.enemies.splice(index, 1)
