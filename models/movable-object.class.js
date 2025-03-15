@@ -103,4 +103,18 @@ class MovableObject extends DrawableObject {
     stopAllEnemyIntervals() {
         this.enemyIntervals.forEach(interval => clearInterval(interval))
     }
+
+
+    gameOverScreen() {
+        if (MovableObject.charcterDead) {
+            let gameOverScreen = new DrawableObject();
+            gameOverScreen.loadImage('img/9_intro_outro_screens/game_over/game over.png'); // Bildpfad anpassen
+            gameOverScreen.x = 0;  // Position in der Mitte
+            gameOverScreen.y = 0;
+            gameOverScreen.width = 720; // Größe anpassen
+            gameOverScreen.height = 500
+    
+            this.world.gameOverScreen = gameOverScreen; // Speichern im World-Objekt            
+        }
+    }
 }

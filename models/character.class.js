@@ -100,7 +100,6 @@ class Character extends MovableObject {
                 if (!MovableObject.charcterDead) {
                     this.currentImage = 0
                     MovableObject.charcterDead = true
-                    console.log(this.characterDead);
                 }
                 this.playSingleDeadAnimation(this.IMAGES_DEAD)
             }
@@ -128,9 +127,11 @@ class Character extends MovableObject {
             this.y += 30
             // console.log(this.currentImage);
         }
-        //  else if (this.currentImage === images.length) {
-        //     this.gameOverScreen()            
-        // }
+         else if (this.currentImage === images.length) {
+            this.gameOverScreen()
+            console.log('drin');
+                    
+        }
     }
 
 

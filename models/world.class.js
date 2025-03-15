@@ -142,6 +142,9 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0)
 
+        if (this.gameOverScreen) {  
+            this.addToMap(this.gameOverScreen) // Game Over anzeigen
+        }
 
         let self = this;
         requestAnimationFrame(function () {
