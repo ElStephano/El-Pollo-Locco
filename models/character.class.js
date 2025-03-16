@@ -6,6 +6,9 @@ class Character extends MovableObject {
     speed = 10
     energy = 100
     isJumping = false
+    jumpSound = new Audio('audio/charachterJump.mp3')
+    deadSound = new Audio('audio/characterDying.mp3')
+    isHit = false
 
 
     offset = {
@@ -72,6 +75,7 @@ class Character extends MovableObject {
             }
             if (this.world.keyboard.UP && !this.isJumping && this.isAlive()) {
                 this.jump()
+                this.jumpSound.play()
             }
 
             if (this.x === 1500) {
@@ -87,8 +91,6 @@ class Character extends MovableObject {
             if (this.isHurt() && this.isAlive()) {
                 this.playAnimation(this.IMAGES_HURT)
             }
-            //  else {
-
             if (this.isJumping === true && this.isAlive()) {
                 this.playSingleJumpAnimation(this.IMAGES_JUMPING)
             }
@@ -100,18 +102,16 @@ class Character extends MovableObject {
                 if (!MovableObject.charcterDead) {
                     this.currentImage = 0
                     MovableObject.charcterDead = true
+                    this.deadSound.play()
                 }
                 this.playSingleDeadAnimation(this.IMAGES_DEAD)
             }
-            // }
         }, 1000 / 20);
         this.characterIntervals.push(animationInterval)
     }
 
 
     playSingleJumpAnimation(images) {
-
-
         if (this.currentImage < images.length) {
             this.singleRunFrames(images)
         } else if (!this.isAboveGround()) {
@@ -121,25 +121,14 @@ class Character extends MovableObject {
 
 
     playSingleDeadAnimation(images) {
-        // console.log(this.currentImage);
         if (this.currentImage < images.length) {
             this.singleRunFrames(images)
             this.y += 30
-            // console.log(this.currentImage);
         }
          else if (this.currentImage === images.length) {
-            this.gameOverScreen()
-            console.log('drin');
-                    
+            this.gameOverScreen()                    
         }
     }
-
-
-    // gameOverScreen() {
-    //     this.stopAllCharacterIntervals()
-    //     this.stopAllEndbossIntervals()
-    //     this.stopAllEnemyIntervals()
-    // }
 
 
     singleRunFrames(images) {

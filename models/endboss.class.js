@@ -11,6 +11,9 @@ class Endboss extends MovableObject {
     alertAnimation = false
     startAttack = false
     stopAttack = true
+    startEndbossSound = new Audio('audio/startAngryChicken.mp3')
+    jumpingSound = new Audio('audio/endbossJump.mp3')
+    isJumping = false
 
 
 
@@ -158,8 +161,19 @@ class Endboss extends MovableObject {
             if (this.stopAttack && this.startAttack &&
                 this.currentEndbossImage < this.IMAGES_ATTACK.length && !MovableObject.charcterDead) {
                 this.singleRunImages(this.IMAGES_ATTACK)
+                if(!this.attackSound) {
+                    setTimeout(() => {
+                        this.startEndbossSound.play()
+                    }, 500)
+                    setTimeout(() => {
+                        this.jumpingSound.play()
+                    }, 1000)
+                    this.isJumping = true
+                }
             } else if (this.currentEndbossImage === this.IMAGES_ATTACK.length && !this.stopAttack) {
                 this.stopAttack = true
+                this.isJumping = false
+
             }
         }, 250)
         this.endbossIntervals.push(attackAnimationInterval)

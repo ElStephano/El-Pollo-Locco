@@ -8,6 +8,8 @@ class World {
     throwableObjects = []
     throwCooldown = 800
     lastThrowTime = 0
+    throwSound = new Audio('audio/throwBottle.mp3')
+    bottleHitSound = new Audio('audio/bottleHit.mp3')
 
 
     constructor(canvas, keyboard) {
@@ -38,11 +40,14 @@ class World {
         let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss)
         this.throwableObjects.forEach((throwable) => {
             this.level.enemies.forEach((enemy) => {
-                if (throwable.isColliding(enemy)) {
+                if (throwable.isColliding(enemy) && !enemy.isHit) {
                     this.isCollidingEnemy(enemy, throwable)
+                    enemy.isHit = true
+                    this.bottleHitSound.play()
                 }
                 if (throwable.isColliding(endboss)) {
                     this.isCollidingEndboss(throwable, endboss)
+                    this.bottleHitSound.play()
                 }
             })
         })
@@ -101,6 +106,7 @@ class World {
         if (this.keyboard.SPACE && now - this.lastThrowTime > this.throwCooldown) {
             if (this.level.bottleStatusBar.bottleAmount > 0) {
                 let bottle = new ThrowableObject(this.character.x, this.character.y)
+                this.throwSound.play()
                 this.lastThrowTime = now
                 this.throwableObjects.push(bottle)
                 this.level.bottleStatusBar.bottleAmount = this.level.bottleStatusBar.bottleAmount - 1
