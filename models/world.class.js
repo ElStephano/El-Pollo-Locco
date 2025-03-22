@@ -32,6 +32,7 @@ class World {
             this.checkCollisions()
             this.checkCollectibleObjects()
             this.checkCollisionBottles()
+            this.checkCollisionAboveGround()
         }, 100)
     }
 
@@ -118,9 +119,23 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy)) {
+            if (this.character.isColliding(enemy) && !enemy.isHit && !this.character.isAboveGround()) {
                 this.character.hit()
                 this.level.healthStatusBar.setPercentage(this.character.energy)
+            }
+        })
+    }
+
+
+    checkCollisionAboveGround() {
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy) && !enemy.isHit && this.character.isAboveGround()
+                && enemy instanceof Enemy) {
+                enemy.isHit = true
+                this.character.jump()
+                setTimeout(() => {
+                    this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1)
+                }, 2000)
             }
         })
     }
@@ -148,7 +163,7 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0)
 
-        if (this.gameOverScreen) {  
+        if (this.gameOverScreen) {
             this.addToMap(this.gameOverScreen) // Game Over anzeigen
         }
 

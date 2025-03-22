@@ -75,13 +75,12 @@ class Character extends MovableObject {
             }
             if (this.world.keyboard.UP && !this.isJumping && this.isAlive()) {
                 this.jump()
-                this.jumpSound.play()
             }
 
-            if (this.x === 1500) {
+            if (this.x === 500 && this.isAlive()) {
                 let endbossIndex = this.world.level.enemies.length - 1
                 let endboss = this.world.level.enemies[endbossIndex]
-                endboss.startEndboss = true
+                endboss.animationPlaying = false
             }
             this.world.camera_x = -this.x + 100
         }, 1000 / 30);
@@ -90,9 +89,6 @@ class Character extends MovableObject {
         let animationInterval = setInterval(() => {
             if (this.isHurt() && this.isAlive()) {
                 this.playAnimation(this.IMAGES_HURT)
-            }
-            if (this.isJumping === true && this.isAlive()) {
-                this.playSingleJumpAnimation(this.IMAGES_JUMPING)
             }
             if (this.world.keyboard.RIGHT && !this.isAboveGround() && this.isAlive() ||
                 this.world.keyboard.LEFT && !this.isAboveGround() && this.isAlive()) {
@@ -103,11 +99,22 @@ class Character extends MovableObject {
                     this.currentImage = 0
                     MovableObject.charcterDead = true
                     this.deadSound.play()
+                    setTimeout(() => {
+                        this.gameOverSound.play()
+                    }, 500)
+
                 }
                 this.playSingleDeadAnimation(this.IMAGES_DEAD)
             }
         }, 1000 / 20);
         this.characterIntervals.push(animationInterval)
+
+        let jumpingInterval = setInterval(() => {
+            if (this.isJumping === true && this.isAlive()) {
+                this.playSingleJumpAnimation(this.IMAGES_JUMPING)
+            }
+        }, 200)
+        this.characterIntervals.push(jumpingInterval)
     }
 
 
@@ -125,8 +132,8 @@ class Character extends MovableObject {
             this.singleRunFrames(images)
             this.y += 30
         }
-         else if (this.currentImage === images.length) {
-            this.gameOverScreen()                    
+        else if (this.currentImage === images.length) {
+            this.gameOverScreen()
         }
     }
 
@@ -145,7 +152,8 @@ class Character extends MovableObject {
 
 
     jump() {
-        this.speedY = 20
+        this.speedY = 15
+        this.jumpSound.play()
         if (this.isJumping === false) {
             this.isJumping = true
         }

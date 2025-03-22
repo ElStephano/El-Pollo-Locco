@@ -1,9 +1,21 @@
+@font-face {
+    font-family: 'Chentenario';
+    src: url('./fonts/Chentenario.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
-    display:flex;
+    font-family: 'Chentenario';
+    height: 100vh;
+    display: flex;
     align-items: center;
     flex-direction: column;
+    background-image: url(../img/01_page_background/page-background.jpg);
+    background-size: 100% 100%;
+    overflow-y: hidden;
 }
 
 canvas {
-    background-color: black;
+    border-radius: 16px;
 }

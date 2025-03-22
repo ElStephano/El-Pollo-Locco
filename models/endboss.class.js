@@ -1,27 +1,20 @@
 class Endboss extends MovableObject {
-    height = 400
-    width = 300
-    y = 40
-    energy = 100
-    currentEndbossImage = 0
-    deadAnimation = false
-    hasDied = false
-    isWalking = false
-    isAlert = true
-    alertAnimation = false
-    startAttack = false
-    stopAttack = true
-    startEndbossSound = new Audio('audio/startAngryChicken.mp3')
-    jumpingSound = new Audio('audio/endbossJump.mp3')
-    isJumping = false
 
+    height = 400;
+    width = 300;
+    y = 40;
+    energy = 100;
+    x = 2000;
+    state = "alert"; // Mögliche States: alert, walking, attacking, dead
+    animationPlaying = true
+    otherDirection = false
 
 
     IMAGES_WALKING = [
-        'img/4_enemie_boss_chicken/1_walk/G1.png',
-        'img/4_enemie_boss_chicken/1_walk/G2.png',
-        'img/4_enemie_boss_chicken/1_walk/G3.png',
-        'img/4_enemie_boss_chicken/1_walk/G4.png',
+        '../img/4_enemie_boss_chicken/1_walk/G1.png',
+        '../img/4_enemie_boss_chicken/1_walk/G2.png',
+        '../img/4_enemie_boss_chicken/1_walk/G3.png',
+        '../img/4_enemie_boss_chicken/1_walk/G4.png',
     ]
 
 
@@ -38,28 +31,28 @@ class Endboss extends MovableObject {
 
 
     IMAGES_DEAD = [
-        'img/4_enemie_boss_chicken/5_dead/G24.png',
-        'img/4_enemie_boss_chicken/5_dead/G25.png',
-        'img/4_enemie_boss_chicken/5_dead/G26.png'
+        '../img/4_enemie_boss_chicken/5_dead/G24.png',
+        '../img/4_enemie_boss_chicken/5_dead/G25.png',
+        '../img/4_enemie_boss_chicken/5_dead/G26.png'
     ]
 
 
     IMAGES_HURT = [
-        'img/4_enemie_boss_chicken/4_hurt/G21.png',
-        'img/4_enemie_boss_chicken/4_hurt/G22.png',
-        'img/4_enemie_boss_chicken/4_hurt/G23.png'
+        '../img/4_enemie_boss_chicken/4_hurt/G21.png',
+        '../img/4_enemie_boss_chicken/4_hurt/G22.png',
+        '../img/4_enemie_boss_chicken/4_hurt/G23.png'
     ]
 
 
     IMAGES_ATTACK = [
-        'img/4_enemie_boss_chicken/3_attack/G13.png',
-        'img/4_enemie_boss_chicken/3_attack/G14.png',
-        'img/4_enemie_boss_chicken/3_attack/G15.png',
-        'img/4_enemie_boss_chicken/3_attack/G16.png',
-        'img/4_enemie_boss_chicken/3_attack/G17.png',
-        'img/4_enemie_boss_chicken/3_attack/G18.png',
-        'img/4_enemie_boss_chicken/3_attack/G19.png',
-        'img/4_enemie_boss_chicken/3_attack/G20.png'
+        '../img/4_enemie_boss_chicken/3_attack/G13.png',
+        '../img/4_enemie_boss_chicken/3_attack/G14.png',
+        '../img/4_enemie_boss_chicken/3_attack/G15.png',
+        '../img/4_enemie_boss_chicken/3_attack/G16.png',
+        '../img/4_enemie_boss_chicken/3_attack/G17.png',
+        '../img/4_enemie_boss_chicken/3_attack/G18.png',
+        '../img/4_enemie_boss_chicken/3_attack/G19.png',
+        '../img/4_enemie_boss_chicken/3_attack/G20.png'
     ]
 
 
@@ -72,185 +65,108 @@ class Endboss extends MovableObject {
 
 
     constructor() {
-        super().loadImage(this.IMAGES_WALKING[0])
-        this.loadImages(this.IMAGES_WALKING)
-        this.loadImages(this.IMAGES_DEAD)
-        this.loadImages(this.IMAGES_ALERT)
-        this.loadImages(this.IMAGES_HURT)
-        this.loadImages(this.IMAGES_ATTACK)
-        this.x = 2000
-        this.checkAnimation()
-        this.applyGravity()
-        this.deadAnimationInterval()
-        this.walkingAnimationInterval()
-        this.alertAnimationInterval()
-        this.attackAnimationInterval()
-        this.speed = 5
+        super()
+        this.loadImagess();
+        this.updateState();
+        this.x = 1000
+        this.speed = 2
     }
 
+    loadImagess() {
+        this.loadImage(this.IMAGES_WALKING[0]);
+        this.loadImages(this.IMAGES_WALKING);
+        this.loadImages(this.IMAGES_ALERT);
+        this.loadImages(this.IMAGES_ATTACK);
+        this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_DEAD);
+    }
 
-    checkAnimation() {
+    updateState() {
         setInterval(() => {
-            if (this.startEndboss && this.isAlive() && this.isAlert && !MovableObject.charcterDead) {
-                this.endbossStart()
-            }
-            if (this.isWalking && this.isAlive() && this.x === 1800 && !MovableObject.charcterDead) {
-                this.finishWalking()
-            }
-            if (this.x <= 1800) {
-                this.attack()
-            }
-            if (this.energy === 0 && !this.deadAnimation) {
-                this.deathAnimation()
-            }
-        }, 1000 / 10)
-    }
+            if (this.animationPlaying) return; // Keine neue Animation starten, wenn eine läuft
 
+            switch (this.state) {
+                case "alert":
+                    this.animationPlaying = true
+                    this.playSingleRunAnimation(this.IMAGES_ALERT, () => {
+                        setTimeout(() => {
+                            this.state = "walking"
+                        }, 1000)
+                        this.animationPlaying = false
+                    })
+                    break
 
-    endbossStart() {
-        this.alertAnimation = true
-        setTimeout(() => {
-            this.alertAnimation = false
-            this.isAlert = false
-            this.startEndboss = false
-            this.isWalking = true
-        }, 1250)
-    }
+                case "walking":
+                    this.animationPlaying = true
+                    this.walkingAnimation()
+                    break
 
+                case "attacking":
+                    this.animationPlaying = true
+                    this.playSingleRunAnimation(this.IMAGES_ATTACK, () => {
+                        this.state = "walking"
+                        this.animationPlaying = false
+                    })
+                    break;
 
-    finishWalking() {
-        this.isWalking = false
-        this.currentEndbossImage = 0
-    }
-
-
-    attack() {
-        this.startAttack = true
-        if (this.isWalking) {
-            this.isWalking = false
-            this.currentEndbossImage = 0
-        }
-    }
-
-
-    deathAnimation() {
-        this.stopAllAnimation()
-        this.currentEndbossImage = 0
-        this.deadAnimation = true
-        this.hasDied = true
-    }
-
-
-    stopAllAnimation() {
-        if (this.isWalking) {
-            this.isWalking = false
-        }
-        if (this.alertAnimation) {
-            this.alertAnimation = false
-            this.isAlert = false
-        }
-        if (this.stopAttack) {
-            this.stopAttack = false
-            this.startAttack = false
-        }
-    }
-
-
-    attackAnimationInterval() {
-        let attackAnimationInterval = setInterval(() => {
-            if (this.stopAttack && this.startAttack &&
-                this.currentEndbossImage < this.IMAGES_ATTACK.length && !MovableObject.charcterDead) {
-                this.singleRunImages(this.IMAGES_ATTACK)
-                if(!this.attackSound) {
-                    setTimeout(() => {
-                        this.startEndbossSound.play()
-                    }, 500)
-                    setTimeout(() => {
-                        this.jumpingSound.play()
-                    }, 1000)
-                    this.isJumping = true
-                }
-            } else if (this.currentEndbossImage === this.IMAGES_ATTACK.length && !this.stopAttack) {
-                this.stopAttack = true
-                this.isJumping = false
-
-            }
-        }, 250)
-        this.endbossIntervals.push(attackAnimationInterval)
-    }
-
-
-    alertAnimationInterval() {
-        let alertAnimationInterval = setInterval(() => {
-            if (this.alertAnimation && this.isAlert && this.currentEndbossImage < this.IMAGES_ALERT.length &&
-                !MovableObject.charcterDead) {
-                this.singleRunImages(this.IMAGES_ALERT)
-            } else if (this.currentEndbossImage >= this.IMAGES_ALERT.length) {
-                this.isAlert = false
-                this.alertAnimation = false
-                clearInterval(alertAnimationInterval)
+                case "dead":
+                    this.animationPlaying = true
+                    this.playSingleRunAnimation(this.IMAGES_DEAD)
+                    break
             }
 
-        }, 250)
+            if (this.x <= 500) {
+                this.endbossOtherDirection(-2, true)
+            } else if (this.x >= 1500) {
+                this.endbossOtherDirection(2, false)
+            }
 
-        this.endbossIntervals.push(alertAnimationInterval)
-    }
-
-
-    deadAnimationInterval() {
-        let deadAnimationInterval =
-            setInterval(() => {
-                if (this.deadAnimation && this.hasDied
-                    && this.currentEndbossImage < this.IMAGES_DEAD.length
-                     && !MovableObject.charcterDead) {
-                    this.runDeadAnimation()
-                }
-                if (this.currentEndbossImage >= this.IMAGES_DEAD.length && this.hasDied) {
-                    this.endDeadAnimation()
-                }
-            }, 250)
-        this.endbossIntervals.push(deadAnimationInterval)
-    }
-
-
-    runDeadAnimation() {
-        this.playSingleRunAnimation(this.IMAGES_DEAD)
-        this.y -= 20
-    }
-
-
-    endDeadAnimation() {
-        this.hasDied = false
-        this.currentEndbossImage = 0
-    }
-
-
-    walkingAnimationInterval() {
-        let walkingAnimationInterval = setInterval(() => {
-            if (this.isWalking  && !MovableObject.charcterDead) {
-                this.walkingAnimation()
+            if (this.energy <= 0) {
+                this.state = "dead"
             }
         }, 200)
-        this.endbossIntervals.push(walkingAnimationInterval)
-    }
 
+    }
 
     walkingAnimation() {
-        this.playAnimation(this.IMAGES_WALKING);
-        this.x -= this.speed;
+        let i = 0
+        let interval = setInterval(() => {
+            if (i < 10) {
+                this.playAnimation(this.IMAGES_WALKING);
+                this.x -= this.speed;
+                i++
+                this.animationPlaying = false;
+            } else {
+                clearInterval(interval)
+                i = 0
+                setTimeout(() => {
+                    this.state = "attacking";
+                }, 1000)
+            }
+        }, 200)
     }
 
 
-    playSingleRunAnimation(images) {
-        if (this.currentEndbossImage < images.length) {
-            this.singleRunImages(images)
-        }
+    endbossOtherDirection(i, direction) {
+        this.otherDirection = direction
+        this.speed = i
     }
 
 
-    singleRunImages(images) {
-        let path = images[this.currentEndbossImage]
-        this.img = this.imageCache[path]
-        this.currentEndbossImage++
+    playSingleRunAnimation(images, callback = null) {
+        let i = 0;
+        let interval = setInterval(() => {
+            if (i < images.length) {
+                this.img = this.imageCache[images[i]];
+                i++;
+            } else {
+                setTimeout(() => {
+                    clearInterval(interval);
+                    if (callback) callback();
+                }, 500)
+            }
+        }, 200);
     }
+
+
 }

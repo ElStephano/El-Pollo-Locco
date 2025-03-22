@@ -14,6 +14,7 @@ class MovableObject extends DrawableObject {
     isEndbossWalking = false
     singleRunAnimation = false
     static charcterDead = false
+    gameOverSound = new Audio('audio/gameOver.mp3')
 
 
     applyGravity() {
@@ -113,8 +114,7 @@ class MovableObject extends DrawableObject {
             gameOverScreen.y = 0;
             gameOverScreen.width = 720; // Größe anpassen
             gameOverScreen.height = 500
-    
-            this.world.gameOverScreen = gameOverScreen; // Speichern im World-Objekt            
+            this.world.gameOverScreen = gameOverScreen; // Speichern im World-Objekt       
         }
     }
 }
