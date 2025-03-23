@@ -6,7 +6,7 @@
 }
 
 body {
-    font-family: 'Chentenario';
+    font-family: 'Chentenario', '';
     height: 100vh;
     display: flex;
     align-items: center;

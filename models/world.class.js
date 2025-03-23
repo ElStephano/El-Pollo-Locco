@@ -46,9 +46,13 @@ class World {
                     enemy.isHit = true
                     this.bottleHitSound.play()
                 }
-                if (throwable.isColliding(endboss)) {
+                if (throwable.isColliding(endboss) && !endboss.isHit) {
                     this.isCollidingEndboss(throwable, endboss)
+                    enemy.isHit = true
                     this.bottleHitSound.play()
+                    setTimeout(() => {
+                        enemy.isHit = false
+                    }, 800)
                 }
             })
         })

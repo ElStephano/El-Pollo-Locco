@@ -14,7 +14,7 @@ class MovableObject extends DrawableObject {
     isEndbossWalking = false
     singleRunAnimation = false
     static charcterDead = false
-    gameOverSound = new Audio('audio/gameOver.mp3')
+    gameOverSound = new Audio('../audio/gameOver.mp3')
 
 
     applyGravity() {

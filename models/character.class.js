@@ -6,8 +6,8 @@ class Character extends MovableObject {
     speed = 10
     energy = 100
     isJumping = false
-    jumpSound = new Audio('audio/charachterJump.mp3')
-    deadSound = new Audio('audio/characterDying.mp3')
+    jumpSound = new Audio('../audio/charachterJump.mp3')
+    deadSound = new Audio('../audio/characterDying.mp3')
     isHit = false
 
 
@@ -38,18 +38,18 @@ class Character extends MovableObject {
         '../img/2_character_pepe/3_jump/J-39.png'
     ]
     IMAGES_DEAD = [
-        'img/2_character_pepe/5_dead/D-51.png',
-        'img/2_character_pepe/5_dead/D-52.png',
-        'img/2_character_pepe/5_dead/D-53.png',
-        'img/2_character_pepe/5_dead/D-54.png',
-        'img/2_character_pepe/5_dead/D-55.png',
-        'img/2_character_pepe/5_dead/D-56.png',
-        'img/2_character_pepe/5_dead/D-57.png'
+        '../img/2_character_pepe/5_dead/D-51.png',
+        '../img/2_character_pepe/5_dead/D-52.png',
+        '../img/2_character_pepe/5_dead/D-53.png',
+        '../img/2_character_pepe/5_dead/D-54.png',
+        '../img/2_character_pepe/5_dead/D-55.png',
+        '../img/2_character_pepe/5_dead/D-56.png',
+        '../img/2_character_pepe/5_dead/D-57.png'
     ]
     IMAGES_HURT = [
-        'img/2_character_pepe/4_hurt/H-41.png',
-        'img/2_character_pepe/4_hurt/H-42.png',
-        'img/2_character_pepe/4_hurt/H-43.png'
+        '../img/2_character_pepe/4_hurt/H-41.png',
+        '../img/2_character_pepe/4_hurt/H-42.png',
+        '../img/2_character_pepe/4_hurt/H-43.png'
     ]
 
 

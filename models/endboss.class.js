@@ -3,11 +3,12 @@ class Endboss extends MovableObject {
     height = 400;
     width = 300;
     y = 40;
-    energy = 100;
+    energy = 20;
     x = 2000;
     state = "alert"; // Mögliche States: alert, walking, attacking, dead
     animationPlaying = true
     otherDirection = false
+    isHit = false
 
 
     IMAGES_WALKING = [
@@ -69,8 +70,9 @@ class Endboss extends MovableObject {
         this.loadImagess();
         this.updateState();
         this.x = 1000
-        this.speed = 2
+        this.speed = 15
     }
+
 
     loadImagess() {
         this.loadImage(this.IMAGES_WALKING[0]);
@@ -81,69 +83,114 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
     }
 
-    updateState() {
-        setInterval(() => {
-            if (this.animationPlaying) return; // Keine neue Animation starten, wenn eine läuft
 
+    updateState() {
+        clearInterval(this.mainInterval);
+        this.mainInterval = setInterval(() => {
+            if (this.animationPlaying) return;
+    
+            // ZUERST prüfen, ob der Boss tot ist
+            if (!this.isAlive()) {
+                this.state = "dead";
+                clearInterval(this.mainInterval);
+                this.animationPlaying = true;
+                this.playSingleRunAnimation(this.IMAGES_DEAD, () => {
+                    setTimeout(() => {
+                        this.animationPlaying = false;
+                    }, 1000);
+                });
+                return; // Hier abbrechen, damit kein anderer Zustand mehr aktiviert wird!
+            }
+    
             switch (this.state) {
                 case "alert":
-                    this.animationPlaying = true
+                    this.animationPlaying = true;
+                    this.clearAnimation();
                     this.playSingleRunAnimation(this.IMAGES_ALERT, () => {
                         setTimeout(() => {
-                            this.state = "walking"
-                        }, 1000)
-                        this.animationPlaying = false
-                    })
-                    break
-
-                case "walking":
-                    this.animationPlaying = true
-                    this.walkingAnimation()
-                    break
-
-                case "attacking":
-                    this.animationPlaying = true
-                    this.playSingleRunAnimation(this.IMAGES_ATTACK, () => {
-                        this.state = "walking"
-                        this.animationPlaying = false
-                    })
+                            this.state = "walking";
+                            this.animationPlaying = false;
+                        }, 500);
+                    });
                     break;
-
-                case "dead":
-                    this.animationPlaying = true
-                    this.playSingleRunAnimation(this.IMAGES_DEAD)
-                    break
+    
+                case "walking":
+                    if (!this.animationPlaying) {
+                        this.animationPlaying = true;
+                        this.clearAnimation();
+                        this.walkingAnimation(() => {
+                            this.state = "attacking";
+                            this.animationPlaying = false;
+                        });
+                    }
+                    break;
+    
+                case "attacking":
+                    if (!this.animationPlaying) {
+                        this.animationPlaying = true;
+                        this.clearAnimation();
+                        this.playSingleRunAnimation(this.IMAGES_ATTACK, () => {
+                            setTimeout(() => {
+                                this.state = "walking";
+                                this.animationPlaying = false;
+                            }, 100);
+                        });
+                    }
+                    break;
             }
-
-            if (this.x <= 500) {
-                this.endbossOtherDirection(-2, true)
-            } else if (this.x >= 1500) {
-                this.endbossOtherDirection(2, false)
-            }
-
-            if (this.energy <= 0) {
-                this.state = "dead"
-            }
-        }, 200)
-
+            
+            this.switchDirection();
+        }, 200);
     }
+    
 
-    walkingAnimation() {
-        let i = 0
+    walkingAnimation(callback) {
+        let i = 0;
         let interval = setInterval(() => {
-            if (i < 10) {
+            if (i < 10 && this.isAlive()) {
                 this.playAnimation(this.IMAGES_WALKING);
                 this.x -= this.speed;
-                i++
-                this.animationPlaying = false;
+                i++;
             } else {
-                clearInterval(interval)
-                i = 0
-                setTimeout(() => {
-                    this.state = "attacking";
-                }, 1000)
+                clearInterval(interval);
+                callback && callback();
             }
-        }, 200)
+        }, 1000 / 10);
+    }
+    
+
+    clearAnimation() {
+        clearInterval(this.currentAnimationInterval);
+        this.currentAnimationInterval = null;
+    }
+    
+
+    playSingleRunAnimation(images, callback = null) {
+        if (images.length === 0) return;
+        
+        this.clearAnimation(); // Verhindert Überlagerungen
+        
+        let i = 0;
+        this.img = this.imageCache[images[i]]; // Setzt das erste Bild sofort
+        
+        this.currentAnimationInterval = setInterval(() => {
+            if (i < images.length) {
+                this.img = this.imageCache[images[i]];
+                i++;
+            } else {
+                clearInterval(this.currentAnimationInterval);
+                if (callback) callback();
+            }
+        }, 200);
+    }
+    
+
+    switchDirection() {
+        if (this.x <= 500) {
+            this.endbossOtherDirection(-15, true)
+        } else if (this.x >= 1500) {
+            this.endbossOtherDirection(15, false)
+        }
     }
 
 
@@ -151,22 +198,4 @@ class Endboss extends MovableObject {
         this.otherDirection = direction
         this.speed = i
     }
-
-
-    playSingleRunAnimation(images, callback = null) {
-        let i = 0;
-        let interval = setInterval(() => {
-            if (i < images.length) {
-                this.img = this.imageCache[images[i]];
-                i++;
-            } else {
-                setTimeout(() => {
-                    clearInterval(interval);
-                    if (callback) callback();
-                }, 500)
-            }
-        }, 200);
-    }
-
-
 }
