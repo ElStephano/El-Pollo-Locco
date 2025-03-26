@@ -33,7 +33,7 @@ class World {
             this.checkCollectibleObjects()
             this.checkCollisionBottles()
             this.checkCollisionAboveGround()
-        }, 100)
+        }, 1000 / 30)
     }
 
 
@@ -41,6 +41,11 @@ class World {
         let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss)
         this.throwableObjects.forEach((throwable) => {
             this.level.enemies.forEach((enemy) => {
+                if (throwable.y > 380 && !throwable.isHit) {
+                    this.bottleHitSound.play()
+                    throwable.bottleHit(throwable.x, throwable.y)
+                    throwable.isHit = true
+                }
                 if (throwable.isColliding(enemy) && !enemy.isHit) {
                     this.isCollidingEnemy(enemy, throwable)
                     enemy.isHit = true

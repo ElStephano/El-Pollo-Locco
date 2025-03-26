@@ -47,41 +47,61 @@ class ThrowableObject extends MovableObject {
 
 
     throw(x, y) {
+        let direction = world.character.otherDirection;
+
         this.x = x
         this.y = y
-        this.speedY = 10
-        this.speedX = 12
+        this.speedY = 25
+        this.speedX = 30
         this.applyGravity()
-        this.throwInterval = setInterval(() => {
-            this.x += 25
-        }, 50)
+        if (!direction) {
+            this.throwRightDirection()
+        } else if (direction) {
+            this.throwLeftDirection()
+        }
+
         this.animationInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_BOTTLE_THROW)
         }, 1000 / 20)
+
+    }
+
+
+    throwRightDirection() {
+        this.throwInterval = setInterval(() => {
+            this.x += 25
+        }, 50)
+    }
+
+
+    throwLeftDirection() {
+        this.throwInterval = setInterval(() => {
+            this.x -= 25
+        }, 50)
     }
 
 
     bottleHit(x, y) {
-            this.isHit = true
-            this.x = x
-            this.y = y
-            this.speedX = 0
-            this.speedY = 0
+        this.isHit = true
+        this.x = x
+        this.y = y
+        this.speedX = 0
+        this.speedY = 0
 
-            clearInterval(this.throwInterval)
-            clearInterval(this.animationInterval)
-            clearInterval(this.gravityInterval)
-            this.playHitAnimation()
-    } 
-    
+        clearInterval(this.throwInterval)
+        clearInterval(this.animationInterval)
+        clearInterval(this.gravityInterval)
+        this.playHitAnimation()
+    }
+
 
     playHitAnimation() {
         let frameCount = 0;
         let maxFrames = this.IMAGES_BOTTLE_HIT.length;
-        let hitAnimationInterval = setInterval(() => 
+        let hitAnimationInterval = setInterval(() =>
             this.updateHitAnimation(hitAnimationInterval, frameCount++, maxFrames), 250);
     }
-    
+
 
     updateHitAnimation(interval, frameCount, maxFrames) {
         this.playAnimation(this.IMAGES_BOTTLE_HIT);
@@ -89,7 +109,7 @@ class ThrowableObject extends MovableObject {
             this.removeAfterAnimation(interval);
         }
     }
-    
+
 
     removeAfterAnimation(interval) {
         clearInterval(interval);
@@ -99,5 +119,5 @@ class ThrowableObject extends MovableObject {
             this.imageCache = 0
         }
     }
-    
+
 }

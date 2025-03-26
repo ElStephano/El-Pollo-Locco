@@ -1,8 +1,8 @@
 class MovableObject extends DrawableObject {
-    speed = 0.15
+    speed = 0.2
     otherDirection = false
     speedY = 0
-    accelaration = 1
+    accelaration = 2.5
     lastHit = 0
     gravityInterval = 0
     currentJumpingImage = 0

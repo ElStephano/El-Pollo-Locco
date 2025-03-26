@@ -88,13 +88,14 @@ class Endboss extends MovableObject {
         clearInterval(this.mainInterval);
         this.mainInterval = setInterval(() => {
             if (this.animationPlaying) return;
-    
+
             // ZUERST prüfen, ob der Boss tot ist
             if (!this.isAlive()) {
                 this.state = "dead";
                 MovableObject.endbossDead = true
                 clearInterval(this.mainInterval);
                 this.animationPlaying = true;
+                this.endbossY()
                 this.playSingleRunAnimation(this.IMAGES_DEAD, () => {
                     setTimeout(() => {
                         this.animationPlaying = false;
@@ -102,7 +103,7 @@ class Endboss extends MovableObject {
                 });
                 return; // Hier abbrechen, damit kein anderer Zustand mehr aktiviert wird!
             }
-    
+
             switch (this.state) {
                 case "alert":
                     this.animationPlaying = true;
@@ -114,7 +115,7 @@ class Endboss extends MovableObject {
                         }, 500);
                     });
                     break;
-    
+
                 case "walking":
                     if (!this.animationPlaying) {
                         this.animationPlaying = true;
@@ -125,7 +126,7 @@ class Endboss extends MovableObject {
                         });
                     }
                     break;
-    
+
                 case "attacking":
                     if (!this.animationPlaying) {
                         this.animationPlaying = true;
@@ -139,11 +140,23 @@ class Endboss extends MovableObject {
                     }
                     break;
             }
-            
+
             this.switchDirection();
         }, 200);
     }
-    
+
+
+    endbossY() {
+        setTimeout(() => {
+            let interval = setInterval(() => {
+                this.y += 20
+            }, 1000 / 20)
+            setTimeout(() => {
+                clearInterval(interval)
+            }, 2000)
+        }, 300)
+    }
+
 
     walkingAnimation(callback) {
         let i = 0;
@@ -158,22 +171,22 @@ class Endboss extends MovableObject {
             }
         }, 1000 / 10);
     }
-    
+
 
     clearAnimation() {
         clearInterval(this.currentAnimationInterval);
         this.currentAnimationInterval = null;
     }
-    
+
 
     playSingleRunAnimation(images, callback = null) {
         if (images.length === 0) return;
-        
+
         this.clearAnimation(); // Verhindert Überlagerungen
-        
+
         let i = 0;
         this.img = this.imageCache[images[i]]; // Setzt das erste Bild sofort
-        
+
         this.currentAnimationInterval = setInterval(() => {
             if (i < images.length) {
                 this.img = this.imageCache[images[i]];
@@ -184,7 +197,7 @@ class Endboss extends MovableObject {
             }
         }, 200);
     }
-    
+
 
     switchDirection() {
         if (this.x <= 500) {
