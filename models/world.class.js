@@ -48,11 +48,11 @@ class World {
                 }
                 if (throwable.isColliding(endboss) && !endboss.isHit) {
                     this.isCollidingEndboss(throwable, endboss)
-                    enemy.isHit = true
+                    endboss.isHit = true
                     this.bottleHitSound.play()
                     setTimeout(() => {
-                        enemy.isHit = false
-                    }, 800)
+                        endboss.isHit = false
+                    }, 2000)
                 }
             })
         })
@@ -122,8 +122,13 @@ class World {
 
 
     checkCollisions() {
+        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss)
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && !enemy.isHit && !this.character.isAboveGround()) {
+            if (this.character.isColliding(enemy) && !enemy.isHit && enemy instanceof Enemy &&
+                !this.character.isAboveGround()) {
+                this.character.hit()
+                this.level.healthStatusBar.setPercentage(this.character.energy)
+            } else if (this.character.isColliding(endboss) && endboss.energy > 0) {
                 this.character.hit()
                 this.level.healthStatusBar.setPercentage(this.character.energy)
             }

@@ -5,21 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="img/2_character_pepe/1_idle/idle/I-1.png">
     <title>El Pollo Loco</title>
 </head>
 
 <body onload="init()">
     <h1>El Pollo Loco</h1>
-    <Border
-    BorderThickness="8"
-    BorderBrush="Black"
-    Background="LightGray"
-    HorizontalAlignment="Left"
-    VerticalAlignment="Top"
-    Width="480"
-    Height="720">
-    <canvas id="canvas" height="480" width="720"></canvas>
-    </Border>
+    <div class="overlay">
+        <canvas id="canvas" height="480" width="720"></canvas>
+        <div id="buttonContainer" class="button-container d-none">
+            <button id="restart">Neustart</button>
+            <button id="main-menu">Hauptmenü</button>
+        </div>
+    </div>
 </body>
 <script src="./models/drawable-object.class.js"></script>
 <script src="./models/world.class.js"></script>
@@ -41,4 +39,5 @@
 <script src="./models/endboss.class.js"></script>
 <script src="./levels/level1.js"></script>
 <script src="./js/game.js"></script>
+
 </html>

@@ -10,11 +10,10 @@ class MovableObject extends DrawableObject {
     endbossIntervals = []
     characterIntervals = []
     enemyIntervals = []
-    startEndboss = false
-    isEndbossWalking = false
-    singleRunAnimation = false
+    static endbossDead = false
     static charcterDead = false
-    gameOverSound = new Audio('../audio/gameOver.mp3')
+    characterIsHit = false
+    gameOverSound = new Audio('audio/gameOver.mp3')
 
 
     applyGravity() {
@@ -65,11 +64,17 @@ class MovableObject extends DrawableObject {
 
 
     hit() {
-        this.energy -= 10;
-        if (this.energy < 0) {
-            this.energy = 0;
-        } else {
-            this.lastHit = new Date().getTime()
+        if (!this.characterIsHit) {
+            this.characterIsHit = true
+            this.energy -= 10;
+            if (this.energy < 0) {
+                this.energy = 0;
+            } else {
+                this.lastHit = new Date().getTime()
+            }
+            setTimeout(() => {
+                this.characterIsHit = false
+            }, 1000)
         }
     }
 
@@ -114,7 +119,15 @@ class MovableObject extends DrawableObject {
             gameOverScreen.y = 0;
             gameOverScreen.width = 720; // Größe anpassen
             gameOverScreen.height = 500
-            this.world.gameOverScreen = gameOverScreen; // Speichern im World-Objekt       
+            this.world.gameOverScreen = gameOverScreen; // Speichern im World-Objekt
+            this.showButtons()
         }
+    }
+
+
+    showButtons() {
+        setTimeout(() => {
+            document.getElementById('buttonContainer').classList.remove('d-none')
+        }, 1000)
     }
 }
