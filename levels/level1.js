@@ -1,8 +1,8 @@
-// let level1
+let level1
 
 
-// function initLevel() {
-    let level1 = new Level(
+function initLevel() {
+        level1 = new Level(
         [
             new Enemy(this.x = 600),
             new Enemy(this.x = 800),
@@ -70,4 +70,4 @@
             new Coins()
         ]
     )
-// }
+}

@@ -4,7 +4,7 @@ class Character extends MovableObject {
     y = 160
     world
     speed = 10
-    energy = 100
+    energy = 10
     isJumping = false
     jumpSound = new Audio('audio/charachterJump.mp3')
     deadSound = new Audio('audio/characterDying.mp3')
@@ -118,7 +118,7 @@ class Character extends MovableObject {
             }
             this.world.camera_x = -this.x + 100
         }, 1000 / 30);
-        this.characterIntervals.push(moveInterval)
+        MovableObject.characterIntervals.push(moveInterval)
 
         let animationInterval = setInterval(() => {
             if (this.isHurt() && this.isAlive()) {
@@ -129,26 +129,28 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_WALKING)
             }
             if (this.isDead()) {
-                if (!MovableObject.charcterDead) {
+                if (!MovableObject.characterDead) {
                     this.currentImage = 0
-                    MovableObject.charcterDead = true
+                    MovableObject.characterDead = true
                     this.deadSound.play()
                     setTimeout(() => {
                         this.gameOverSound.play()
                     }, 500)
-
                 }
                 this.playSingleDeadAnimation(this.IMAGES_DEAD)
+                setTimeout(()=>{
+                    this.stopAllIntervals()
+                }, 1000)
             }
         }, 1000 / 20);
-        this.characterIntervals.push(animationInterval)
+        MovableObject.characterIntervals.push(animationInterval)
 
         let jumpingInterval = setInterval(() => {
             if (this.isJumping === true && this.isAlive()) {
                 this.playSingleJumpAnimation(this.IMAGES_JUMPING)
             }
         }, 1000 / 10)
-        this.characterIntervals.push(jumpingInterval)
+        MovableObject.characterIntervals.push(jumpingInterval)
     }
 
 
@@ -160,24 +162,27 @@ class Character extends MovableObject {
             clearInterval(this.longIdleInterval);
             this.idleInterval = null;
             this.longIdleInterval = null;
- 
+
         }
         this.isIdle = false; // Setzt den Idle-Status zurück
+        this.isLongIdle = false
     }
 
 
     checkInactivity() {
-        setInterval(() => {
+        let idleInterval = setInterval(() => {
             let currentTime = Date.now();
-            if (currentTime - this.lastKeyPressTime > 100 && !this.isIdle
-            ) { // 10 Sek. Inaktiv?
+            if (currentTime - this.lastKeyPressTime > 100 && !this.isIdle &&
+                !this.isLongIdle) { // 10 Sek. Inaktiv?
                 this.playIdleAnimation(this.IMAGES_IDLE);
             } else if (currentTime - this.lastKeyPressTime > 7000) {
-                clearInterval(this.idleInterval)
-                clearInterval(this.longIdleInterval)
-                this.playLongIdleAnimation(this.IMAGES_LONG_IDLE)
+                if (!this.isLongIdle) {
+                    clearInterval(this.idleInterval)
+                    this.playLongIdleAnimation(this.IMAGES_LONG_IDLE)
+                }
             }
         }, 1000 / 20);
+        MovableObject.characterIntervals.push(idleInterval)
     }
 
 
@@ -187,15 +192,19 @@ class Character extends MovableObject {
             this.idleInterval = setInterval(() => {
                 this.playAnimation(obj);
             }, 1000 / 10); // Animation abspielen mit 10 FPS
+            MovableObject.characterIntervals.push(this.idleInterval)
         }
     }
 
 
     playLongIdleAnimation(obj) {
         if (this.isIdle) {
+            this.isIdle = false
+            this.isLongIdle = true
             this.longIdleInterval = setInterval(() => {
                 this.playAnimation(obj);
-            }, 1000 / 10); // Animation abspielen mit 10 FPS
+            }, 1000 / 5); // Animation abspielen mit 10 FPS
+            MovableObject.characterIntervals.push(this.longIdleInterval)
         }
     }
 
@@ -228,6 +237,7 @@ class Character extends MovableObject {
 
 
     resetJumpAnimation() {
+        console.log('jou')
         this.isJumping = false
         this.currentImage = 0
     }
@@ -236,8 +246,9 @@ class Character extends MovableObject {
     jump() {
         this.speedY = 30
         this.jumpSound.play()
-        if (this.isJumping === false) {
+        if (!this.isJumping) {
             this.isJumping = true
+            this.currentImage = 0
         }
     }
 }

@@ -59,7 +59,6 @@ class ThrowableObject extends MovableObject {
         } else if (direction) {
             this.throwLeftDirection()
         }
-
         this.animationInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_BOTTLE_THROW)
         }, 1000 / 20)

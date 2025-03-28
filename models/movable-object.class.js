@@ -7,11 +7,11 @@ class MovableObject extends DrawableObject {
     gravityInterval = 0
     currentJumpingImage = 0
     isJumping = false
-    endbossIntervals = []
-    characterIntervals = []
-    enemyIntervals = []
+    static endbossIntervals = []
+    static characterIntervals = []
+    static enemyIntervals = []
     static endbossDead = false
-    static charcterDead = false
+    static characterDead = false
     characterIsHit = false
     gameOverSound = new Audio('audio/gameOver.mp3')
 
@@ -96,23 +96,36 @@ class MovableObject extends DrawableObject {
     }
 
 
+    stopAllIntervals() {
+        this.stopAllCharacterIntervals()
+        this.stopAllEndbossIntervals()
+        this.stopAllEnemyIntervals()
+    }
+
+
     stopAllEndbossIntervals() {
-        this.endbossIntervals.forEach(interval => clearInterval(interval))
+        if (MovableObject.endbossIntervals.length > 0) {
+            MovableObject.endbossIntervals.forEach(interval => clearInterval(interval))
+        }
     }
 
 
     stopAllCharacterIntervals() {
-        this.characterIntervals.forEach(interval => clearInterval(interval))
+        if (MovableObject.characterIntervals.length > 0) {
+            MovableObject.characterIntervals.forEach(interval => clearInterval(interval))
+        }
     }
 
 
     stopAllEnemyIntervals() {
-        this.enemyIntervals.forEach(interval => clearInterval(interval))
+        if (MovableObject.enemyIntervals.length > 0) {
+            MovableObject.enemyIntervals.forEach(interval => clearInterval(interval))
+        }
     }
 
 
     gameOverScreen() {
-        if (MovableObject.charcterDead) {
+        if (MovableObject.characterDead) {
             let gameOverScreen = new DrawableObject();
             gameOverScreen.loadImage('img/9_intro_outro_screens/game_over/game over.png'); // Bildpfad anpassen
             gameOverScreen.x = 0;  // Position in der Mitte
@@ -121,6 +134,7 @@ class MovableObject extends DrawableObject {
             gameOverScreen.height = 500
             this.world.gameOverScreen = gameOverScreen; // Speichern im World-Objekt
             this.showButtons()
+            console.log('gameOverSreen')
         }
     }
 
