@@ -10,6 +10,7 @@ class MovableObject extends DrawableObject {
     static endbossIntervals = []
     static characterIntervals = []
     static enemyIntervals = []
+    static backgroundIntervals = []
     static endbossDead = false
     static characterDead = false
     characterIsHit = false
@@ -100,12 +101,24 @@ class MovableObject extends DrawableObject {
         this.stopAllCharacterIntervals()
         this.stopAllEndbossIntervals()
         this.stopAllEnemyIntervals()
+        this.stopAllBackgroundIntervals()
+    }
+
+
+    
+
+    stopAllBackgroundIntervals() {
+        if (MovableObject.backgroundIntervals.length > 0) {
+            MovableObject.backgroundIntervals.forEach(interval => clearInterval(interval))
+            MovableObject.backgroundIntervals = []
+        }
     }
 
 
     stopAllEndbossIntervals() {
         if (MovableObject.endbossIntervals.length > 0) {
             MovableObject.endbossIntervals.forEach(interval => clearInterval(interval))
+            MovableObject.endbossIntervals = []
         }
     }
 
@@ -113,14 +126,18 @@ class MovableObject extends DrawableObject {
     stopAllCharacterIntervals() {
         if (MovableObject.characterIntervals.length > 0) {
             MovableObject.characterIntervals.forEach(interval => clearInterval(interval))
+            MovableObject.characterIntervals = []
         }
+
     }
 
 
     stopAllEnemyIntervals() {
         if (MovableObject.enemyIntervals.length > 0) {
             MovableObject.enemyIntervals.forEach(interval => clearInterval(interval))
+            MovableObject.enemyIntervals = []
         }
+       
     }
 
 
@@ -142,6 +159,6 @@ class MovableObject extends DrawableObject {
     showButtons() {
         setTimeout(() => {
             document.getElementById('buttonContainer').classList.remove('d-none')
-        }, 1000)
+        }, 3000)
     }
 }

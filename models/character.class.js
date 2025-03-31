@@ -129,7 +129,8 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_WALKING)
             }
             if (this.isDead()) {
-                if (!MovableObject.characterDead) {
+                console.log(MovableObject.characterDead)
+                if (!MovableObject.characterDead && this.isDead()) {
                     this.currentImage = 0
                     MovableObject.characterDead = true
                     this.deadSound.play()
@@ -140,7 +141,8 @@ class Character extends MovableObject {
                 this.playSingleDeadAnimation(this.IMAGES_DEAD)
                 setTimeout(()=>{
                     this.stopAllIntervals()
-                }, 1000)
+                    this.resetVariables()
+                }, 2000)
             }
         }, 1000 / 20);
         MovableObject.characterIntervals.push(animationInterval)
@@ -224,6 +226,7 @@ class Character extends MovableObject {
             this.y += 30
         }
         else if (this.currentImage === images.length) {
+            this.currentImage = 0
             this.gameOverScreen()
         }
     }
@@ -250,5 +253,14 @@ class Character extends MovableObject {
             this.isJumping = true
             this.currentImage = 0
         }
+    }
+
+
+    resetVariables() {
+        MovableObject.endbossIntervals = [];
+        MovableObject.characterIntervals = [];
+        MovableObject.enemyIntervals = [];
+        MovableObject.endbossDead = false;
+        MovableObject.characterDead = false;
     }
 }

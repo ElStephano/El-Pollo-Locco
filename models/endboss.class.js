@@ -9,6 +9,10 @@ class Endboss extends MovableObject {
     animationPlaying = true
     otherDirection = false
     isHit = false
+    mainInterval = null
+    currentAnimationInterval = null
+    deadIntervalY = null
+    walkingInterval = null
 
 
     IMAGES_WALKING = [
@@ -81,7 +85,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
-    }
+    }    
 
 
     updateState() {
@@ -143,33 +147,36 @@ class Endboss extends MovableObject {
 
             this.switchDirection();
         }, 200);
+        MovableObject.endbossIntervals.push(this.mainInterval)
     }
 
 
     endbossY() {
         setTimeout(() => {
-            let interval = setInterval(() => {
+            this.deadIntervalY = setInterval(() => {
                 this.y += 20
             }, 1000 / 20)
             setTimeout(() => {
-                clearInterval(interval)
+                clearInterval(this.deadIntervalY)
             }, 2000)
         }, 300)
+        MovableObject.endbossIntervals.push(this.deadIntervalY)
     }
 
 
     walkingAnimation(callback) {
         let i = 0;
-        let interval = setInterval(() => {
+        this.walkingInterval = setInterval(() => {
             if (i < 10 && this.isAlive()) {
                 this.playAnimation(this.IMAGES_WALKING);
                 this.x -= this.speed;
                 i++;
             } else {
-                clearInterval(interval);
+                clearInterval(this.walkingInterval);
                 callback && callback();
             }
         }, 1000 / 10);
+        MovableObject.endbossIntervals.push(this.walkingInterval)
     }
 
 
@@ -196,6 +203,7 @@ class Endboss extends MovableObject {
                 if (callback) callback();
             }
         }, 200);
+        MovableObject.endbossIntervals.push(this.currentAnimationInterval)
     }
 
 

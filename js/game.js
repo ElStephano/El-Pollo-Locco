@@ -5,7 +5,7 @@ keyboard = new Keyboard()
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
-    console.log(world.level)
+    // console.log(world.level)
 }
 
 function keySettings() {
@@ -44,17 +44,39 @@ function keySettings() {
     })
 }
 
-
+window.onload = () => {keySettings()}
 document.getElementById('start').addEventListener('click', startGame)
 document.getElementById('restart').addEventListener('click', restartGame)
+document.getElementById('main-menu').addEventListener('click', backToMainMenu)
+
 
 function startGame() {
     initLevel()
     init()
-    keySettings()
-    document.getElementById('startScreen').classList.add('d-none')  
+    document.getElementById('startScreen').classList.add('d-none') 
+    console.log(world)
 }
 
+
 function restartGame() {
-    startGame() 
+    level1 = null
+    let ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // keySettings()
+    let btnContainer = document.getElementById('buttonContainer')
+    if(!btnContainer.classList.contains('d-none')) {
+        btnContainer.classList.add('d-none')
+    }
+    setTimeout(()=>{
+        world = null
+        initLevel()
+        world = new World(canvas, keyboard);
+        // startGame()
+    }, 100)
+}
+
+
+function backToMainMenu() {
+    document.getElementById('startScreen').classList.remove('d-none')
+    document.getElementById('buttonContainer').classList.add('d-none')
 }

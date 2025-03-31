@@ -10,6 +10,8 @@ class World {
     lastThrowTime = 0
     throwSound = new Audio('audio/throwBottle.mp3')
     bottleHitSound = new Audio('audio/bottleHit.mp3')
+    checkInterval= null
+
 
 
     constructor(canvas, keyboard) {
@@ -27,12 +29,19 @@ class World {
 
 
     run() {
-        setInterval(() => {
+        this.checkInterval = setInterval(() => {
             this.checkThrowableObjects()
             this.checkCollisions()
             this.checkCollectibleObjects()
             this.checkCollisionBottles()
             this.checkCollisionAboveGround()
+            if(MovableObject.characterDead) {
+                setTimeout(()=>{
+                    console.log('checkInterval');
+                    
+                    clearInterval(this.checkInterval)
+                },500)
+            }
         }, 1000 / 30)
     }
 
