@@ -129,7 +129,6 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_WALKING)
             }
             if (this.isDead()) {
-                console.log(MovableObject.characterDead)
                 if (!MovableObject.characterDead && this.isDead()) {
                     this.currentImage = 0
                     MovableObject.characterDead = true
@@ -240,7 +239,6 @@ class Character extends MovableObject {
 
 
     resetJumpAnimation() {
-        console.log('jou')
         this.isJumping = false
         this.currentImage = 0
     }

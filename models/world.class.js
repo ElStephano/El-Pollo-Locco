@@ -36,9 +36,7 @@ class World {
             this.checkCollisionBottles()
             this.checkCollisionAboveGround()
             if(MovableObject.characterDead) {
-                setTimeout(()=>{
-                    console.log('checkInterval');
-                    
+                setTimeout(()=>{                    
                     clearInterval(this.checkInterval)
                 },500)
             }

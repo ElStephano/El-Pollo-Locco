@@ -74,7 +74,7 @@ class Endboss extends MovableObject {
         this.loadImagess();
         this.updateState();
         this.x = 1000
-        this.speed = 15
+        this.speed = 5
     }
 
 
@@ -85,7 +85,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
-    }    
+    }
 
 
     updateState() {
@@ -116,6 +116,8 @@ class Endboss extends MovableObject {
                         setTimeout(() => {
                             this.state = "walking";
                             this.animationPlaying = false;
+                            console.log('alert');
+
                         }, 500);
                     });
                     break;
@@ -127,6 +129,7 @@ class Endboss extends MovableObject {
                         this.walkingAnimation(() => {
                             this.state = "attacking";
                             this.animationPlaying = false;
+                            console.log('walking');
                         });
                     }
                     break;
@@ -139,6 +142,7 @@ class Endboss extends MovableObject {
                             setTimeout(() => {
                                 this.state = "walking";
                                 this.animationPlaying = false;
+                                console.log('attacking');
                             }, 100);
                         });
                     }
@@ -146,7 +150,7 @@ class Endboss extends MovableObject {
             }
 
             this.switchDirection();
-        }, 200);
+        }, 1000 / 20);
         MovableObject.endbossIntervals.push(this.mainInterval)
     }
 
@@ -165,19 +169,23 @@ class Endboss extends MovableObject {
 
 
     walkingAnimation(callback) {
-        let i = 0;
+        if (this.walkingInterval) {
+            clearInterval(this.walkingInterval);
+        }
         this.walkingInterval = setInterval(() => {
-            if (i < 10 && this.isAlive()) {
+            if (this.isAlive()) {
                 this.playAnimation(this.IMAGES_WALKING);
                 this.x -= this.speed;
-                i++;
-            } else {
-                clearInterval(this.walkingInterval);
-                callback && callback();
             }
-        }, 1000 / 10);
-        MovableObject.endbossIntervals.push(this.walkingInterval)
+        }, 100);
+        MovableObject.endbossIntervals.push(this.walkingInterval);
+        setTimeout(() => {
+            clearInterval(this.walkingInterval);
+            this.walkingInterval = null;
+            callback && callback();
+        }, 3000);
     }
+    
 
 
     clearAnimation() {

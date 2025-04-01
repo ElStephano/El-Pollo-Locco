@@ -5,7 +5,6 @@ keyboard = new Keyboard()
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
-    // console.log(world.level)
 }
 
 function keySettings() {
@@ -54,7 +53,6 @@ function startGame() {
     initLevel()
     init()
     document.getElementById('startScreen').classList.add('d-none') 
-    console.log(world)
 }
 
 

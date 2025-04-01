@@ -151,7 +151,6 @@ class MovableObject extends DrawableObject {
             gameOverScreen.height = 500
             this.world.gameOverScreen = gameOverScreen; // Speichern im World-Objekt
             this.showButtons()
-            console.log('gameOverSreen')
         }
     }
 
