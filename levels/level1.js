@@ -63,11 +63,11 @@ function initLevel() {
             new CollectibleBottles(),
             new CollectibleBottles(),
             new CollectibleBottles(),
-            new Coins(),
-            new Coins(),
-            new Coins(),
-            new Coins(),
-            new Coins()
+            new Coins(this.x = 400, this.y = 150),
+            new Coins(this.x = 450, this.y = 130),
+            new Coins(this.x = 800, this.y = 200),
+            new Coins(this.x = 1000, this.y = 250),
+            new Coins(this.x = 1300, this.y = 250)
         ]
     )
 }

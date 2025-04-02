@@ -7,15 +7,30 @@ class Coins extends CollectibleObject {
     ]
     
     
-    constructor() {
+    constructor(x, y) {
         super()
         this.loadImages(this.IMAGES_COINS)
         this.setCoins()
+        this.animate()
+        this.x = x
+        this.y = y
     }
 
 
+    // setCoins() {
+    //     let path = this.IMAGES_COINS[this.getRandomImage(this.IMAGES_COINS)]
+    //     this.img = this.imageCache[path]
+    // }
+
     setCoins() {
-        let path = this.IMAGES_COINS[this.getRandomImage(this.IMAGES_COINS)]
-        this.img = this.imageCache[path]
+        this.currentImageIndex = 0;
+        this.img = this.imageCache[this.IMAGES_COINS[this.currentImageIndex]];
+    }    
+
+    animate() {
+        setInterval(() => {
+            this.currentImageIndex = (this.currentImageIndex + 1) % this.IMAGES_COINS.length;
+            this.img = this.imageCache[this.IMAGES_COINS[this.currentImageIndex]];
+        }, 200); // Wechselt alle 200 Millisekunden
     }
 }

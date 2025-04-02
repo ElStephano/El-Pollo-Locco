@@ -148,9 +148,8 @@ class Endboss extends MovableObject {
                     }
                     break;
             }
-
             this.switchDirection();
-        }, 1000 / 20);
+        }, 1000 / 30);
         MovableObject.endbossIntervals.push(this.mainInterval)
     }
 
@@ -158,8 +157,8 @@ class Endboss extends MovableObject {
     endbossY() {
         setTimeout(() => {
             this.deadIntervalY = setInterval(() => {
-                this.y += 20
-            }, 1000 / 20)
+                this.y += 10
+            }, 1000 / 30)
             setTimeout(() => {
                 clearInterval(this.deadIntervalY)
             }, 2000)
