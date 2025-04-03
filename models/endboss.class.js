@@ -74,7 +74,7 @@ class Endboss extends MovableObject {
         this.loadImagess();
         this.updateState();
         this.x = 1000
-        this.speed = 5
+        this.speed = 10
     }
 
 
@@ -208,6 +208,13 @@ class Endboss extends MovableObject {
             } else {
                 clearInterval(this.currentAnimationInterval);
                 if (callback) callback();
+            }
+            console.log(this.img.src);
+            if (this.img.src === 'http://127.0.0.1:5500/img/4_enemie_boss_chicken/3_attack/G16.png') {
+                this.endbossJumpSound.play()
+
+                console.log('drin');
+                
             }
         }, 200);
         MovableObject.endbossIntervals.push(this.currentAnimationInterval)

@@ -84,7 +84,7 @@ button:hover {
     background-color: gold;
 }
 
-.start-screen-buttons{
+.start-screen-buttons {
     position: absolute;
     top: 40px;
     width: 720px;
@@ -92,16 +92,21 @@ button:hover {
     justify-content: space-around;
 }
 
-
-
-/* #start {
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.icons-container {
+    box-sizing: border-box;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
 }
 
-#settings {
-    top: 70%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-} */
+.icons-container img {
+    width: 24px;
+}
+
+.icons-container button {
+    width: 36px !important;
+    height: 30px;
+    margin: 8px;
+}
