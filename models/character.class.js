@@ -138,7 +138,7 @@ class Character extends MovableObject {
                     }, 500)
                 }
                 this.playSingleDeadAnimation(this.IMAGES_DEAD)
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.stopAllIntervals()
                     this.resetVariables()
                 }, 2000)

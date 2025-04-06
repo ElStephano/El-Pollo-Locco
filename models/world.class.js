@@ -11,7 +11,9 @@ class World {
     throwSound = new Audio('audio/throwBottle.mp3')
     bottleHitSound = new Audio('audio/bottleHit.mp3')
     checkInterval= null
-
+    static killedEnemies = 0
+    static collectedCoins = 0
+    static collectedBottles = 0
 
 
     constructor(canvas, keyboard) {
@@ -64,7 +66,7 @@ class World {
                     this.bottleHitSound.play()
                     setTimeout(() => {
                         endboss.isHit = false
-                    }, 2000)
+                    }, 3000)
                 }
             })
         })
@@ -74,9 +76,11 @@ class World {
     isCollidingEndboss(throwable, endboss) {
         if (!throwable.isHit) {
             const bottleIndex = this.throwableObjects.indexOf(throwable)
-            if (bottleIndex !== -1 && endboss.energy > 0) {
+            if (bottleIndex !== -1 && endboss.energy >= 0) {
                 this.throwableObjects[bottleIndex].bottleHit(throwable.x, throwable.y)
                 endboss.energy -= 20
+                this.level.statusbarHealthEndboss.percentage -= 20
+                this.level.statusbarHealthEndboss.setPercentage( this.level.statusbarHealthEndboss.percentage)
                 setTimeout(() => {
                     this.throwableObjects.splice(bottleIndex, 1)
                 }, (this.throwableObjects[bottleIndex].IMAGES_BOTTLE_HIT.length) * 250)
@@ -91,6 +95,7 @@ class World {
             const bottleIndex = this.throwableObjects.indexOf(throwable)
             if (index !== -1 && bottleIndex !== -1 && !enemy.isHit) {
                 enemy.isHit = true
+                World.killedEnemies += 1
                 setTimeout(() => {
                     this.level.enemies.splice(index, 1)
                 }, 2000)
@@ -109,9 +114,11 @@ class World {
                 if (collectible instanceof CollectibleBottles && this.level.bottleStatusBar.bottleAmount <= 9) {
                     this.level.bottleStatusBar.setBottleAmount(this.level.bottleStatusBar.bottleAmount + 1)
                     this.level.collectibleObject.splice(this.level.collectibleObject.indexOf(collectible), 1)
+                    World.collectedBottles += 1
                 } else if (collectible instanceof Coins) {
                     this.level.coinStatusBar.setCoins(this.level.coinStatusBar.coinAmount + 1)
                     this.level.collectibleObject.splice(this.level.collectibleObject.indexOf(collectible), 1)
+                    World.collectedCoins += 1  
                 }
             }
         })
@@ -152,6 +159,7 @@ class World {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && !enemy.isHit && this.character.isAboveGround()
                 && enemy instanceof Enemy) {
+                World.killedEnemies += 1
                 enemy.isHit = true
                 this.character.jump()
                 setTimeout(() => {
@@ -167,18 +175,21 @@ class World {
 
         this.ctx.translate(this.camera_x, 0)
         this.addObjectsToMap(this.level.backgroundObjects)
-
         this.ctx.translate(-this.camera_x, 0)
+
+        this.addObjectsToMap(this.level.clouds)
+        
         this.addToMap(this.level.healthStatusBar)
         this.addToMap(this.level.bottleStatusBar)
         this.addToMap(this.level.coinStatusBar)
+        this.addToMap(this.level.statusbarHealthEndboss)
         this.ctx.translate(this.camera_x, 0)
 
         this.addObjectsToMap(this.level.collectibleObject)
 
         this.addObjectsToMap(this.throwableObjects)
 
-        this.addObjectsToMap(this.level.clouds)
+        
         this.addObjectsToMap(this.level.enemies)
         this.addToMap(this.character)
 

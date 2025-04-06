@@ -7,6 +7,9 @@ class Enemy extends MovableObject {
     enemyAnimationInterval = null;
     enemyMoveInterval = null;
     isSmallChicken = false; // Neue Eigenschaft zur Unterscheidung
+    deadSound = new Audio('audio/dead_chicken.mp3')
+    soundPlay = false
+
 
     IMAGES_WALKING = [
         'img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
@@ -16,13 +19,16 @@ class Enemy extends MovableObject {
 
     IMAGE_DEAD = 'img/3_enemies_chicken/chicken_normal/2_dead/dead.png';
 
+
     SMALL_CHICKEN_WALKING = [
         'img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
         'img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
         'img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
     ];
 
+
     SMALL_CHICKEN_DEAD = 'img/3_enemies_chicken/chicken_small/2_dead/dead.png';
+
 
     offset = {
         'top': 10,
@@ -31,9 +37,10 @@ class Enemy extends MovableObject {
         'left': 10
     };
 
+
     constructor(x) {
         super();
-        
+
         // Entscheidet bei jedem Gegner, ob es groß oder klein ist
         this.isSmallChicken = Math.random() < 0.5; // 50% Chance für kleines Huhn
         this.x = x;
@@ -50,8 +57,10 @@ class Enemy extends MovableObject {
             this.loadImage(this.IMAGES_WALKING[0]);
         }
 
+        this.audioSettings()
         this.animate();
     }
+
 
     animate() {
         this.enemyMoveInterval = setInterval(() => {
@@ -70,8 +79,17 @@ class Enemy extends MovableObject {
                 }
             } else if (this.isHit) {
                 this.img.src = this.isSmallChicken ? this.SMALL_CHICKEN_DEAD : this.IMAGE_DEAD;
+                if (!this.soundPlay) {
+                    this.deadSound.play()
+                    this.soundPlay = true
+                }
             }
         }, 200);
         MovableObject.enemyIntervals.push(this.enemyAnimationInterval);
+    }
+
+
+    audioSettings() {
+        this.deadSound.volume = 0.2
     }
 }

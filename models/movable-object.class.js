@@ -106,8 +106,6 @@ class MovableObject extends DrawableObject {
     }
 
 
-    
-
     stopAllBackgroundIntervals() {
         if (MovableObject.backgroundIntervals.length > 0) {
             MovableObject.backgroundIntervals.forEach(interval => clearInterval(interval))
@@ -160,5 +158,34 @@ class MovableObject extends DrawableObject {
         setTimeout(() => {
             document.getElementById('buttonContainer').classList.remove('d-none')
         }, 3000)
+    }
+
+
+    showStats() {
+        if(MovableObject.endbossDead){
+            this.stopAllIntervals()
+            this.getStats()
+            document.getElementById('winningScreen').classList.remove('d-none');
+            this.showButtons()
+            this.resetStats()
+        } 
+    }
+
+    getStats() {
+        if (MovableObject.endbossDead) {
+            let kills = document.getElementById('killedEnemies')
+            let coins = document.getElementById('collectedCoins')
+            let bottles = document.getElementById('collectedBottles')
+            kills.innerHTML = `${World.killedEnemies}`
+            coins.innerHTML = `${World.collectedCoins}`
+            bottles.innerHTML = `${World.collectedBottles}`
+        }
+    }
+
+
+    resetStats() {
+        World.killedEnemies = 0
+        World.collectedCoins = 0
+        World.collectedBottles = 0
     }
 }

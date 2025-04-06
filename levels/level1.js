@@ -4,24 +4,24 @@ let level1
 function initLevel() {
         level1 = new Level(
         [
-            new Enemy(this.x = 600),
-            new Enemy(this.x = 800),
-            new Enemy(this.x = 1600),
-            new Enemy(this.x = 2000),
-            new Enemy(this.x = 3000),
-            new Enemy(this.x = 4000),
-            new Enemy(this.x = 5000),
-            new Enemy(this.x = 6000),
-            new Enemy(this.x = 8000),
-            new Enemy(this.x = 7000),
+            new Enemy(600),
+            new Enemy(800),
+            new Enemy(1600),
+            new Enemy(2000),
+            new Enemy(3000),
+            new Enemy(4000),
+            new Enemy(5000),
+            new Enemy(6000),
+            new Enemy(8000),
+            new Enemy(7000),
             new Endboss()
         ],
         [
-            new Cloud(this.x = 300),
-            new Cloud(this.x = 1200),
-            new Cloud(this.x = 2200),
-            new Cloud(this.x = 3200),
-            new Cloud(this.x = 4200)
+            new Cloud(300),
+            new Cloud(1200),
+            new Cloud(2200),
+            new Cloud(3200),
+            new Cloud(4200)
         ],
         [
             new BackgroundObject('img/5_background/layers/air.png', -719),
@@ -55,6 +55,8 @@ function initLevel() {
 
         new StatusBarCoin()
         ,
+
+        new StatusbarHealthEndboss(),
         [
             new CollectibleBottles(),
             new CollectibleBottles(),
@@ -63,11 +65,13 @@ function initLevel() {
             new CollectibleBottles(),
             new CollectibleBottles(),
             new CollectibleBottles(),
-            new Coins(this.x = 400, this.y = 150),
-            new Coins(this.x = 450, this.y = 130),
-            new Coins(this.x = 800, this.y = 200),
-            new Coins(this.x = 1000, this.y = 250),
-            new Coins(this.x = 1300, this.y = 250)
-        ]
+            new Coins(400, 150),
+            new Coins(450, 130),
+            new Coins(800, 200),
+            new Coins(1000, 250),
+            new Coins(1300, 250)
+        ],
+
+        2150
     )
 }

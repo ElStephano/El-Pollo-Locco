@@ -50,6 +50,9 @@ window.onload = () => { keySettings() }
 document.getElementById('start').addEventListener('click', startGame)
 document.getElementById('restart').addEventListener('click', restartGame)
 document.getElementById('main-menu').addEventListener('click', backToMainMenu)
+document.getElementById('controller').addEventListener('click', keyAssignment)
+// document.getElementById('nextBtn').addEventListener('click', statsButton)
+
 
 
 function startGame() {
@@ -67,6 +70,7 @@ function restartGame() {
     let btnContainer = document.getElementById('buttonContainer')
     if (!btnContainer.classList.contains('d-none')) {
         btnContainer.classList.add('d-none')
+        document.getElementById('winningScreen').classList.add('d-none')
     }
     setTimeout(() => {
         world = null
@@ -80,17 +84,21 @@ function restartGame() {
 function backToMainMenu() {
     document.getElementById('startScreen').classList.remove('d-none')
     document.getElementById('buttonContainer').classList.add('d-none')
+    document.getElementById('winningScreen').classList.add('d-none')
+
 }
 
 
-
+function keyAssignment() {
+    document.getElementById('keyAssignment').classList.toggle('d-none')
+}
 
 
 function startMusic() {
     backgroundMusic.loop = true; // Musik in Dauerschleife
     backgroundMusic.volume = 0; // Startet stumm
     backgroundMusic.play().then(() => {
-        backgroundMusic.volume = 0.5; // Lautstärke nach dem ersten Klick anpassen
+        backgroundMusic.volume = 0.3; // Lautstärke nach dem ersten Klick anpassen
         isMuted = false; // Musik ist nun nicht mehr stumm
         console.log("Musik gestartet");
         // Entferne den Event-Listener, da die Musik nun gestartet ist
@@ -101,12 +109,14 @@ function startMusic() {
     });
 }
 
+
 // Funktion zum Umschalten der Stummschaltung
 function toggleMute() {
     isMuted = !isMuted;
     backgroundMusic.muted = isMuted;
     updateMuteIcon();
 }
+
 
 // Funktion zum Aktualisieren des Icons
 function updateMuteIcon() {
@@ -131,7 +141,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+// function statsButton() {
+//     document.getElementById('winningScreen').classList.add('d-none')
+//     document.getElementById('winningScreen').classList.add('d-none')
 
-
-
-
+// }

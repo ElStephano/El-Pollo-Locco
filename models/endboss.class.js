@@ -100,10 +100,12 @@ class Endboss extends MovableObject {
                 clearInterval(this.mainInterval);
                 this.animationPlaying = true;
                 this.endbossY()
+                World.killedEnemies += 1
                 this.playSingleRunAnimation(this.IMAGES_DEAD, () => {
                     setTimeout(() => {
                         this.animationPlaying = false;
                     }, 1000);
+                    this.showStats()
                 });
                 return; // Hier abbrechen, damit kein anderer Zustand mehr aktiviert wird!
             }
@@ -116,8 +118,6 @@ class Endboss extends MovableObject {
                         setTimeout(() => {
                             this.state = "walking";
                             this.animationPlaying = false;
-                            console.log('alert');
-
                         }, 500);
                     });
                     break;
@@ -129,7 +129,6 @@ class Endboss extends MovableObject {
                         this.walkingAnimation(() => {
                             this.state = "attacking";
                             this.animationPlaying = false;
-                            console.log('walking');
                         });
                     }
                     break;
@@ -142,7 +141,6 @@ class Endboss extends MovableObject {
                             setTimeout(() => {
                                 this.state = "walking";
                                 this.animationPlaying = false;
-                                console.log('attacking');
                             }, 100);
                         });
                     }
@@ -209,12 +207,8 @@ class Endboss extends MovableObject {
                 clearInterval(this.currentAnimationInterval);
                 if (callback) callback();
             }
-            console.log(this.img.src);
             if (this.img.src === 'http://127.0.0.1:5500/img/4_enemie_boss_chicken/3_attack/G16.png') {
-                this.endbossJumpSound.play()
-
-                console.log('drin');
-                
+                this.endbossJumpSound.play()                
             }
         }, 200);
         MovableObject.endbossIntervals.push(this.currentAnimationInterval)
