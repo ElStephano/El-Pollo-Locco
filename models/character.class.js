@@ -9,6 +9,8 @@ class Character extends MovableObject {
     jumpSound = new Audio('audio/charachterJump.mp3')
     deadSound = new Audio('audio/characterDying.mp3')
     isHit = false
+    static endbossStart = false
+    static endbossIsAnimate = false
     lastKeyPressTime = Date.now()
     idleInterval = null
     longIdleInterval = null
@@ -141,8 +143,9 @@ class Character extends MovableObject {
                 setTimeout(() => {
                     this.stopAllIntervals()
                     this.resetVariables()
-                }, 2000)
+                }, 3000)
             }
+            this.startEndboss()
         }, 1000 / 20);
         MovableObject.characterIntervals.push(animationInterval)
 
@@ -223,8 +226,7 @@ class Character extends MovableObject {
         if (this.currentImage < images.length) {
             this.singleRunFrames(images)
             this.y += 30
-        }
-        else if (this.currentImage === images.length) {
+        } else {
             this.currentImage = 0
             this.gameOverScreen()
         }
@@ -260,5 +262,15 @@ class Character extends MovableObject {
         MovableObject.enemyIntervals = [];
         MovableObject.endbossDead = false;
         MovableObject.characterDead = false;
+        Character.endbossStart = false
+        Character.endbossIsAnimate = false
+    }
+
+
+    startEndboss() {
+        if(this.x > 2000) {
+            if(!Character.endbossStart)
+            Character.endbossStart = true
+        }
     }
 }

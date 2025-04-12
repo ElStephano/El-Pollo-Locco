@@ -165,6 +165,7 @@ button:hover {
     width: 20%;
     font-size: 16px;
     font-size: 24px;
+    margin: 18px 0 !important;
 }
 
 .stats p{
@@ -187,4 +188,16 @@ button:hover {
     height: 100%;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.8);
+}
+
+#killedEnemies {
+    margin: 18px 0;
+}
+
+#collectedCoins {
+    margin: 18px 0;
+}
+
+#collectedBottles {
+    margin: 18px 0;
 }

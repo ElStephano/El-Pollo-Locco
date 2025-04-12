@@ -10,10 +10,12 @@ class World {
     lastThrowTime = 0
     throwSound = new Audio('audio/throwBottle.mp3')
     bottleHitSound = new Audio('audio/bottleHit.mp3')
-    checkInterval= null
+    checkInterval = null
     static killedEnemies = 0
     static collectedCoins = 0
     static collectedBottles = 0
+    backgroundMusic = new Audio('./audio/Menu.mp3');
+    isMuted = true
 
 
     constructor(canvas, keyboard) {
@@ -23,7 +25,10 @@ class World {
         this.draw()
         this.setWorld()
         this.run()
+        this.initMuteButton();
+        this.waitForFirstUserInteraction()
     }
+
 
     setWorld() {
         this.character.world = this;
@@ -37,10 +42,10 @@ class World {
             this.checkCollectibleObjects()
             this.checkCollisionBottles()
             this.checkCollisionAboveGround()
-            if(MovableObject.characterDead) {
-                setTimeout(()=>{                    
+            if (MovableObject.characterDead) {
+                setTimeout(() => {
                     clearInterval(this.checkInterval)
-                },500)
+                }, 500)
             }
         }, 1000 / 30)
     }
@@ -60,13 +65,11 @@ class World {
                     enemy.isHit = true
                     this.bottleHitSound.play()
                 }
-                if (throwable.isColliding(endboss) && !endboss.isHit) {
+                if (throwable.isColliding(endboss) && !endboss.isHit && !throwable.isHit) {
                     this.isCollidingEndboss(throwable, endboss)
                     endboss.isHit = true
                     this.bottleHitSound.play()
-                    setTimeout(() => {
-                        endboss.isHit = false
-                    }, 3000)
+                    endboss.isHit = false
                 }
             })
         })
@@ -79,8 +82,9 @@ class World {
             if (bottleIndex !== -1 && endboss.energy >= 0) {
                 this.throwableObjects[bottleIndex].bottleHit(throwable.x, throwable.y)
                 endboss.energy -= 20
+                endboss.isHit = true
                 this.level.statusbarHealthEndboss.percentage -= 20
-                this.level.statusbarHealthEndboss.setPercentage( this.level.statusbarHealthEndboss.percentage)
+                this.level.statusbarHealthEndboss.setPercentage(this.level.statusbarHealthEndboss.percentage)
                 setTimeout(() => {
                     this.throwableObjects.splice(bottleIndex, 1)
                 }, (this.throwableObjects[bottleIndex].IMAGES_BOTTLE_HIT.length) * 250)
@@ -118,7 +122,7 @@ class World {
                 } else if (collectible instanceof Coins) {
                     this.level.coinStatusBar.setCoins(this.level.coinStatusBar.coinAmount + 1)
                     this.level.collectibleObject.splice(this.level.collectibleObject.indexOf(collectible), 1)
-                    World.collectedCoins += 1  
+                    World.collectedCoins += 1
                 }
             }
         })
@@ -178,7 +182,7 @@ class World {
         this.ctx.translate(-this.camera_x, 0)
 
         this.addObjectsToMap(this.level.clouds)
-        
+
         this.addToMap(this.level.healthStatusBar)
         this.addToMap(this.level.bottleStatusBar)
         this.addToMap(this.level.coinStatusBar)
@@ -189,7 +193,7 @@ class World {
 
         this.addObjectsToMap(this.throwableObjects)
 
-        
+
         this.addObjectsToMap(this.level.enemies)
         this.addToMap(this.character)
 
@@ -237,5 +241,65 @@ class World {
         objects.forEach(o => {
             this.addToMap(o)
         })
+    }
+
+
+    restartMusic() {
+        this.backgroundMusic.pause();
+        this.backgroundMusic.currentTime = 0;
+        if (!this.isMuted) {
+            this.backgroundMusic.play().catch((e) => {
+                console.error('Fehler beim Abspielen der Musik:', e);
+            });
+        }
+    }
+
+
+
+    startMusic() {
+        if (!this.backgroundMusic.loop) {
+            this.backgroundMusic.loop = true;
+            this.backgroundMusic.volume = 0.2;
+            this.backgroundMusic.play().catch((e) => {
+                console.error('Musik konnte nicht abgespielt werden:', e);
+            });
+            this.isMuted = false;
+            this.updateMuteIcon();
+        }
+    }
+
+
+
+    // Funktion zum Umschalten der Stummschaltung
+    toggleMute() {
+        this.isMuted = !this.isMuted;
+        this.backgroundMusic.muted = this.isMuted;
+        this.updateMuteIcon();
+    }
+
+
+    // Funktion zum Aktualisieren des Icons
+    updateMuteIcon() {
+        const muteIcon = document.getElementById('muteIcon');
+        muteIcon.src = this.isMuted ? 'img/10_Icons/mute.png' : 'img/10_Icons/loud.png';
+    }
+
+    // Funktion zur Initialisierung des Mute-Buttons
+    initMuteButton() {
+        const muteButton = document.getElementById('muteButton');
+
+        muteButton.addEventListener('click', this.toggleMute.bind(this));
+    }
+
+
+    waitForFirstUserInteraction() {
+        const startMusicOnce = () => {
+            this.startMusic(); // Musik starten
+            document.removeEventListener('keydown', startMusicOnce);
+            document.removeEventListener('click', startMusicOnce);
+        };
+
+        document.addEventListener('keydown', startMusicOnce); // Tastendruck startet Musik
+        document.addEventListener('click', startMusicOnce);   // oder Klick
     }
 }

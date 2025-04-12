@@ -28,9 +28,10 @@ class Coins extends CollectibleObject {
     }    
 
     animate() {
-        setInterval(() => {
+        this.interval = setInterval(() => {
             this.currentImageIndex = (this.currentImageIndex + 1) % this.IMAGES_COINS.length;
             this.img = this.imageCache[this.IMAGES_COINS[this.currentImageIndex]];
         }, 200); // Wechselt alle 200 Millisekunden
+        MovableObject.backgroundIntervals.push(this.interval)
     }
 }

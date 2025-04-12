@@ -1,8 +1,7 @@
 let canvas;
 let world;
 keyboard = new Keyboard()
-const backgroundMusic = new Audio('./audio/Menu.mp3');
-let isMuted = true;
+
 
 
 function init() {
@@ -56,6 +55,8 @@ document.getElementById('controller').addEventListener('click', keyAssignment)
 
 
 function startGame() {
+    stopMusic()
+    clearAllInterval()
     initLevel()
     init()
     document.getElementById('startScreen').classList.add('d-none')
@@ -63,21 +64,41 @@ function startGame() {
 
 
 function restartGame() {
+    clearAllInterval()
     level1 = null
     let ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // keySettings()
     let btnContainer = document.getElementById('buttonContainer')
+    let winningScreen = document.getElementById('winningScreen')
     if (!btnContainer.classList.contains('d-none')) {
         btnContainer.classList.add('d-none')
-        document.getElementById('winningScreen').classList.add('d-none')
+        if (!winningScreen.classList.contains('d-none')) {
+            winningScreen.classList.add('d-none')
+        }
     }
+    stopMusic()
     setTimeout(() => {
         world = null
         initLevel()
         world = new World(canvas, keyboard);
-        // startGame()
+        world.restartMusic()
     }, 100)
+}
+
+
+function clearAllInterval() {
+    for (let i = 1; i < 99999; i++) {
+        clearInterval(i);
+    }
+}
+
+
+function stopMusic() {
+    if (world && world.backgroundMusic) {
+        world.backgroundMusic.pause();               // hier
+        world.backgroundMusic.currentTime = 0;
+    }
 }
 
 
@@ -94,51 +115,6 @@ function keyAssignment() {
 }
 
 
-function startMusic() {
-    backgroundMusic.loop = true; // Musik in Dauerschleife
-    backgroundMusic.volume = 0; // Startet stumm
-    backgroundMusic.play().then(() => {
-        backgroundMusic.volume = 0.3; // Lautstärke nach dem ersten Klick anpassen
-        isMuted = false; // Musik ist nun nicht mehr stumm
-        console.log("Musik gestartet");
-        // Entferne den Event-Listener, da die Musik nun gestartet ist
-        const muteButton = document.getElementById('muteButton');
-        muteButton.removeEventListener('click', startMusic);
-    }).catch(error => {
-        console.error("Musik konnte nicht abgespielt werden:", error);
-    });
-}
-
-
-// Funktion zum Umschalten der Stummschaltung
-function toggleMute() {
-    isMuted = !isMuted;
-    backgroundMusic.muted = isMuted;
-    updateMuteIcon();
-}
-
-
-// Funktion zum Aktualisieren des Icons
-function updateMuteIcon() {
-    const muteIcon = document.getElementById('muteIcon');
-    muteIcon.src = isMuted ? 'img/10_Icons/mute.png' : 'img/10_Icons/loud.png';
-}
-
-// Funktion zur Initialisierung des Mute-Buttons
-function initMuteButton() {
-    const muteButton = document.getElementById('muteButton');
-
-    // Beim ersten Klick auf den Mute-Button wird die Musik gestartet
-    muteButton.addEventListener('click', startMusic, { once: true });
-
-    // Der Mute-Button kann auch weiterhin die Lautstärke steuern
-    muteButton.addEventListener('click', toggleMute);
-}
-
-// Initialisierung nach dem Laden der Seite
-document.addEventListener('DOMContentLoaded', () => {
-    initMuteButton();
-});
 
 
 // function statsButton() {

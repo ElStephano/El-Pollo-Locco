@@ -16,6 +16,7 @@ class MovableObject extends DrawableObject {
     characterIsHit = false
     gameOverSound = new Audio('audio/gameOver.mp3')
     endbossJumpSound = new Audio('audio/endbossJump.mp3')
+    endbossDying = new Audio('audio/endbossDying.mp3')
 
 
     applyGravity() {
@@ -106,6 +107,7 @@ class MovableObject extends DrawableObject {
     }
 
 
+
     stopAllBackgroundIntervals() {
         if (MovableObject.backgroundIntervals.length > 0) {
             MovableObject.backgroundIntervals.forEach(interval => clearInterval(interval))
@@ -136,7 +138,7 @@ class MovableObject extends DrawableObject {
             MovableObject.enemyIntervals.forEach(interval => clearInterval(interval))
             MovableObject.enemyIntervals = []
         }
-       
+
     }
 
 
@@ -155,20 +157,26 @@ class MovableObject extends DrawableObject {
 
 
     showButtons() {
-        setTimeout(() => {
-            document.getElementById('buttonContainer').classList.remove('d-none')
-        }, 3000)
+        let startScreen = document.getElementById('startScreen')
+        let buttons = document.getElementById('buttonContainer')
+        if (startScreen.classList.contains('d-none')) {
+            setTimeout(() => {
+                buttons.classList.remove('d-none')
+            }, 3000)
+        }
     }
 
 
     showStats() {
-        if(MovableObject.endbossDead){
+        if (MovableObject.endbossDead) {
             this.stopAllIntervals()
             this.getStats()
             document.getElementById('winningScreen').classList.remove('d-none');
             this.showButtons()
-            this.resetStats()
-        } 
+            setTimeout(() => {
+                this.resetStats()
+            }, 500)
+        }
     }
 
     getStats() {
