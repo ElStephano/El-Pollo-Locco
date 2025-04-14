@@ -44,9 +44,9 @@ class Enemy extends MovableObject {
         // Entscheidet bei jedem Gegner, ob es groß oder klein ist
         this.isSmallChicken = Math.random() < 0.5; // 50% Chance für kleines Huhn
         this.x = x;
-        this.speed = 1 + Math.random() * 0.5;
 
         if (this.isSmallChicken) {
+            this.speed = 2
             this.height = 80; // Kleinere Höhe für kleines Huhn
             this.width = 80;
             this.y = 350; // Damit es etwas tiefer erscheint
@@ -55,6 +55,7 @@ class Enemy extends MovableObject {
         } else {
             this.loadImages(this.IMAGES_WALKING);
             this.loadImage(this.IMAGES_WALKING[0]);
+            this.speed = 3
         }
 
         this.audioSettings()
@@ -67,7 +68,7 @@ class Enemy extends MovableObject {
             if (!this.isHit && !MovableObject.charcterDead) {
                 this.moveLeft();
             }
-        }, 1000 / 10);
+        }, 1000 / 30);
         MovableObject.enemyIntervals.push(this.enemyMoveInterval);
 
         this.enemyAnimationInterval = setInterval(() => {
@@ -80,11 +81,13 @@ class Enemy extends MovableObject {
             } else if (this.isHit) {
                 this.img.src = this.isSmallChicken ? this.SMALL_CHICKEN_DEAD : this.IMAGE_DEAD;
                 if (!this.soundPlay) {
-                    this.deadSound.play()
+                    if (!World.isMuted) {
+                        this.deadSound.play()
+                    }
                     this.soundPlay = true
                 }
             }
-        }, 200);
+        }, 1000 / 30);
         MovableObject.enemyIntervals.push(this.enemyAnimationInterval);
     }
 

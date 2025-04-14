@@ -10,12 +10,14 @@ class World {
     lastThrowTime = 0
     throwSound = new Audio('audio/throwBottle.mp3')
     bottleHitSound = new Audio('audio/bottleHit.mp3')
+    collectCoinSound = new Audio('audio/collectCoin.mp3')
+    collectBottleSound = new Audio('audio/collectBottle.mp3')
     checkInterval = null
     static killedEnemies = 0
     static collectedCoins = 0
     static collectedBottles = 0
-    backgroundMusic = new Audio('./audio/Menu.mp3');
-    isMuted = true
+    backgroundMusic = new Audio('audio/Menu.mp3');
+    static isMuted = true
 
 
     constructor(canvas, keyboard) {
@@ -25,7 +27,7 @@ class World {
         this.draw()
         this.setWorld()
         this.run()
-        this.initMuteButton();
+        // this.initMuteButton();
         this.waitForFirstUserInteraction()
     }
 
@@ -56,20 +58,29 @@ class World {
         this.throwableObjects.forEach((throwable) => {
             this.level.enemies.forEach((enemy) => {
                 if (throwable.y > 380 && !throwable.isHit) {
-                    this.bottleHitSound.play()
+                    if (!World.isMuted) {
+                        this.bottleHitSound.play()
+                    }
                     throwable.bottleHit(throwable.x, throwable.y)
                     throwable.isHit = true
                 }
-                if (throwable.isColliding(enemy) && !enemy.isHit) {
+                if (throwable.isColliding(enemy) && !enemy.isHit && !(enemy instanceof Endboss)) {
                     this.isCollidingEnemy(enemy, throwable)
                     enemy.isHit = true
-                    this.bottleHitSound.play()
+                    if (!World.isMuted) {
+                        this.bottleHitSound.play()
+                    }
                 }
                 if (throwable.isColliding(endboss) && !endboss.isHit && !throwable.isHit) {
                     this.isCollidingEndboss(throwable, endboss)
                     endboss.isHit = true
-                    this.bottleHitSound.play()
-                    endboss.isHit = false
+                    if (!World.isMuted) {
+                        this.bottleHitSound.play()
+                    }
+                    throwable.isHit = true
+                    setTimeout(() => {
+                        endboss.isHit = false
+                    }, 500)
                 }
             })
         })
@@ -79,10 +90,9 @@ class World {
     isCollidingEndboss(throwable, endboss) {
         if (!throwable.isHit) {
             const bottleIndex = this.throwableObjects.indexOf(throwable)
-            if (bottleIndex !== -1 && endboss.energy >= 0) {
+            if (bottleIndex !== -1 && endboss.energy >= 0 && !throwable.isHit) {
                 this.throwableObjects[bottleIndex].bottleHit(throwable.x, throwable.y)
                 endboss.energy -= 20
-                endboss.isHit = true
                 this.level.statusbarHealthEndboss.percentage -= 20
                 this.level.statusbarHealthEndboss.setPercentage(this.level.statusbarHealthEndboss.percentage)
                 setTimeout(() => {
@@ -116,10 +126,14 @@ class World {
         this.level.collectibleObject.forEach((collectible) => {
             if (this.character.isColliding(collectible)) {
                 if (collectible instanceof CollectibleBottles && this.level.bottleStatusBar.bottleAmount <= 9) {
+                    this.collectBottleSound.play()
+                    this.collectBottleSound.volume = 0.5
                     this.level.bottleStatusBar.setBottleAmount(this.level.bottleStatusBar.bottleAmount + 1)
                     this.level.collectibleObject.splice(this.level.collectibleObject.indexOf(collectible), 1)
                     World.collectedBottles += 1
                 } else if (collectible instanceof Coins) {
+                    this.collectCoinSound.play()
+                    this.collectCoinSound.volume = 0.5
                     this.level.coinStatusBar.setCoins(this.level.coinStatusBar.coinAmount + 1)
                     this.level.collectibleObject.splice(this.level.collectibleObject.indexOf(collectible), 1)
                     World.collectedCoins += 1
@@ -134,7 +148,9 @@ class World {
         if (this.keyboard.SPACE && now - this.lastThrowTime > this.throwCooldown) {
             if (this.level.bottleStatusBar.bottleAmount > 0) {
                 let bottle = new ThrowableObject(this.character.x, this.character.y)
-                this.throwSound.play()
+                if (!World.isMuted) {
+                    this.throwSound.play()
+                }
                 this.lastThrowTime = now
                 this.throwableObjects.push(bottle)
                 this.level.bottleStatusBar.bottleAmount = this.level.bottleStatusBar.bottleAmount - 1
@@ -246,8 +262,12 @@ class World {
 
     restartMusic() {
         this.backgroundMusic.pause();
-        this.backgroundMusic.currentTime = 0;
-        if (!this.isMuted) {
+        this.backgroundMusic.currentTime = 1;
+        this.backgroundMusic.loop = true;
+        this.backgroundMusic.volume = 0.2;
+        this.backgroundMusic.muted = World.isMuted;
+    
+        if (!World.isMuted) {
             this.backgroundMusic.play().catch((e) => {
                 console.error('Fehler beim Abspielen der Musik:', e);
             });
@@ -255,15 +275,29 @@ class World {
     }
 
 
+    // restartMusic() {
+    //     this.backgroundMusic.pause();
+    //     this.backgroundMusic = new Audio('audio/Menu.mp3')
+    //     this.backgroundMusic.currentTime = 1;
+    //     this.backgroundMusic.muted = World.isMuted; 
+    //     if (!World.isMuted) {
+    //         this.backgroundMusic.play().catch((e) => {
+    //             console.error('Fehler beim Abspielen der Musik:', e);
+    //         });
+    //     }
+    // }
+
+
 
     startMusic() {
         if (!this.backgroundMusic.loop) {
             this.backgroundMusic.loop = true;
+            this.backgroundMusic.currentTime = 1
             this.backgroundMusic.volume = 0.2;
             this.backgroundMusic.play().catch((e) => {
                 console.error('Musik konnte nicht abgespielt werden:', e);
             });
-            this.isMuted = false;
+            World.isMuted = false;
             this.updateMuteIcon();
         }
     }
@@ -272,8 +306,8 @@ class World {
 
     // Funktion zum Umschalten der Stummschaltung
     toggleMute() {
-        this.isMuted = !this.isMuted;
-        this.backgroundMusic.muted = this.isMuted;
+        World.isMuted = !World.isMuted;
+        this.backgroundMusic.muted = World.isMuted;
         this.updateMuteIcon();
     }
 
@@ -281,7 +315,7 @@ class World {
     // Funktion zum Aktualisieren des Icons
     updateMuteIcon() {
         const muteIcon = document.getElementById('muteIcon');
-        muteIcon.src = this.isMuted ? 'img/10_Icons/mute.png' : 'img/10_Icons/loud.png';
+        muteIcon.src = World.isMuted ? 'img/10_Icons/mute.png' : 'img/10_Icons/loud.png';
     }
 
     // Funktion zur Initialisierung des Mute-Buttons

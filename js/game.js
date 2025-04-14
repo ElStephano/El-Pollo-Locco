@@ -50,8 +50,6 @@ document.getElementById('start').addEventListener('click', startGame)
 document.getElementById('restart').addEventListener('click', restartGame)
 document.getElementById('main-menu').addEventListener('click', backToMainMenu)
 document.getElementById('controller').addEventListener('click', keyAssignment)
-// document.getElementById('nextBtn').addEventListener('click', statsButton)
-
 
 
 function startGame() {
@@ -79,9 +77,11 @@ function restartGame() {
     }
     stopMusic()
     setTimeout(() => {
+        // World.isMuted = true
         world = null
         initLevel()
         world = new World(canvas, keyboard);
+        world.updateMuteIcon()
         world.restartMusic()
     }, 100)
 }
@@ -97,7 +97,7 @@ function clearAllInterval() {
 function stopMusic() {
     if (world && world.backgroundMusic) {
         world.backgroundMusic.pause();               // hier
-        world.backgroundMusic.currentTime = 0;
+        world.backgroundMusic.currentTime = 1;
     }
 }
 
@@ -106,7 +106,6 @@ function backToMainMenu() {
     document.getElementById('startScreen').classList.remove('d-none')
     document.getElementById('buttonContainer').classList.add('d-none')
     document.getElementById('winningScreen').classList.add('d-none')
-
 }
 
 
@@ -115,10 +114,10 @@ function keyAssignment() {
 }
 
 
-
-
-// function statsButton() {
-//     document.getElementById('winningScreen').classList.add('d-none')
-//     document.getElementById('winningScreen').classList.add('d-none')
-
-// }
+setTimeout(() => {
+    document.getElementById('muteButton').addEventListener('click', () => {
+        if (world) {
+            world.toggleMute();
+        }
+    });
+}, 100)

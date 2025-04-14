@@ -25,7 +25,7 @@ class MovableObject extends DrawableObject {
                 this.y -= this.speedY
                 this.speedY -= this.accelaration
             }
-        }, 1000 / 25)
+        }, 1000 / 30)
     }
 
 
@@ -151,15 +151,18 @@ class MovableObject extends DrawableObject {
             gameOverScreen.width = 720; // Größe anpassen
             gameOverScreen.height = 500
             this.world.gameOverScreen = gameOverScreen; // Speichern im World-Objekt
-            this.showButtons()
+
+            let startScreen = document.getElementById('startScreen')
+            if (startScreen.classList.contains('d-none')) {
+                this.showButtons()
+            }
         }
     }
 
 
     showButtons() {
-        let startScreen = document.getElementById('startScreen')
         let buttons = document.getElementById('buttonContainer')
-        if (startScreen.classList.contains('d-none')) {
+        if (buttons.classList.contains('d-none')) {
             setTimeout(() => {
                 buttons.classList.remove('d-none')
             }, 3000)

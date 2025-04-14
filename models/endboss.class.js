@@ -2,11 +2,8 @@ class Endboss extends MovableObject {
 
     height = 400;
     width = 300;
-    y = 40;
+    y = 45;
     energy = 100;
-    // x = 1000;
-    // state = "alert";
-    // animationPlaying = true
     currentEndbossImage = 0
     otherDirection = false
     isHit = false
@@ -79,7 +76,7 @@ class Endboss extends MovableObject {
         this.loadAllImages();
         // this.updateState();
         this.x = 2500
-        this.speed = 15
+        this.speed = 20
         this.checkStatsInterval()
     }
 
@@ -96,105 +93,107 @@ class Endboss extends MovableObject {
     animateEndboss() {
         let i = 0;
         this.currentAnimation = () => this.startWalkingAnimation();
-    
+
         this.currentAnimationInterval = setInterval(() => {
             this.playAnimationEndboss(this.IMAGES_ALERT, i);
-    
+
             if (this.isHit) {
                 clearInterval(this.currentAnimationInterval);
                 this.interruptForHurt();
                 return;
             }
-    
+
             i++;
-    
+
             if (i >= this.IMAGES_ALERT.length) {
                 clearInterval(this.currentAnimationInterval);
                 this.startWalkingAnimation(); // danach Walking starten
             }
         }, 300); // Alert: 5 FPS
-    
+
         MovableObject.endbossIntervals.push(this.currentAnimationInterval);
     }
-    
+
 
     startWalkingAnimation() {
         let i = 0;
         this.currentAnimation = () => this.startWalkingAnimation();
-    
+
         this.currentAnimationInterval = setInterval(() => {
             this.playAnimationEndboss(this.IMAGES_WALKING, i);
             this.x -= this.speed;
-    
+
             if (this.isHit) {
                 clearInterval(this.currentAnimationInterval);
                 this.interruptForHurt();
                 return;
             }
-    
+
             i++;
-    
+
             if (i >= 20) { // z. B. 20 Frames lang laufen
                 clearInterval(this.currentAnimationInterval);
                 this.startAttackAnimation();
             }
-        }, 80); // Walking: 10 FPS
-    
+        }, 70); // Walking: 10 FPS
+
         MovableObject.endbossIntervals.push(this.currentAnimationInterval);
     }
-    
+
 
     startAttackAnimation() {
         let i = 0;
         this.currentAnimation = () => this.startWalkingAnimation();
-    
+
         this.currentAnimationInterval = setInterval(() => {
             if (i === this.IMAGES_ATTACK.length) {
                 clearInterval(this.currentAnimationInterval);
                 this.animateEndboss();
                 return;
             }
-    
+
             this.playAnimationEndboss(this.IMAGES_ATTACK, i);
-    
+
             if (i > 3 && i < 7) {
                 this.x += this.otherDirection ? 80 : -80;
             }
 
             if (i === 3) {
-                this.endbossJumpSound.play()
+                if (!World.isMuted) {
+                    this.endbossJumpSound.play()
+                }
             }
-    
+
             if (this.isHit) {
                 clearInterval(this.currentAnimationInterval);
                 this.interruptForHurt();
                 return;
             }
-    
+
             i++;
         }, 1000 / 7); // 12.5 FPS
-    
+
         MovableObject.endbossIntervals.push(this.currentAnimationInterval);
     }
-    
+
 
     interruptForHurt() {
         this.isHit = false;
         let i = 0;
-    
+
         this.currentAnimationInterval = setInterval(() => {
             this.playAnimationEndboss(this.IMAGES_HURT, i);
             i++;
-    
-            if (i >= this.IMAGES_HURT.length) {
+
+            if (i === this.IMAGES_HURT.length) {
                 clearInterval(this.currentAnimationInterval);
-    
+
                 if (this.currentAnimation) {
                     this.currentAnimation(); // Zurück zur vorherigen Animation
                 }
             }
         }, 120); // z. B. 8 FPS
-    
+
         MovableObject.endbossIntervals.push(this.currentAnimationInterval);
     }
 
@@ -213,9 +212,11 @@ class Endboss extends MovableObject {
         if (this.energy <= 0) {
             MovableObject.endbossDead = true;
             this.stopAllIntervals();
-            this.endbossDying.play();
+            if (!World.isMuted) {
+                this.endbossDying.play();
+            }
             World.killedEnemies += 1;
-    
+
             let i = 0;
             this.currentAnimationInterval = setInterval(() => {
                 if (i < this.IMAGES_DEAD.length) {
@@ -231,7 +232,7 @@ class Endboss extends MovableObject {
                     }, 500);
                 }
             }, 100); // 10 FPS
-    
+
             MovableObject.endbossIntervals.push(this.currentAnimationInterval);
         }
     }
@@ -272,7 +273,7 @@ class Endboss extends MovableObject {
 
 
     startEndbossAnimations() {
-        if(Character.endbossStart && !Character.endbossIsAnimate) {
+        if (Character.endbossStart && !Character.endbossIsAnimate) {
             this.animateEndboss()
             Character.endbossStart = false
             Character.endbossIsAnimate = true

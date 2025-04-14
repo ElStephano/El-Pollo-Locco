@@ -8,17 +8,20 @@ class Character extends MovableObject {
     isJumping = false
     jumpSound = new Audio('audio/charachterJump.mp3')
     deadSound = new Audio('audio/characterDying.mp3')
+    snoring = new Audio('audio/snoring.mp3')
     isHit = false
     static endbossStart = false
     static endbossIsAnimate = false
     lastKeyPressTime = Date.now()
     idleInterval = null
     longIdleInterval = null
+    isSnoring = false
+    showGameOverScreen = false
 
 
     offset = {
         'top': 120,
-        'right': 40,
+        'right': 60,
         'bottom': 130,
         'left': 20
     }
@@ -134,9 +137,13 @@ class Character extends MovableObject {
                 if (!MovableObject.characterDead && this.isDead()) {
                     this.currentImage = 0
                     MovableObject.characterDead = true
-                    this.deadSound.play()
+                    if (!World.isMuted) {
+                        this.deadSound.play()
+                    }
                     setTimeout(() => {
-                        this.gameOverSound.play()
+                        if (!World.isMuted) {
+                            this.gameOverSound.play()
+                        }
                     }, 500)
                 }
                 this.playSingleDeadAnimation(this.IMAGES_DEAD)
@@ -166,15 +173,16 @@ class Character extends MovableObject {
             clearInterval(this.longIdleInterval);
             this.idleInterval = null;
             this.longIdleInterval = null;
-
         }
         this.isIdle = false; // Setzt den Idle-Status zurück
         this.isLongIdle = false
+        this.resetSnoring()
     }
 
 
     checkInactivity() {
         let idleInterval = setInterval(() => {
+            this.resetSnoring()
             let currentTime = Date.now();
             if (currentTime - this.lastKeyPressTime > 100 && !this.isIdle &&
                 !this.isLongIdle) { // 10 Sek. Inaktiv?
@@ -187,6 +195,14 @@ class Character extends MovableObject {
             }
         }, 1000 / 20);
         MovableObject.characterIntervals.push(idleInterval)
+    }
+
+
+    resetSnoring() {
+        if (!this.isLongIdle || this.isDead() || World.isMuted) {
+            this.snoring.pause()
+            this.snoring.currentTime = 0
+        }
     }
 
 
@@ -205,6 +221,10 @@ class Character extends MovableObject {
         if (this.isIdle) {
             this.isIdle = false
             this.isLongIdle = true
+            if (!World.isMuted) {
+                this.snoring.play()
+                this.snoring.loop = true
+            }
             this.longIdleInterval = setInterval(() => {
                 this.playAnimation(obj);
             }, 1000 / 5); // Animation abspielen mit 10 FPS
@@ -228,7 +248,10 @@ class Character extends MovableObject {
             this.y += 30
         } else {
             this.currentImage = 0
-            this.gameOverScreen()
+            if (!this.showGameOverScreen) {
+                this.gameOverScreen()
+                this.showGameOverScreen = true
+            }
         }
     }
 
@@ -248,7 +271,9 @@ class Character extends MovableObject {
 
     jump() {
         this.speedY = 30
-        this.jumpSound.play()
+        if (!World.isMuted) {
+            this.jumpSound.play()
+        }
         if (!this.isJumping) {
             this.isJumping = true
             this.currentImage = 0
@@ -268,9 +293,9 @@ class Character extends MovableObject {
 
 
     startEndboss() {
-        if(this.x > 2000) {
-            if(!Character.endbossStart)
-            Character.endbossStart = true
+        if (this.x > 2000) {
+            if (!Character.endbossStart)
+                Character.endbossStart = true
         }
     }
 }
