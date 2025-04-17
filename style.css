@@ -6,6 +6,7 @@
 }
 
 body {
+    margin: 0;
     font-family: 'Chentenario', '';
     height: 100vh;
     display: flex;
@@ -18,6 +19,7 @@ body {
 
 canvas {
     border-radius: 16px;
+    display: block;
 }
 
 .overlay {
@@ -158,7 +160,7 @@ button:hover {
     flex-direction: column;
 }
 
-.stat-numbers p{
+.stat-numbers p {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -168,7 +170,7 @@ button:hover {
     margin: 18px 0 !important;
 }
 
-.stats p{
+.stats p {
     display: flex;
     justify-content: center;
 }
@@ -200,4 +202,60 @@ button:hover {
 
 #collectedBottles {
     margin: 18px 0;
+}
+
+
+
+@media only screen and (max-width: 720px) {
+    .overlay {
+        border-radius: 0;
+        /* height: 100vh; */
+        width: 100%;
+    }
+
+    .start-screen-buttons {
+        width: 100%
+    }
+
+    canvas {
+        border-radius: 0;
+        width: 100%;
+    }
+
+    h1 {
+        display: none;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    .overlay {
+        border-radius: 0;
+        height: 100vh;
+        width: 100%;
+    }
+
+    canvas {
+        border-radius: 0;
+        height: 100vh;
+        width: 100%;
+    }
+
+    h1 {
+        display: none;
+    }
+
+    .start-screen-buttons {
+        width: 100%;
+        /* height: 30px; */
+        /* font-size: 12px; */
+    }
+}
+
+@media only screen and (max-width: 560px) {
+    .start-screen button {
+        width: 75px;
+        height: 30px;
+        font-size: 12px;
+    }
+
 }

@@ -1,7 +1,7 @@
 class Character extends MovableObject {
     height = 260
     width = 125
-    y = 160
+    y = 150
     world
     speed = 10
     energy = 10

@@ -96,7 +96,7 @@ function clearAllInterval() {
 
 function stopMusic() {
     if (world && world.backgroundMusic) {
-        world.backgroundMusic.pause();               // hier
+        world.backgroundMusic.pause();           // hier
         world.backgroundMusic.currentTime = 1;
     }
 }

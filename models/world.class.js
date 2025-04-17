@@ -24,6 +24,14 @@ class World {
         this.ctx = canvas.getContext('2d')
         this.canvas = canvas
         this.keyboard = keyboard
+        this.getIsMutedFromLocalStorage()
+        this.updateMuteIcon()
+
+        this.backgroundMusic.loop = true;
+        this.backgroundMusic.volume = 0.2;
+        this.backgroundMusic.muted = World.isMuted;
+
+
         this.draw()
         this.setWorld()
         this.run()
@@ -126,14 +134,18 @@ class World {
         this.level.collectibleObject.forEach((collectible) => {
             if (this.character.isColliding(collectible)) {
                 if (collectible instanceof CollectibleBottles && this.level.bottleStatusBar.bottleAmount <= 9) {
-                    this.collectBottleSound.play()
-                    this.collectBottleSound.volume = 0.5
+                    if (!World.isMuted) {
+                        this.collectBottleSound.play()
+                        this.collectBottleSound.volume = 0.5
+                    }
                     this.level.bottleStatusBar.setBottleAmount(this.level.bottleStatusBar.bottleAmount + 1)
                     this.level.collectibleObject.splice(this.level.collectibleObject.indexOf(collectible), 1)
                     World.collectedBottles += 1
                 } else if (collectible instanceof Coins) {
-                    this.collectCoinSound.play()
-                    this.collectCoinSound.volume = 0.5
+                    if (!World.isMuted) {
+                        this.collectCoinSound.play()
+                        this.collectCoinSound.volume = 0.5
+                    }
                     this.level.coinStatusBar.setCoins(this.level.coinStatusBar.coinAmount + 1)
                     this.level.collectibleObject.splice(this.level.collectibleObject.indexOf(collectible), 1)
                     World.collectedCoins += 1
@@ -261,12 +273,13 @@ class World {
 
 
     restartMusic() {
+        this.getIsMutedFromLocalStorage()
         this.backgroundMusic.pause();
         this.backgroundMusic.currentTime = 1;
         this.backgroundMusic.loop = true;
         this.backgroundMusic.volume = 0.2;
         this.backgroundMusic.muted = World.isMuted;
-    
+
         if (!World.isMuted) {
             this.backgroundMusic.play().catch((e) => {
                 console.error('Fehler beim Abspielen der Musik:', e);
@@ -275,40 +288,46 @@ class World {
     }
 
 
-    // restartMusic() {
-    //     this.backgroundMusic.pause();
-    //     this.backgroundMusic = new Audio('audio/Menu.mp3')
-    //     this.backgroundMusic.currentTime = 1;
-    //     this.backgroundMusic.muted = World.isMuted; 
-    //     if (!World.isMuted) {
-    //         this.backgroundMusic.play().catch((e) => {
-    //             console.error('Fehler beim Abspielen der Musik:', e);
-    //         });
-    //     }
-    // }
-
-
-
     startMusic() {
-        if (!this.backgroundMusic.loop) {
-            this.backgroundMusic.loop = true;
+        if (!World.isMuted && this.backgroundMusic.paused) {
             this.backgroundMusic.currentTime = 1
-            this.backgroundMusic.volume = 0.2;
             this.backgroundMusic.play().catch((e) => {
-                console.error('Musik konnte nicht abgespielt werden:', e);
+                console.error('Fehler beim Abspielen der Musik:', e);
             });
-            World.isMuted = false;
-            this.updateMuteIcon();
+        }
+    }
+
+
+    setIsMutedToLocalStorage() {
+        localStorage.setItem('isMuted', World.isMuted)
+    }
+
+
+    getIsMutedFromLocalStorage() {
+        let storedMuteStatus = localStorage.getItem('isMuted')
+        if (storedMuteStatus !== null) {
+            World.isMuted = storedMuteStatus === 'true'; // Achtung: localStorage speichert nur Strings
+        } else {
+            World.isMuted = false; // Standardwert, falls nichts gespeichert wurde
         }
     }
 
 
 
-    // Funktion zum Umschalten der Stummschaltung
     toggleMute() {
         World.isMuted = !World.isMuted;
         this.backgroundMusic.muted = World.isMuted;
+        this.setIsMutedToLocalStorage();
         this.updateMuteIcon();
+    
+        const muteButton = document.getElementById('muteButton');
+        muteButton.blur(); // Fokus entfernen
+    
+        if (!World.isMuted) {
+            this.backgroundMusic.play().catch(e => {
+                console.error('Fehler beim Abspielen der Musik:', e);
+            });
+        }
     }
 
 
@@ -318,12 +337,22 @@ class World {
         muteIcon.src = World.isMuted ? 'img/10_Icons/mute.png' : 'img/10_Icons/loud.png';
     }
 
-    // Funktion zur Initialisierung des Mute-Buttons
+
     initMuteButton() {
         const muteButton = document.getElementById('muteButton');
-
-        muteButton.addEventListener('click', this.toggleMute.bind(this));
+    
+        muteButton.addEventListener('click', (event) => {
+            this.toggleMute();
+            event.currentTarget.blur(); // Fokus vom Button entfernen
+        });
     }
+    
+    // // Funktion zur Initialisierung des Mute-Buttons
+    // initMuteButton() {
+    //     const muteButton = document.getElementById('muteButton');
+
+    //     muteButton.addEventListener('click', this.toggleMute.bind(this));
+    // }
 
 
     waitForFirstUserInteraction() {

@@ -165,6 +165,7 @@ class MovableObject extends DrawableObject {
         if (buttons.classList.contains('d-none')) {
             setTimeout(() => {
                 buttons.classList.remove('d-none')
+                
             }, 3000)
         }
     }
