@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impressum</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
 </head>
 
 <style>
@@ -16,7 +16,7 @@ body {
     background-attachment: fixed;
     color: white;
     font-family: 'Chentenario';
-    overflow: hidden; /* Verhindert, dass der Text außerhalb der Seite sichtbar ist */
+    overflow: scroll; /* Verhindert, dass der Text außerhalb der Seite sichtbar ist */
 }
 
 /* Schriftart */
@@ -79,6 +79,20 @@ button:hover {
     background-color: gold;
 }
 
+@media only screen and (max-width: 720px){
+    button {
+        bottom: 85%;
+        left: 74%;
+    }
+}
+
+@media only screen and (max-height: 480px){
+    button {
+        bottom: 85%;
+        left: 74%;
+    }
+}
+
 </style>
 
 <body>
@@ -101,7 +115,7 @@ button:hover {
     </p>
     <button><a href="../index.html">zurück</a></button>
 
-    <script src="script.js"></script>
+    <!-- <script src="script.js"></script> -->
 </body>
 
 </html>

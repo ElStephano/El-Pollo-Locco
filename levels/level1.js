@@ -81,6 +81,6 @@ function initLevel() {
             new Coins(1300, 250)
         ],
 
-        2150
+        3549
     )
 }

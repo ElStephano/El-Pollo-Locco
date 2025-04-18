@@ -200,4 +200,14 @@ class MovableObject extends DrawableObject {
         World.collectedCoins = 0
         World.collectedBottles = 0
     }
+
+
+    hideTouch(){
+        let touch = document.getElementById("mobileControls")
+        if(window.innerWidth < 720 || window.innerHeight < 480){
+            touch.classList.add('d-none')
+        }
+    }
+
+
 }

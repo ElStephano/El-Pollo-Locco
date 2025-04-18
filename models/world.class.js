@@ -35,7 +35,6 @@ class World {
         this.draw()
         this.setWorld()
         this.run()
-        // this.initMuteButton();
         this.waitForFirstUserInteraction()
     }
 
@@ -346,13 +345,6 @@ class World {
             event.currentTarget.blur(); // Fokus vom Button entfernen
         });
     }
-    
-    // // Funktion zur Initialisierung des Mute-Buttons
-    // initMuteButton() {
-    //     const muteButton = document.getElementById('muteButton');
-
-    //     muteButton.addEventListener('click', this.toggleMute.bind(this));
-    // }
 
 
     waitForFirstUserInteraction() {

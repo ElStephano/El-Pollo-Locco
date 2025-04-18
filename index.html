@@ -11,65 +11,70 @@
 
 <body>
     <h1>El Pollo Loco</h1>
-    <div id="overlay" class="overlay">
-        <canvas id="canvas" height="480" width="720"></canvas>
+    <div class="fullscreen-container" id="fullscreenContainer">
+        <div id="overlay" class="overlay">
+            <canvas id="canvas" height="480" width="720"></canvas>
 
-        <div id="buttonContainer" class="button-container d-none">
-            <button id="restart">Neustart</button>
-            <button id="main-menu">Hauptmenü</button>
-        </div>
-
-        <div id="startScreen" class="start-screen">
-            <img src="img/9_intro_outro_screens/start/startscreen_2.png" alt="background-image">
-            <div id="startScreenButtons" class="start-screen-buttons">
-                <button id="start">Start Game</button>
-                <a href="html\imprint.html"><button id="imprint">Imprint</button></a>
+            <div id="buttonContainer" class="button-container d-none">
+                <button id="restart">Neustart</button>
+                <button id="main-menu">Hauptmenü</button>
             </div>
-        </div>
 
-        <div class="icons-container">
-            <button id="muteButton">
-                <img id="muteIcon" src="img/10_Icons/mute.png" alt="Mute Icon">
-            </button>
-            <button id="controller">
-                <img src="img/10_Icons/controller.png" alt="Controller Icon">
-            </button>
-        </div>
-
-        <div id="keyAssignment" class="key-assignment d-none">
-            <div><img src="img/10_Icons/right-arrow.png">Right</div>
-            <div><img src="img/10_Icons/left-arrow.png">Left</div>
-            <div><img src="img/10_Icons/up-arrow.png">Jump</div>
-            <div><img src="img/10_Icons/space.png">Throw Bottle</div>
-        </div>
-
-        <div id="winningScreen" class="winning-screen d-none">
-            <div id="stats" class="stats">
-                <img src="img/10_Icons/trophy.png" alt="trophy">
-                <div class="stats-text">
-                    <div>
-                        <p>Killed enemies:</p>
-                    </div>
-                    <div>
-                        <p>Collected coins:</p>
-                    </div>
-                    <div>
-                        <p>COLLECTED BOTTLES:</p>
-                    </div>
-                </div>
-                <div class="stat-numbers">
-                    <div>
-                        <p id="killedEnemies"></p>
-                    </div>
-                    <div>
-                        <p id="collectedCoins"></p>
-                    </div>
-                    <div>
-                        <p id="collectedBottles"></p>
-                    </div>
+            <div id="startScreen" class="start-screen">
+                <img src="img/9_intro_outro_screens/start/startscreen_2.png" alt="background-image">
+                <div id="startScreenButtons" class="start-screen-buttons">
+                    <button id="start">Start Game</button>
+                    <a href="html\imprint.html"><button id="imprint">Imprint</button></a>
                 </div>
             </div>
-            <!-- <button id="nextBtn">NEXT</button> -->
+
+            <div class="icons-container">
+                <button id="muteButton">
+                    <img id="muteIcon" src="img/10_Icons/mute.png" alt="Mute Icon">
+                </button>
+                <button id="controller">
+                    <img src="img/10_Icons/controller.png" alt="Controller Icon">
+                </button>
+            </div>
+
+            <div id="keyAssignment" class="key-assignment d-none">
+                <div><img src="img/10_Icons/right-arrow.png">Right</div>
+                <div><img src="img/10_Icons/left-arrow.png">Left</div>
+                <div><img src="img/10_Icons/up-arrow.png">Jump</div>
+                <div><img src="img/10_Icons/space.png">Throw Bottle</div>
+            </div>
+
+            <div id="winningScreen" class="winning-screen d-none">
+                <div id="stats" class="stats">
+                    <img src="img/10_Icons/trophy.png" alt="trophy">
+                    <div class="stats-text">
+                        <div>
+                            <p>Killed enemies:</p>
+                        </div>
+                        <div>
+                            <p>Collected coins:</p>
+                        </div>
+                        <div>
+                            <p>COLLECTED BOTTLES:</p>
+                        </div>
+                    </div>
+                    <div class="stat-numbers">
+                        <div>
+                            <p id="killedEnemies"></p>
+                        </div>
+                        <div>
+                            <p id="collectedCoins"></p>
+                        </div>
+                        <div>
+                            <p id="collectedBottles"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="orientation-warning" class="d-none">
+                <p>Bitte drehe dein Gerät ins <strong>Querformat</strong></p>
+            </div>
+            <button id="fullscreenBtn" class="fullscreenBtn"><img src="./img/10_Icons/fullscreen.png" alt="fullscreen"></button>
         </div>
     </div>
 </body>
@@ -93,6 +98,7 @@
 <script src="./models/level.class.js"></script>
 <script src="./models/endboss.class.js"></script>
 <script src="./levels/level1.js"></script>
+<script src="./models/mobile-controls.class.js"></script>
 <script src="./js/game.js"></script>
 
 </html>

@@ -137,6 +137,7 @@ class Character extends MovableObject {
                 if (!MovableObject.characterDead && this.isDead()) {
                     this.currentImage = 0
                     MovableObject.characterDead = true
+                    this.hideTouch()
                     if (!World.isMuted) {
                         this.deadSound.play()
                     }
@@ -293,7 +294,7 @@ class Character extends MovableObject {
 
 
     startEndboss() {
-        if (this.x > 2000) {
+        if (this.x > 2500) {
             if (!Character.endbossStart)
                 Character.endbossStart = true
         }

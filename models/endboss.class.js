@@ -75,7 +75,7 @@ class Endboss extends MovableObject {
         super()
         this.loadAllImages();
         // this.updateState();
-        this.x = 2500
+        this.x = 3000
         this.speed = 20
         this.checkStatsInterval()
     }
@@ -212,6 +212,7 @@ class Endboss extends MovableObject {
         if (this.energy <= 0) {
             MovableObject.endbossDead = true;
             this.stopAllIntervals();
+            this.hideTouch()
             if (!World.isMuted) {
                 this.endbossDying.play();
             }
