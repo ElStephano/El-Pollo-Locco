@@ -1,6 +1,4 @@
 class ThrowableObject extends MovableObject {
-
-
     isHit = false
 
 
@@ -41,28 +39,30 @@ class ThrowableObject extends MovableObject {
         this.throwInterval = null
         this.animationInterval = null
         this.gravityInterval = null
-        // this.hitAnimationInterval = null
         this.throw(x, y + 120)
     }
 
 
     throw(x, y) {
         let direction = world.character.otherDirection;
-
         this.x = x
         this.y = y
         this.speedY = 25
         this.speedX = 30
         this.applyGravity()
+        this.throwedDirection(direction)
+        this.animationInterval = setInterval(() => {
+            this.playAnimation(this.IMAGES_BOTTLE_THROW)
+        }, 1000 / 20)
+    }
+
+
+    throwedDirection(direction) {
         if (!direction) {
             this.throwRightDirection()
         } else if (direction) {
             this.throwLeftDirection()
         }
-        this.animationInterval = setInterval(() => {
-            this.playAnimation(this.IMAGES_BOTTLE_THROW)
-        }, 1000 / 20)
-
     }
 
 
@@ -86,7 +86,6 @@ class ThrowableObject extends MovableObject {
         this.y = y
         this.speedX = 0
         this.speedY = 0
-
         clearInterval(this.throwInterval)
         clearInterval(this.animationInterval)
         clearInterval(this.gravityInterval)

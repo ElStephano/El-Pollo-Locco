@@ -73,8 +73,7 @@ class Endboss extends MovableObject {
 
     constructor() {
         super()
-        this.loadAllImages();
-        // this.updateState();
+        this.loadAllImages()
         this.x = 3000
         this.speed = 20
         this.checkStatsInterval()
@@ -92,109 +91,103 @@ class Endboss extends MovableObject {
 
     animateEndboss() {
         let i = 0;
-        this.currentAnimation = () => this.startWalkingAnimation();
-
+        this.currentAnimation = () => this.startWalkingAnimation()
         this.currentAnimationInterval = setInterval(() => {
-            this.playAnimationEndboss(this.IMAGES_ALERT, i);
-
+            this.playAnimationEndboss(this.IMAGES_ALERT, i)
             if (this.isHit) {
-                clearInterval(this.currentAnimationInterval);
-                this.interruptForHurt();
-                return;
+                clearInterval(this.currentAnimationInterval)
+                this.interruptForHurt()
+                return
             }
-
-            i++;
-
-            if (i >= this.IMAGES_ALERT.length) {
-                clearInterval(this.currentAnimationInterval);
-                this.startWalkingAnimation(); // danach Walking starten
-            }
-        }, 300); // Alert: 5 FPS
-
-        MovableObject.endbossIntervals.push(this.currentAnimationInterval);
+            i++
+            this.endAlertAnimation(i)
+        }, 300)
+        MovableObject.endbossIntervals.push(this.currentAnimationInterval)
     }
 
 
     startWalkingAnimation() {
-        let i = 0;
-        this.currentAnimation = () => this.startWalkingAnimation();
-
+        let i = 0
+        this.currentAnimation = () => this.startWalkingAnimation()
         this.currentAnimationInterval = setInterval(() => {
-            this.playAnimationEndboss(this.IMAGES_WALKING, i);
-            this.x -= this.speed;
-
+            this.playAnimationEndboss(this.IMAGES_WALKING, i)
+            this.x -= this.speed
             if (this.isHit) {
-                clearInterval(this.currentAnimationInterval);
-                this.interruptForHurt();
+                clearInterval(this.currentAnimationInterval)
+                this.interruptForHurt()
                 return;
             }
-
-            i++;
-
-            if (i >= 20) { // z. B. 20 Frames lang laufen
-                clearInterval(this.currentAnimationInterval);
-                this.startAttackAnimation();
-            }
-        }, 70); // Walking: 10 FPS
-
+            i++
+            this.endWalkingAnimation(i)
+        }, 70)
         MovableObject.endbossIntervals.push(this.currentAnimationInterval);
     }
 
 
     startAttackAnimation() {
-        let i = 0;
-        this.currentAnimation = () => this.startWalkingAnimation();
-
+        let i = 0
+        this.currentAnimation = () => this.startWalkingAnimation()
         this.currentAnimationInterval = setInterval(() => {
-            if (i === this.IMAGES_ATTACK.length) {
-                clearInterval(this.currentAnimationInterval);
-                this.animateEndboss();
-                return;
+            if (this.shouldStopAttackAnimation(i)) return
+            this.playAnimationEndboss(this.IMAGES_ATTACK, i)
+            this.endbossWalkingMovement(i)
+            this.endbossAttackSound(i)
+            i++
+        }, 1000 / 7)
+        MovableObject.endbossIntervals.push(this.currentAnimationInterval)
+    }
+
+
+    shouldStopAttackAnimation(i) {
+        if (i === this.IMAGES_ATTACK.length) {
+            clearInterval(this.currentAnimationInterval);
+            this.animateEndboss();
+            return true;
+        }
+        if (this.isHit) {
+            clearInterval(this.currentAnimationInterval);
+            this.interruptForHurt();
+            return true;
+        }
+        return false;
+    }
+
+
+    endbossWalkingMovement(i) {
+        if (i > 3 && i < 7) {
+            this.x += this.otherDirection ? 80 : -80
+        }
+    }
+
+
+    endbossAttackSound(i){
+        if (i === 3) {
+            if (!World.isMuted) {
+                this.endbossJumpSound.play()
             }
-
-            this.playAnimationEndboss(this.IMAGES_ATTACK, i);
-
-            if (i > 3 && i < 7) {
-                this.x += this.otherDirection ? 80 : -80;
-            }
-
-            if (i === 3) {
-                if (!World.isMuted) {
-                    this.endbossJumpSound.play()
-                }
-            }
-
-            if (this.isHit) {
-                clearInterval(this.currentAnimationInterval);
-                this.interruptForHurt();
-                return;
-            }
-
-            i++;
-        }, 1000 / 7); // 12.5 FPS
-
-        MovableObject.endbossIntervals.push(this.currentAnimationInterval);
+        }
     }
 
 
     interruptForHurt() {
-        this.isHit = false;
-        let i = 0;
-
+        this.isHit = false
+        let i = 0
         this.currentAnimationInterval = setInterval(() => {
-            this.playAnimationEndboss(this.IMAGES_HURT, i);
-            i++;
-
+            this.playAnimationEndboss(this.IMAGES_HURT, i)
+            i++
             if (i === this.IMAGES_HURT.length) {
-                clearInterval(this.currentAnimationInterval);
-
-                if (this.currentAnimation) {
-                    this.currentAnimation(); // Zurück zur vorherigen Animation
-                }
+                this.returnToAnimation()
             }
-        }, 120); // z. B. 8 FPS
+        }, 120)
+        MovableObject.endbossIntervals.push(this.currentAnimationInterval)
+    }
 
-        MovableObject.endbossIntervals.push(this.currentAnimationInterval);
+
+    returnToAnimation() {
+        clearInterval(this.currentAnimationInterval)
+        if (this.currentAnimation) {
+            this.currentAnimation()
+        }
     }
 
 
@@ -210,33 +203,62 @@ class Endboss extends MovableObject {
 
     endbossIsDead() {
         if (this.energy <= 0) {
-            MovableObject.endbossDead = true;
-            this.stopAllIntervals();
-            this.hideTouch()
-            if (!World.isMuted) {
-                this.endbossDying.play();
-            }
-            World.killedEnemies += 1;
-
+            this.endOfGame()
             let i = 0;
             this.currentAnimationInterval = setInterval(() => {
                 if (i < this.IMAGES_DEAD.length) {
-                    this.playAnimationEndboss(this.IMAGES_DEAD, i);
-                    this.endbossDeadSpeedY();
+                    this.animateDead(i)
                     i++;
                 } else {
-                    setTimeout(() => {
-                        this.showStats();
-                        clearInterval(this.currentAnimationInterval);
-                        Character.endbossIsAnimate = false
-                        console.log('drin')
-                    }, 500);
+                    this.finalStats() 
                 }
-            }, 100); // 10 FPS
-
-            MovableObject.endbossIntervals.push(this.currentAnimationInterval);
+            }, 100)
+            MovableObject.endbossIntervals.push(this.currentAnimationInterval)
         }
     }
+
+
+    animateDead(i) {
+        this.playAnimationEndboss(this.IMAGES_DEAD, i);
+        this.endbossDeadSpeedY();
+    }
+
+
+    finalStats() {
+        setTimeout(() => {
+            this.showStats();
+            clearInterval(this.currentAnimationInterval);
+            Character.endbossIsAnimate = false
+        }, 500);
+    }
+
+
+    endOfGame() {
+        MovableObject.endbossDead = true;
+        this.stopAllIntervals();
+        this.hideTouch()
+        if (!World.isMuted) {
+            this.endbossDying.play();
+        }
+        World.killedEnemies += 1;
+    }
+
+
+    endAlertAnimation(i) {
+        if (i >= this.IMAGES_ALERT.length) {
+            clearInterval(this.currentAnimationInterval)
+            this.startWalkingAnimation()
+        }
+    }
+
+
+    endWalkingAnimation(i) {
+        if (i >= 20) {
+            clearInterval(this.currentAnimationInterval)
+            this.startAttackAnimation()
+        }
+    }
+
 
 
     playAnimationEndboss(images, index) {

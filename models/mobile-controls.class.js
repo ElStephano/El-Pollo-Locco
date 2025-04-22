@@ -1,12 +1,12 @@
 class MobileControls {
     constructor(keyboard) {
         this.keyboard = keyboard;
-        this.renderControls();
-        this.bindButtons();
-        this.setViewportHeight();   // 💡 Fix für 100vh
-        this.preventURLBar();       // 💡 Scroll-Hack gegen URL-Leiste
-        this.forceScrollOnFirstTouch();
-        this.showIfMobile();
+        this.renderControls()
+        this.bindButtons()
+        this.setViewportHeight()
+        this.preventURLBar()
+        this.forceScrollOnFirstTouch()
+        this.showIfMobile()
     }
 
 

@@ -20,7 +20,8 @@ class DrawableObject {
 
 
     drawFrame(ctx) {
-        if (this instanceof Enemy || this instanceof CollectibleObject || this instanceof Character || this instanceof Endboss || this instanceof ThrowableObject) {
+        if (this instanceof Enemy || this instanceof CollectibleObject
+            || this instanceof Character || this instanceof Endboss || this instanceof ThrowableObject) {
             ctx.beginPath()
             ctx.lineWidth = '1'
             ctx.strokeStyle = 'blue'
@@ -34,11 +35,11 @@ class DrawableObject {
         if (this instanceof Character) {
             this.drawInnerRectCharacter(ctx);
         } else if (this instanceof Enemy || this instanceof CollectibleObject) {
-            this.drawInnerRectEnemyOrCollectible(ctx);
+            this.drawInnerRectEnemyOrCollectible(ctx)
         } else if (this instanceof Endboss) {
-            this.drawInnerRectEndboss(ctx);
+            this.drawInnerRectEndboss(ctx)
         } else if (this instanceof ThrowableObject) {
-            this.drawInnerRectThrowableObject(ctx);
+            this.drawInnerRectThrowableObject(ctx)
         }
     }
 
@@ -48,39 +49,39 @@ class DrawableObject {
 
 
     drawInnerRectCharacter(ctx) {
-        this.drawRedRect(ctx);
+        this.drawRedRect(ctx)
     }
 
 
     drawInnerRectEnemyOrCollectible(ctx) {
-        this.drawRedRect(ctx);
+        this.drawRedRect(ctx)
     }
 
 
     drawInnerRectEndboss(ctx) {
-        this.drawRedRect(ctx);
+        this.drawRedRect(ctx)
     }
 
 
     drawRedRect(ctx) {
-        ctx.beginPath();
-        ctx.lineWidth = '1';
-        ctx.strokeStyle = 'red';
+        ctx.beginPath()
+        ctx.lineWidth = '1'
+        ctx.strokeStyle = 'red'
         ctx.rect(
             this.x + this.offset.left,
             this.y + this.offset.top,
             this.width - this.offset.right,
             this.height - this.offset.bottom
-        );
-        ctx.stroke();
+        )
+        ctx.stroke()
     }
 
 
     loadImages(arr) {
-        arr.forEach((path) => {                 //für jedes Bild aus dem Array der loadImages(Bilder)
-            let img = new Image()               //ein neues IMG wird erstellt
-            img.src = path                      //dem img wird der pfad(URL) zugewiesen
-            this.imageCache[path] = img         //speichert das geladene 
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path
+            this.imageCache[path] = img
         })
     }
 }

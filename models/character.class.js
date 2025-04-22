@@ -17,6 +17,8 @@ class Character extends MovableObject {
     longIdleInterval = null
     isSnoring = false
     showGameOverScreen = false
+    isHurtAnimating = false
+
 
 
     offset = {
@@ -101,81 +103,146 @@ class Character extends MovableObject {
 
     animate() {
         let moveInterval = setInterval(() => {
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.isAlive()) {
-                this.moveRight()
-                this.otherDirection = false
-                this.resetInactivityTimer()
-            }
-            if (this.world.keyboard.LEFT && this.x > 0 && this.isAlive()) {
-                this.moveLeft()
-                this.otherDirection = true
-                this.resetInactivityTimer()
-            }
-            if (this.world.keyboard.UP && !this.isJumping && this.isAlive()) {
-                this.jump()
-                this.resetInactivityTimer()
-            }
-
-            if (this.x === 500 && this.isAlive()) {
-                let endbossIndex = this.world.level.enemies.length - 1
-                let endboss = this.world.level.enemies[endbossIndex]
-                endboss.animationPlaying = false
-            }
-            this.world.camera_x = -this.x + 100
+            this.movement()
         }, 1000 / 30);
         MovableObject.characterIntervals.push(moveInterval)
 
         let animationInterval = setInterval(() => {
-            if (this.isHurt() && this.isAlive()) {
-                this.playAnimation(this.IMAGES_HURT)
-            }
-            if (this.world.keyboard.RIGHT && !this.isAboveGround() && this.isAlive() ||
-                this.world.keyboard.LEFT && !this.isAboveGround() && this.isAlive()) {
-                this.playAnimation(this.IMAGES_WALKING)
-            }
-            if (this.isDead()) {
-                if (!MovableObject.characterDead && this.isDead()) {
-                    this.currentImage = 0
-                    MovableObject.characterDead = true
-                    this.hideTouch()
-                    if (!World.isMuted) {
-                        this.deadSound.play()
-                    }
-                    setTimeout(() => {
-                        if (!World.isMuted) {
-                            this.gameOverSound.play()
-                        }
-                    }, 500)
-                }
-                this.playSingleDeadAnimation(this.IMAGES_DEAD)
-                setTimeout(() => {
-                    this.stopAllIntervals()
-                    this.resetVariables()
-                }, 3000)
-            }
-            this.startEndboss()
+            this.animateCharacter()
         }, 1000 / 20);
         MovableObject.characterIntervals.push(animationInterval)
 
         let jumpingInterval = setInterval(() => {
-            if (this.isJumping === true && this.isAlive()) {
-                this.playSingleJumpAnimation(this.IMAGES_JUMPING)
-            }
+            this.jumpingAnimation()
         }, 1000 / 10)
         MovableObject.characterIntervals.push(jumpingInterval)
     }
 
 
-    resetInactivityTimer() {
-        this.lastKeyPressTime = Date.now();
-        // Falls eine Idle-Animation läuft, stoppen
-        if (this.idleInterval) {
-            clearInterval(this.idleInterval);
-            clearInterval(this.longIdleInterval);
-            this.idleInterval = null;
-            this.longIdleInterval = null;
+    movement() {
+        if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.isAlive()) {
+            this.movementRight()
         }
-        this.isIdle = false; // Setzt den Idle-Status zurück
+        if (this.world.keyboard.LEFT && this.x > 0 && this.isAlive()) {
+            this.movementLeft()
+        }
+        if (this.world.keyboard.UP && !this.isJumping && this.isAlive()) {
+            this.movementJump()
+        }
+        if (this.x === 500 && this.isAlive()) {
+            this.activateEndboss()
+        }
+        this.world.camera_x = -this.x + 100
+    }
+
+
+    jumpingAnimation() {
+        if (this.isJumping && this.isAlive() && !this.isHurtAnimating) {
+            this.playSingleJumpAnimation(this.IMAGES_JUMPING)
+        }
+    }
+
+
+    movementRight() {
+        this.moveRight()
+        this.otherDirection = false
+        this.resetInactivityTimer()
+    }
+
+
+    movementLeft() {
+        this.moveLeft()
+        this.otherDirection = true
+        this.resetInactivityTimer()
+    }
+
+
+    movementJump() {
+        this.jump()
+        this.resetInactivityTimer()
+    }
+
+
+    activateEndboss() {
+        let endbossIndex = this.world.level.enemies.length - 1
+        let endboss = this.world.level.enemies[endbossIndex]
+        endboss.animationPlaying = false
+    }
+
+
+    animateCharacter() {
+        if (this.isHurt() && this.isAlive() && !this.isHurtAnimating) {
+            this.hurtAnimation()
+        }
+        if (this.walking()) {
+            this.playAnimation(this.IMAGES_WALKING)
+        }
+        if (this.isDead()) {
+            this.gameOver()
+        }
+        this.startEndboss()
+    }
+
+
+    gameOver() {
+        if (!MovableObject.characterDead && this.isDead()) {    
+            this.deactivateControl()
+        }
+        this.playSingleDeadAnimation(this.IMAGES_DEAD)
+        setTimeout(() => {
+            this.stopAllIntervals()
+            this.resetVariables()
+        }, 3000)
+    }
+
+
+    deactivateControl() {
+        this.currentImage = 0
+        MovableObject.characterDead = true
+        this.hideTouch()
+        if (!World.isMuted) {
+            this.deadSound.play()
+        }
+        setTimeout(() => {
+            if (!World.isMuted) {
+                this.gameOverSound.play()
+            }
+        }, 500)
+    }
+
+
+    walking() {
+        return this.world.keyboard.RIGHT && !this.isAboveGround() && this.isAlive() && !this.isHurtAnimating ||
+        this.world.keyboard.LEFT && !this.isAboveGround() && this.isAlive() && !this.isHurtAnimating
+
+    }
+
+
+    hurtAnimation() {
+        this.isHurtAnimating = true
+        this.currentImage = 0
+        let hurtDuration = 1000           
+        let hurtInterval = setInterval(() => {
+            this.playAnimation(this.IMAGES_HURT)
+        }, 1000 / 10)
+        MovableObject.characterIntervals.push(hurtInterval)
+
+        setTimeout(() => {
+            clearInterval(hurtInterval)
+            this.isHurtAnimating = false
+        }, hurtDuration)
+    }
+
+
+    resetInactivityTimer() {
+        this.lastKeyPressTime = Date.now()
+        if (this.idleInterval) {
+            clearInterval(this.idleInterval)
+            clearInterval(this.longIdleInterval)
+            this.idleInterval = null
+            this.longIdleInterval = null
+        }
+        this.isIdle = false
         this.isLongIdle = false
         this.resetSnoring()
     }
@@ -184,10 +251,9 @@ class Character extends MovableObject {
     checkInactivity() {
         let idleInterval = setInterval(() => {
             this.resetSnoring()
-            let currentTime = Date.now();
-            if (currentTime - this.lastKeyPressTime > 100 && !this.isIdle &&
-                !this.isLongIdle) { // 10 Sek. Inaktiv?
-                this.playIdleAnimation(this.IMAGES_IDLE);
+            let currentTime = Date.now()
+            if (currentTime - this.lastKeyPressTime > 100 && !this.isIdle && !this.isLongIdle) {
+                this.playIdleAnimation(this.IMAGES_IDLE)
             } else if (currentTime - this.lastKeyPressTime > 7000) {
                 if (!this.isLongIdle) {
                     clearInterval(this.idleInterval)
@@ -209,10 +275,10 @@ class Character extends MovableObject {
 
     playIdleAnimation(obj) {
         if (!this.isIdle) {
-            this.isIdle = true;
+            this.isIdle = true
             this.idleInterval = setInterval(() => {
-                this.playAnimation(obj);
-            }, 1000 / 10); // Animation abspielen mit 10 FPS
+                this.playAnimation(obj)
+            }, 1000 / 10)
             MovableObject.characterIntervals.push(this.idleInterval)
         }
     }
@@ -227,8 +293,8 @@ class Character extends MovableObject {
                 this.snoring.loop = true
             }
             this.longIdleInterval = setInterval(() => {
-                this.playAnimation(obj);
-            }, 1000 / 5); // Animation abspielen mit 10 FPS
+                this.playAnimation(obj)
+            }, 1000 / 5)
             MovableObject.characterIntervals.push(this.longIdleInterval)
         }
     }

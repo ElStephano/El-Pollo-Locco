@@ -33,17 +33,17 @@ class Coins extends CollectibleObject {
 
     animate() {
         this.interval = setInterval(() => {
-            this.currentImageIndex = (this.currentImageIndex + 1) % this.IMAGES_COINS.length;
-            this.img = this.imageCache[this.IMAGES_COINS[this.currentImageIndex]];
+            this.currentImageIndex = (this.currentImageIndex + 1) % this.IMAGES_COINS.length
+            this.img = this.imageCache[this.IMAGES_COINS[this.currentImageIndex]]
             let path = this.IMAGES_COINS[this.currentImageIndex]
             if (path === this.IMAGES_COINS[0]) {
-                this.width = 93;   // Breite für coin_1
-                this.height = 93;  // Höhe für coin_1               
+                this.width = 93
+                this.height = 93             
             } else if (path === this.IMAGES_COINS[1]) {
-                this.width = 95;   // Breite für coin_2
-                this.height = 95;  // Höhe für coin_2
+                this.width = 95
+                this.height = 95
             }
-        }, 200); // Wechselt alle 200 Millisekunden
+        }, 200)
         MovableObject.backgroundIntervals.push(this.interval)
     }
 }
