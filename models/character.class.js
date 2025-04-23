@@ -1,34 +1,75 @@
+/**
+ * Die `Character`-Klasse repräsentiert den spielbaren Charakter im Spiel.
+ * Sie erbt von `MovableObject` und steuert Bewegung, Animation, Interaktionen und Spielzustände.
+ */
 class Character extends MovableObject {
-    height = 260
-    width = 125
-    y = 150
-    world
-    speed = 10
-    energy = 10
-    isJumping = false
-    jumpSound = new Audio('audio/charachterJump.mp3')
-    deadSound = new Audio('audio/characterDying.mp3')
-    snoring = new Audio('audio/snoring.mp3')
-    isHit = false
-    static endbossStart = false
-    static endbossIsAnimate = false
-    lastKeyPressTime = Date.now()
-    idleInterval = null
-    longIdleInterval = null
-    isSnoring = false
-    showGameOverScreen = false
-    isHurtAnimating = false
 
+    /** Höhe der Spielfigur in Pixel. */
+    height = 260;
 
+    /** Breite der Spielfigur in Pixel. */
+    width = 125;
 
+    /** Y-Position der Spielfigur. */
+    y = 150;
+
+    /** Referenz zur Spielwelt. */
+    world;
+
+    /** Bewegungsgeschwindigkeit. */
+    speed = 10;
+
+    /** Lebensenergie des Charakters. */
+    energy = 10;
+
+    /** Gibt an, ob der Charakter gerade springt. */
+    isJumping = false;
+
+    /** Soundeffekt beim Springen. */
+    jumpSound = new Audio('audio/charachterJump.mp3');
+
+    /** Soundeffekt beim Sterben. */
+    deadSound = new Audio('audio/characterDying.mp3');
+
+    /** Soundeffekt beim langen Inaktivitätszustand. */
+    snoring = new Audio('audio/snoring.mp3');
+
+    /** Gibt an, ob der Charakter getroffen wurde. */
+    isHit = false;
+
+    /** Steuert, ob der Endgegner aktiviert wurde. */
+    static endbossStart = false;
+
+    /** Gibt an, ob die Endboss-Animation läuft. */
+    static endbossIsAnimate = false;
+
+    /** Letzter Tastendruck-Zeitpunkt zur Erkennung von Inaktivität. */
+    lastKeyPressTime = Date.now();
+
+    /** Intervall für Idle-Animation. */
+    idleInterval = null;
+
+    /** Intervall für Long-Idle-Animation. */
+    longIdleInterval = null;
+
+    /** Gibt an, ob der Charakter gerade schnarcht. */
+    isSnoring = false;
+
+    /** Flag für das Anzeigen des Game Over Screens. */
+    showGameOverScreen = false;
+
+    /** Ob die Hurt-Animation aktuell läuft. */
+    isHurtAnimating = false;
+
+    /** Offset zur Kollisionserkennung. */
     offset = {
         'top': 120,
         'right': 60,
         'bottom': 130,
         'left': 20
-    }
+    };
 
-
+    /** Bildpfade für Idle-, Jump-, Hurt-, Death-Animationen etc. */
     IMAGES_LONG_IDLE = [
         'img/2_character_pepe/1_idle/long_idle/I-11.png',
         'img/2_character_pepe/1_idle/long_idle/I-12.png',
@@ -87,7 +128,9 @@ class Character extends MovableObject {
         'img/2_character_pepe/4_hurt/H-43.png'
     ]
 
-
+    /**
+         * Konstruktor lädt alle Bilder und initialisiert Physik, Animationen und Inaktivitätsprüfung.
+         */
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png')
         this.loadImages(this.IMAGES_WALKING)
@@ -101,6 +144,9 @@ class Character extends MovableObject {
         this.animate()
     }
 
+    /**
+ * Startet alle Bewegungs- und Animations-Intervalle des Charakters.
+ */
     animate() {
         let moveInterval = setInterval(() => {
             this.movement()
@@ -118,7 +164,9 @@ class Character extends MovableObject {
         MovableObject.characterIntervals.push(jumpingInterval)
     }
 
-
+    /**
+     * Verarbeitet Bewegungslogik abhängig von Tasteneingaben und Spiellogik.
+     */
     movement() {
         if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.isAlive()) {
             this.movementRight()
@@ -135,41 +183,53 @@ class Character extends MovableObject {
         this.world.camera_x = -this.x + 100
     }
 
-
+    /**
+      * Führt Sprunganimation aus, wenn Charakter springt.
+      */
     jumpingAnimation() {
         if (this.isJumping && this.isAlive() && !this.isHurtAnimating) {
             this.playSingleJumpAnimation(this.IMAGES_JUMPING)
         }
     }
 
-
+    /**
+     * Führt Bewegung nach rechts aus.
+     */
     movementRight() {
         this.moveRight()
         this.otherDirection = false
         this.resetInactivityTimer()
     }
 
-
+    /**
+     * Führt Bewegung nach links aus.
+     */
     movementLeft() {
         this.moveLeft()
         this.otherDirection = true
         this.resetInactivityTimer()
     }
 
-
+    /**
+     * Führt Sprungbewegung aus.
+     */
     movementJump() {
         this.jump()
         this.resetInactivityTimer()
     }
 
-
+    /**
+     * Aktiviert den Endgegner, sobald der Spieler eine bestimmte X-Position erreicht.
+     */
     activateEndboss() {
         let endbossIndex = this.world.level.enemies.length - 1
         let endboss = this.world.level.enemies[endbossIndex]
         endboss.animationPlaying = false
     }
 
-
+    /**
+     * Steuert die laufende Animation basierend auf Zustand des Charakters.
+     */
     animateCharacter() {
         if (this.isHurt() && this.isAlive() && !this.isHurtAnimating) {
             this.hurtAnimation()
@@ -183,9 +243,11 @@ class Character extends MovableObject {
         this.startEndboss()
     }
 
-
+    /**
+     * Führt den Game-Over-Prozess aus.
+     */
     gameOver() {
-        if (!MovableObject.characterDead && this.isDead()) {    
+        if (!MovableObject.characterDead && this.isDead()) {
             this.deactivateControl()
         }
         this.playSingleDeadAnimation(this.IMAGES_DEAD)
@@ -195,7 +257,9 @@ class Character extends MovableObject {
         }, 3000)
     }
 
-
+    /**
+      * Deaktiviert Steuerung und spielt Sterbesound.
+      */
     deactivateControl() {
         this.currentImage = 0
         MovableObject.characterDead = true
@@ -210,18 +274,23 @@ class Character extends MovableObject {
         }, 500)
     }
 
-
+    /**
+    * Prüft ob Charakter läuft.
+    * @returns {boolean}
+    */
     walking() {
         return this.world.keyboard.RIGHT && !this.isAboveGround() && this.isAlive() && !this.isHurtAnimating ||
-        this.world.keyboard.LEFT && !this.isAboveGround() && this.isAlive() && !this.isHurtAnimating
+            this.world.keyboard.LEFT && !this.isAboveGround() && this.isAlive() && !this.isHurtAnimating
 
     }
 
-
+    /**
+     * Führt Hurt-Animation aus, wenn der Charakter getroffen wird.
+     */
     hurtAnimation() {
         this.isHurtAnimating = true
         this.currentImage = 0
-        let hurtDuration = 1000           
+        let hurtDuration = 1000
         let hurtInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_HURT)
         }, 1000 / 10)
@@ -233,7 +302,9 @@ class Character extends MovableObject {
         }, hurtDuration)
     }
 
-
+    /**
+     * Setzt den Timer für Inaktivität zurück.
+     */
     resetInactivityTimer() {
         this.lastKeyPressTime = Date.now()
         if (this.idleInterval) {
@@ -247,7 +318,9 @@ class Character extends MovableObject {
         this.resetSnoring()
     }
 
-
+    /**
+     * Startet Überwachung auf Inaktivität (für Idle-Animationen).
+     */
     checkInactivity() {
         let idleInterval = setInterval(() => {
             this.resetSnoring()
@@ -264,7 +337,9 @@ class Character extends MovableObject {
         MovableObject.characterIntervals.push(idleInterval)
     }
 
-
+    /**
+      * Stoppt das Schnarchen.
+      */
     resetSnoring() {
         if (!this.isLongIdle || this.isDead() || World.isMuted) {
             this.snoring.pause()
@@ -272,7 +347,10 @@ class Character extends MovableObject {
         }
     }
 
-
+    /**
+     * Startet Idle-Animation bei kurzer Inaktivität.
+     * @param {Array<string>} obj - Bildpfade
+     */
     playIdleAnimation(obj) {
         if (!this.isIdle) {
             this.isIdle = true
@@ -283,7 +361,10 @@ class Character extends MovableObject {
         }
     }
 
-
+    /**
+     * Startet Long-Idle-Animation bei längerer Inaktivität.
+     * @param {Array<string>} obj - Bildpfade
+     */
     playLongIdleAnimation(obj) {
         if (this.isIdle) {
             this.isIdle = false
@@ -299,7 +380,10 @@ class Character extends MovableObject {
         }
     }
 
-
+    /**
+     * Spielt eine einfache Sprunganimation.
+     * @param {Array<string>} images - Bildpfade
+     */
     playSingleJumpAnimation(images) {
         if (this.currentImage < images.length) {
             this.singleRunFrames(images)
@@ -308,7 +392,10 @@ class Character extends MovableObject {
         }
     }
 
-
+    /**
+     * Spielt Sterbeanimation und zeigt Game Over Screen.
+     * @param {Array<string>} images - Bildpfade
+     */
     playSingleDeadAnimation(images) {
         if (this.currentImage < images.length) {
             this.singleRunFrames(images)
@@ -322,20 +409,27 @@ class Character extends MovableObject {
         }
     }
 
-
+    /**
+     * Wechselt die Bildframes durch.
+     * @param {Array<string>} images - Bildpfade
+     */
     singleRunFrames(images) {
         let path = images[this.currentImage]
         this.img = this.imageCache[path]
         this.currentImage++
     }
 
-
+    /**
+     * Setzt Sprunganimation zurück.
+     */
     resetJumpAnimation() {
         this.isJumping = false
         this.currentImage = 0
     }
 
-
+    /**
+     * Löst den Sprung aus.
+     */
     jump() {
         this.speedY = 30
         if (!World.isMuted) {
@@ -347,7 +441,9 @@ class Character extends MovableObject {
         }
     }
 
-
+    /**
+     * Setzt globale Spielvariablen zurück (für Neustart).
+     */
     resetVariables() {
         MovableObject.endbossIntervals = [];
         MovableObject.characterIntervals = [];
@@ -358,7 +454,9 @@ class Character extends MovableObject {
         Character.endbossIsAnimate = false
     }
 
-
+    /**
+     * Startet Endboss-Mechanik, wenn Spieler weit genug gelaufen ist.
+     */
     startEndboss() {
         if (this.x > 2500) {
             if (!Character.endbossStart)
