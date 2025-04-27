@@ -1,14 +1,13 @@
 /**
- * Klasse, die die mobilen Steuerungen für das Spiel verwaltet.
- * Sie rendert die Steuerbuttons, bindet Touch-Ereignisse an die Buttons und sorgt dafür, 
- * dass die Steuerungen korrekt angezeigt werden, wenn auf einem mobilen Gerät gespielt wird.
+ * Class that manages the mobile controls for the game.
+ * It renders the control buttons, binds touch events to the buttons, and ensures that the controls are displayed correctly when playing on a mobile device.
  */
 class MobileControls {
-    
+
     /**
-     * Erstellt eine neue Instanz der MobileControls-Klasse.
+     * Creates a new instance of the MobileControls class.
      * 
-     * @param {Object} keyboard - Das Keyboard-Objekt, das die aktuellen Tastenstatus enthält.
+     * @param {Object} keyboard - The keyboard object that contains the current key states.
      * @constructor
      */
     constructor(keyboard) {
@@ -22,8 +21,8 @@ class MobileControls {
     }
 
     /**
-     * Erzwingt das Scrollen der Seite beim ersten Touch, um die URL-Leiste auf mobilen Geräten zu verbergen.
-     * Diese Funktion sorgt dafür, dass das Spiel direkt beim ersten Touch angezeigt wird.
+     * Forces the page to scroll on the first touch to hide the URL bar on mobile devices.
+     * This ensures that the game is displayed immediately after the first touch.
      */
     forceScrollOnFirstTouch() {
         const handler = () => {
@@ -34,11 +33,12 @@ class MobileControls {
     }
 
     /**
-     * Rendert die mobilen Steuerbuttons in HTML und fügt sie dem Dokument hinzu.
-     * Die Steuerbuttons ermöglichen das Steuern von Charakterbewegungen und Aktionen.
+     * Renders the mobile control buttons in HTML and adds them to the document.
+     * The control buttons allow controlling character movement and actions.
      */
     renderControls() {
-        const html = `
+        let mobileControlContainer = document.getElementById('mobileControlsContainer')
+        mobileControlContainer.innerHTML = `
             <div id="mobileControls" class="mobile-controls">
                 <div class="arrowTouch">
                     <button id="btnLeft" class="control-btn"><img src="./img/10_Icons/left-arrow.png"></button>
@@ -50,12 +50,11 @@ class MobileControls {
                 </div>
             </div>
         `;
-        document.body.insertAdjacentHTML('beforeend', html);
     }
 
     /**
-     * Bindet die Touch-Ereignisse für die Steuerbuttons.
-     * Es wird dafür gesorgt, dass beim Tippen auf die Buttons die entsprechenden Tasten im `keyboard`-Objekt aktiviert/deaktiviert werden.
+     * Binds the touch events for the control buttons.
+     * Ensures that when tapping the buttons, the corresponding keys in the `keyboard` object are activated/deactivated.
      */
     bindButtons() {
         this.bindTouch('btnLeft', 'LEFT');
@@ -65,10 +64,10 @@ class MobileControls {
     }
 
     /**
-     * Bindet die Touch-Ereignisse (touchstart, touchend) für einen einzelnen Button.
+     * Binds the touch events (touchstart, touchend) for a single button.
      * 
-     * @param {string} buttonId - Die ID des Buttons, der gebunden werden soll.
-     * @param {string} key - Der Tastenbezeichner im `keyboard`-Objekt, der beim Tippen auf den Button geändert wird.
+     * @param {string} buttonId - The ID of the button to bind.
+     * @param {string} key - The key identifier in the `keyboard` object that will be changed when the button is tapped.
      */
     bindTouch(buttonId, key) {
         const btn = document.getElementById(buttonId);
@@ -86,21 +85,32 @@ class MobileControls {
     }
 
     /**
-     * Zeigt die mobilen Steuerungen nur auf mobilen Geräten an, basierend auf der Bildschirmgröße.
-     * Wenn die Breite des Bildschirms kleiner als 768px oder die Höhe kleiner als 480px ist, wird die Steuerung angezeigt.
+     * Displays the mobile controls only on mobile devices based on screen size.
+     * If the screen width is less than 768px or the height is less than 480px, the controls will be shown.
      */
     showIfMobile() {
-        const isMobileWidth = window.innerWidth < 768;
-        const isMobileHeight = window.innerHeight < 480;
-        const controls = document.getElementById('mobileControls');
-        if (!(isMobileWidth || isMobileHeight) && controls) {
-            controls.classList.add('d-none');
+        const container = document.getElementById('mobileControlsContainer');
+        const iconsContainer = document.getElementById('iconsContainer')
+    
+        const isTouchDevice = (
+            'ontouchstart' in window || 
+            navigator.maxTouchPoints > 0 || 
+            navigator.msMaxTouchPoints > 0
+        );
+    
+        if (isTouchDevice && container) {
+            container.classList.remove('d-none');
+            iconsContainer.classList.add('icons-container-mobile')
+        } else if (container) {
+            container.classList.add('d-none');
+            iconsContainer.classList.remove('icons-container-mobile')
+
         }
     }
 
     /**
-     * Setzt die CSS-Variable `--vh` auf die Höhe des Viewports, um Probleme mit der mobilen Ansicht und der URL-Leiste zu verhindern.
-     * Diese Methode sorgt dafür, dass der Viewport immer korrekt auf mobilen Geräten dargestellt wird.
+     * Sets the CSS variable `--vh` to the height of the viewport to prevent issues with mobile view and the URL bar.
+     * This method ensures that the viewport is always displayed correctly on mobile devices.
      */
     setViewportHeight() {
         const updateVh = () => {
@@ -112,8 +122,8 @@ class MobileControls {
     }
 
     /**
-     * Verhindert, dass die URL-Leiste bei einem Seitenladen auf mobilen Geräten sichtbar bleibt.
-     * Scrollt die Seite nach dem Laden ein kleines Stück nach oben, um die URL-Leiste zu verbergen.
+     * Prevents the URL bar from staying visible when the page is loaded on mobile devices.
+     * It scrolls the page up slightly after loading to hide the URL bar.
      */
     preventURLBar() {
         window.addEventListener('load', () => {
@@ -123,6 +133,3 @@ class MobileControls {
         });
     }
 }
-
-
-

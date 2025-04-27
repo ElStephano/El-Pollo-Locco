@@ -1,66 +1,66 @@
 /**
- * Repräsentiert einen feindlichen Charakter im Spiel, der sich bewegen und angreifen kann.
- * Es gibt zwei Typen von Feinden: kleine Hühner und große Hühner. Der Feind kann sich in beide Richtungen bewegen 
- * und hat eine Animation, die zeigt, wie er läuft und stirbt.
+ * Represents an enemy character in the game that can move and attack.
+ * There are two types of enemies: small chickens and large chickens.
+ * The enemy can move in both directions and has an animation showing it walking and dying.
  */
 class Enemy extends MovableObject {
 
     /**
-     * Die Höhe des Feindes.
+     * The height of the enemy.
      * @type {number}
      */
     height = 100;
 
     /**
-     * Die Breite des Feindes.
+     * The width of the enemy.
      * @type {number}
      */
     width = 100;
 
     /**
-     * Die y-Koordinate des Feindes.
+     * The y-coordinate of the enemy.
      * @type {number}
      */
-    y = 330;
+    y = 320;
 
     /**
-     * Gibt an, ob der Feind getroffen wurde.
+     * Indicates whether the enemy has been hit.
      * @type {boolean}
      */
     isHit = false;
 
     /**
-     * Das Intervall für die Feindbewegungsanimation.
+     * The interval for the enemy's movement animation.
      * @type {number | null}
      */
     enemyAnimationInterval = null;
 
     /**
-     * Das Intervall für die Feindbewegung.
+     * The interval for the enemy's movement.
      * @type {number | null}
      */
     enemyMoveInterval = null;
 
     /**
-     * Gibt an, ob der Feind ein kleines Huhn ist.
+     * Indicates whether the enemy is a small chicken.
      * @type {boolean}
      */
     isSmallChicken = false;
 
     /**
-     * Das Audioobjekt für den Tod des Feindes.
+     * The audio object for the enemy's death sound.
      * @type {Audio}
      */
     deadSound = new Audio('audio/dead_chicken.mp3');
 
     /**
-     * Ein Wert, der angibt, ob der Tod-Sound bereits abgespielt wurde.
+     * A value indicating whether the death sound has already been played.
      * @type {boolean}
      */
     soundPlay = false;
 
     /**
-     * Die Animationsbilder für das Gehen eines großen Huhns.
+     * The walking animation images for a large chicken.
      * @type {Array<string>}
      */
     IMAGES_WALKING = [
@@ -70,13 +70,13 @@ class Enemy extends MovableObject {
     ];
 
     /**
-     * Das Bild für das Totbild eines großen Huhns.
+     * The dead image for a large chicken.
      * @type {string}
      */
     IMAGE_DEAD = 'img/3_enemies_chicken/chicken_normal/2_dead/dead.png';
 
     /**
-     * Die Animationsbilder für das Gehen eines kleinen Huhns.
+     * The walking animation images for a small chicken.
      * @type {Array<string>}
      */
     SMALL_CHICKEN_WALKING = [
@@ -86,13 +86,13 @@ class Enemy extends MovableObject {
     ];
 
     /**
-     * Das Bild für das Totbild eines kleinen Huhns.
+     * The dead image for a small chicken.
      * @type {string}
      */
     SMALL_CHICKEN_DEAD = 'img/3_enemies_chicken/chicken_small/2_dead/dead.png';
 
     /**
-     * Die Offset-Werte für die Kollisionserkennung.
+     * The offset values for collision detection.
      * @type {Object}
      */
     offset = {
@@ -103,9 +103,9 @@ class Enemy extends MovableObject {
     };
 
     /**
-     * Erzeugt eine Instanz eines Feindes.
-     * Der Feind kann entweder ein kleines oder ein großes Huhn sein, das zufällig bestimmt wird.
-     * @param {number} x - Die x-Koordinate des Feindes.
+     * Creates an instance of an enemy.
+     * The enemy can randomly be either a small or a large chicken.
+     * @param {number} x - The x-coordinate of the enemy.
      * @constructor
      */
     constructor(x) {
@@ -122,7 +122,7 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * Initialisiert das kleine Huhn.
+     * Initializes the small chicken.
      */
     createSmallChicken() {
         this.speed = 2;
@@ -134,7 +134,7 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * Initialisiert das große Huhn.
+     * Initializes the large chicken.
      */
     createLargeChicken() {
         this.loadImages(this.IMAGES_WALKING);
@@ -143,7 +143,7 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * Startet die Animationen und Bewegungen des Feindes.
+     * Starts the enemy's animations and movement.
      */
     animate() {
         this.enemyMoveInterval = setInterval(() => {
@@ -158,8 +158,8 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * Bestimmt die Bewegung des Feindes.
-     * Wenn der Feind nicht getroffen wurde, bewegt er sich nach links.
+     * Handles the enemy's movement.
+     * If the enemy is not hit, it moves to the left.
      */
     enemiesMovement() {
         if (!this.isHit && !MovableObject.charcterDead) {
@@ -168,7 +168,7 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * Bestimmt, welche Animation für den Feind gespielt wird (Gehen oder Tot).
+     * Determines which animation to play for the enemy (walking or dead).
      */
     animateEnemies() {
         if (!this.isHit && !MovableObject.charcterDead) {
@@ -179,7 +179,7 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * Spielt die Tot-Animation des Feindes ab und spielt den Tod-Sound ab.
+     * Plays the enemy's death animation and sound.
      */
     animateDeadEnemies() {
         this.img.src = this.isSmallChicken ? this.SMALL_CHICKEN_DEAD : this.IMAGE_DEAD;
@@ -192,7 +192,7 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * Spielt die Gehen-Animation des Feindes ab.
+     * Plays the enemy's walking animation.
      */
     animateWalkingEnemies() {
         if (this.isSmallChicken) {
@@ -203,10 +203,11 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * Setzt die Audio-Einstellungen für den Tod des Feindes.
+     * Sets the audio settings for the enemy's death sound.
      */
     audioSettings() {
         this.deadSound.volume = 0.2;
     }
 }
+
 

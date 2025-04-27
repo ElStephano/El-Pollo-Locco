@@ -1,37 +1,26 @@
 /**
- * Die Klasse `CollectibleObject` repräsentiert sammelbare Objekte im Spiel,
- * wie z.B. Münzen oder Flaschen. Sie erbt von `MovableObject` und besitzt Eigenschaften
- * für zufällige Platzierung und Kollisionserkennung.
+ * The `CollectibleObject` class represents collectible objects in the game,
+ * such as coins or bottles. It inherits from `MovableObject` and includes properties
+ * for random placement and collision detection.
  */
 class CollectibleObject extends MovableObject {
 
     /**
-     * Offset-Werte zur Anpassung des Kollisionsrahmens für das sammelbare Objekt.
-     * @type {{top: number, right: number, bottom: number, left: number}}
-     */
-    offset = {
-        'top': 10,
-        'right': 20,
-        'bottom': 20,
-        'left': 10
-    };
-
-    /**
-     * Erstellt eine neue Instanz eines sammelbaren Objekts mit zufälliger X-Position.
-     * Positioniert das Objekt in Bodennähe.
+     * Creates a new instance of a collectible object with a random X position.
+     * Positions the object near the ground.
      */
     constructor() {
         super();
-        this.x = Math.random() * 2200;
+        this.x = Math.random() * 2800;
         this.y = 340;
         this.width = 70;
         this.height = 80;
     }
 
     /**
-     * Gibt einen zufälligen Index aus einem übergebenen Array von Bildpfaden zurück.
-     * @param {Array<string>} images - Das Array mit Bildpfaden.
-     * @returns {number} Der zufällige Index im Bild-Array.
+     * Returns a random index from a given array of image paths.
+     * @param {Array<string>} images - The array of image paths.
+     * @returns {number} The random index within the image array.
      */
     getRandomImage(images) {
         let randomIndex = Math.floor(Math.random() * images.length);

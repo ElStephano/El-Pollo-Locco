@@ -84,11 +84,12 @@ class MovableObject extends DrawableObject {
      * @param {MovableObject} mo - The other object to check collision with.
      * @returns {boolean}
      */
+
     isColliding(mo) {
-        return this.x + this.width - this.offset.left > mo.x + mo.offset.left &&
-               this.y + this.height - 10 > mo.y + mo.offset.left &&
-               this.x + this.offset.left < mo.x + mo.width - mo.offset.left &&
-               this.y + this.offset.top < mo.y + mo.height + this.offset.top;
+        return this.x + this.width - (this.offset.right - this.offset.left)  > mo.x + mo.offset.left &&
+                this.y + this.height - (this.offset.bottom - this.offset.top) > mo.y + mo.offset.top &&
+                this.x + this.offset.left < mo.x + mo.width - (mo.offset.right - mo.offset.left)
+                this.y + this.offset.top < mo.y + mo.height - mo.offset.top;
     }
 
     /** Moves the object to the right. */

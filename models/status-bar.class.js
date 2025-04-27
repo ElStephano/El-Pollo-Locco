@@ -1,12 +1,12 @@
 /**
- * Klasse, die eine allgemeine Statusleiste darstellt.
- * Erbt von der Klasse `DrawableObject` und stellt eine Basis für verschiedene Statusanzeigen dar.
+ * Class that represents a general status bar.
+ * Inherits from the `DrawableObject` class and serves as a base for various status displays.
  */
 class StatusBar extends DrawableObject {
 
     /**
-     * Erstellt eine neue Instanz der StatusBar-Klasse.
-     * Setzt die Position und Größe der Statusleiste.
+     * Creates a new instance of the StatusBar class.
+     * Sets the position and size of the status bar.
      */
     constructor() {
         super();

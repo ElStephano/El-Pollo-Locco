@@ -1,11 +1,11 @@
 /**
- * Klasse, die die Gesundheitsanzeige darstellt.
- * Erbt von der `StatusBar`-Klasse und zeigt den Gesundheitsstatus des Spielers als Statusleiste an.
+ * Class that represents the health status display.
+ * Inherits from the `StatusBar` class and shows the player's health status as a status bar.
  */
 class StatusbarHealth extends StatusBar {
 
     /**
-     * @type {string[]} Liste der Bildpfade für die verschiedenen Gesundheitsstufen des Spielers.
+     * @type {string[]} List of image paths for the different health levels of the player.
      */
     IMAGES = [
         './img/7_statusbars/1_statusbar/2_statusbar_health/green/0.png',
@@ -17,13 +17,13 @@ class StatusbarHealth extends StatusBar {
     ];
 
     /**
-     * @type {number} Der Prozentsatz des Gesundheitsstatus (0-100).
+     * @type {number} The percentage of health (0-100).
      */
     percentage = 100;
 
     /**
-     * Erstellt eine neue Instanz der StatusbarHealth-Klasse.
-     * Lädt die Bilder für die Gesundheitsanzeige und setzt den initialen Gesundheitswert.
+     * Creates a new instance of the StatusbarHealth class.
+     * Loads the images for the health display and sets the initial health value.
      */
     constructor() {
         super();
@@ -32,9 +32,9 @@ class StatusbarHealth extends StatusBar {
     }
 
     /**
-     * Setzt den Prozentsatz des Gesundheitsstatus und aktualisiert das angezeigte Bild.
+     * Sets the health percentage and updates the displayed image.
      * 
-     * @param {number} percentage - Der neue Gesundheitswert (zwischen 0 und 100).
+     * @param {number} percentage - The new health value (between 0 and 100).
      */
     setPercentage(percentage) {
         this.percentage = percentage;
@@ -43,9 +43,9 @@ class StatusbarHealth extends StatusBar {
     }
 
     /**
-     * Bestimmt den Index des Bildes basierend auf dem aktuellen Gesundheitsprozentsatz.
+     * Determines the index of the image based on the current health percentage.
      * 
-     * @returns {number} Der Index des Bildes, das die aktuelle Gesundheitsstufe darstellt.
+     * @returns {number} The index of the image representing the current health level.
      */
     resolveImageIndex() {
         if (this.percentage == 100) {

@@ -1,95 +1,94 @@
 /**
- * Repräsentiert den Endboss des Spiels. Der Endboss kann gehen, sich verletzen, angreifen und sterben.
- * Er hat mehrere Animationsphasen: Gehen, Alarmieren, Angreifen, Verletzen und Sterben.
+ * Represents the final boss of the game. The Endboss can walk, get hurt, attack, and die.
+ * It has multiple animation phases: Walking, Alert, Attacking, Getting Hurt, and Dying.
  */
-class Endboss extends MovableObject {
-
+class Endboss extends MovableObject {    
     /**
-     * Die Höhe des Endbosses.
+     * The height of the Endboss.
      * @type {number}
      */
     height = 400;
 
     /**
-     * Die Breite des Endbosses.
+     * The width of the Endboss.
      * @type {number}
      */
     width = 300;
 
     /**
-     * Die y-Koordinate des Endbosses.
+     * The y-coordinate of the Endboss.
      * @type {number}
      */
     y = 45;
 
     /**
-     * Die Energie des Endbosses.
+     * The energy level of the Endboss.
      * @type {number}
      */
     energy = 100;
 
     /**
-     * Der Index des aktuellen Animationsbildes des Endbosses.
+     * The index of the current animation frame of the Endboss.
      * @type {number}
      */
     currentEndbossImage = 0;
 
     /**
-     * Gibt an, ob der Endboss die Richtung gewechselt hat.
+     * Indicates whether the Endboss has changed direction.
      * @type {boolean}
      */
     otherDirection = false;
 
     /**
-     * Gibt an, ob der Endboss getroffen wurde.
+     * Indicates whether the Endboss has been hit.
      * @type {boolean}
      */
     isHit = false;
 
     /**
-     * Das Hauptintervall für die Endboss-Animation.
+     * The main interval for the Endboss animation.
      * @type {number | null}
      */
     mainInterval = null;
 
     /**
-     * Das aktuelle Animationsintervall des Endbosses.
+     * The current animation interval of the Endboss.
      * @type {number | null}
      */
     currentAnimationInterval = null;
 
     /**
-     * Die aktuelle Animation des Endbosses.
+     * The current animation function of the Endboss.
      * @type {Function | null}
      */
     currentAnimation = null;
 
     /**
-     * Das Intervall zur Überprüfung des Endboss-Status.
+     * The interval to check the Endboss's status.
      * @type {number | null}
      */
     checkInterval = null;
 
     /**
-     * Das Intervall für den Y-Offset des toten Endbosses.
+     * The interval for the Y-offset when the Endboss is dead.
      * @type {number | null}
      */
     deadIntervalY = null;
 
     /**
-     * Das Intervall für die Gehanimation des Endbosses.
+     * The walking animation interval of the Endboss.
      * @type {number | null}
      */
     walkingInterval = null;
 
-    /**
-     * Das Intervall für die Verletzungsanimation des Endbosses.
+   /**
+     * The interval for the hurt animation of the Endboss.
      * @type {number | null}
      */
     isHurtInterval = null;
 
     /**
-     * Die Bilder für die Geh-Animation des Endbosses.
+     * The images for the walking animation.
      * @type {Array<string>}
      */
     IMAGES_WALKING = [
@@ -100,7 +99,7 @@ class Endboss extends MovableObject {
     ];
 
     /**
-     * Die Bilder für die Alarm-Animation des Endbosses.
+     * The images for the alert animation.
      * @type {Array<string>}
      */
     IMAGES_ALERT = [
@@ -115,7 +114,7 @@ class Endboss extends MovableObject {
     ];
 
     /**
-     * Die Bilder für die Todes-Animation des Endbosses.
+     * The images for the death animation.
      * @type {Array<string>}
      */
     IMAGES_DEAD = [
@@ -125,7 +124,7 @@ class Endboss extends MovableObject {
     ];
 
     /**
-     * Die Bilder für die Verletzungs-Animation des Endbosses.
+     * The images for the hurt animation.
      * @type {Array<string>}
      */
     IMAGES_HURT = [
@@ -135,7 +134,7 @@ class Endboss extends MovableObject {
     ];
 
     /**
-     * Die Bilder für die Angriffs-Animation des Endbosses.
+     * The images for the attack animation.
      * @type {Array<string>}
      */
     IMAGES_ATTACK = [
@@ -150,7 +149,7 @@ class Endboss extends MovableObject {
     ];
 
     /**
-     * Offset-Werte für die Kollisionserkennung.
+     * Offset values for collision detection.
      * @type {Object}
      */
     offset = {
@@ -161,8 +160,8 @@ class Endboss extends MovableObject {
     };
 
     /**
-     * Erzeugt eine Instanz des Endbosses.
-     * Der Endboss wird initial auf einer bestimmten Position und mit einer bestimmten Geschwindigkeit platziert.
+     * Creates an instance of the Endboss.
+     * The Endboss is initially placed at a specific position with a specific speed.
      * @constructor
      */
     constructor() {
@@ -174,7 +173,7 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Lädt alle Bilder für die Animationen des Endbosses.
+     * Loads all images for the Endboss animations.
      */
     loadAllImages() {
         this.loadImage(this.IMAGES_WALKING[0]);
@@ -186,7 +185,7 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Startet die Alarm-Animation des Endbosses.
+     * Starts the alert animation for the Endboss.
      */
     animateEndboss() {
         let i = 0;
@@ -205,7 +204,7 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Startet die Gehanimation des Endbosses.
+     * Starts the walking animation for the Endboss.
      */
     startWalkingAnimation() {
         let i = 0;
@@ -225,7 +224,7 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Startet die Angriffs-Animation des Endbosses.
+     * Starts the attack animation for the Endboss.
      */
     startAttackAnimation() {
         let i = 0;
@@ -241,9 +240,9 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Überprüft, ob die Angriffs-Animation gestoppt werden soll.
-     * @param {number} i - Der aktuelle Index der Animation.
-     * @returns {boolean} - Gibt zurück, ob die Animation gestoppt werden soll.
+     * Checks if the attack animation should stop.
+     * @param {number} i - The current animation frame index.
+     * @returns {boolean} - Whether the animation should stop.
      */
     shouldStopAttackAnimation(i) {
         if (i === this.IMAGES_ATTACK.length) {
@@ -260,18 +259,18 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Bewegt den Endboss während des Angriffs.
-     * @param {number} i - Der aktuelle Index der Animation.
+     * Moves the Endboss during an attack.
+     * @param {number} i - The current animation frame index.
      */
     endbossWalkingMovement(i) {
         if (i > 3 && i < 7) {
-            this.x += this.otherDirection ? 80 : -80;
+            this.x += this.otherDirection ? 100 : -100;
         }
     }
 
     /**
-     * Spielt den Angriffssound des Endbosses ab.
-     * @param {number} i - Der aktuelle Index der Animation.
+     * Plays the Endboss attack sound.
+     * @param {number} i - The current animation frame index.
      */
     endbossAttackSound(i) {
         if (i === 3) {
@@ -282,7 +281,7 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Unterbricht die Animation des Endbosses, wenn er verletzt wurde.
+     * Interrupts the Endboss animation if hit.
      */
     interruptForHurt() {
         this.isHit = false;
@@ -298,7 +297,7 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Setzt die Animation des Endbosses zurück.
+     * Returns the Endboss to its normal animation after being hurt.
      */
     returnToAnimation() {
         clearInterval(this.currentAnimationInterval);
@@ -308,7 +307,7 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Überprüft regelmäßig den Status des Endbosses und startet gegebenenfalls Animationen oder Richtungswechsel.
+     * Regularly checks the status of the Endboss and triggers animations or direction changes.
      */
     checkStatsInterval() {
         this.checkInterval = setInterval(() => {
@@ -320,7 +319,7 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Überprüft, ob der Endboss gestorben ist.
+     * Checks if the Endboss has died.
      */
     endbossIsDead() {
         if (this.energy <= 0) {
@@ -339,8 +338,8 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Führt die Todesanimation des Endbosses aus.
-     * @param {number} i - Der aktuelle Index der Todes-Animation.
+     * Executes the death animation of the Endboss.
+     * @param {number} i - The current death animation frame index.
      */
     animateDead(i) {
         this.playAnimationEndboss(this.IMAGES_DEAD, i);
@@ -348,7 +347,7 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Zeigt nach dem Tod des Endbosses die Endwerte und beendet das Spiel.
+     * Displays final stats after the Endboss dies and ends the game.
      */
     finalStats() {
         setTimeout(() => {
@@ -359,7 +358,7 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Beendet das Spiel und stoppt alle Endboss-Animationen.
+     * Ends the game and stops all Endboss animations.
      */
     endOfGame() {
         MovableObject.endbossDead = true;
@@ -372,8 +371,8 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Beendet die Alarm-Animation, wenn alle Bilder abgespielt wurden.
-     * @param {number} i - Der aktuelle Index der Alarm-Animation.
+     * Ends the alert animation after all frames have played.
+     * @param {number} i - The current alert animation frame index.
      */
     endAlertAnimation(i) {
         if (i >= this.IMAGES_ALERT.length) {
@@ -383,8 +382,8 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Beendet die Gehanimation, wenn alle Bilder abgespielt wurden.
-     * @param {number} i - Der aktuelle Index der Geh-Animation.
+     * Ends the walking animation after all frames have played.
+     * @param {number} i - The current walking animation frame index.
      */
     endWalkingAnimation(i) {
         if (i >= 20) {
@@ -394,9 +393,9 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Spielt eine Animation des Endbosses ab.
-     * @param {Array<string>} images - Die Liste der Bilder der Animation.
-     * @param {number} index - Der Index des aktuellen Bildes.
+     * Plays a specific animation frame of the Endboss.
+     * @param {Array<string>} images - The list of animation images.
+     * @param {number} index - The index of the current frame.
      */
     playAnimationEndboss(images, index) {
         let path = images[index % images.length];
@@ -404,20 +403,20 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Wechselt die Richtung des Endbosses, wenn er eine bestimmte Position erreicht.
+     * Changes the direction of the Endboss when it reaches a certain position.
      */
-    switchDirection() {
-        if (this.x <= 1000) {
+     switchDirection() {
+        if (this.x < Character.currentX) {
             this.endbossOtherDirection(-15, true);
-        } else if (this.x >= 2500) {
+        } else if (this.x > Character.currentX) {
             this.endbossOtherDirection(15, false);
         }
     }
 
     /**
-     * Setzt die Geschwindigkeit und die Richtung des Endbosses.
-     * @param {number} i - Die Geschwindigkeit.
-     * @param {boolean} direction - Die Richtung des Endbosses (true = nach rechts, false = nach links).
+     * Sets the speed and direction of the Endboss.
+     * @param {number} i - The speed.
+     * @param {boolean} direction - The direction (true = right, false = left).
      */
     endbossOtherDirection(i, direction) {
         this.otherDirection = direction;
@@ -425,7 +424,7 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Setzt die Y-Position des toten Endbosses, um einen Fall zu simulieren.
+     * Simulates the fall of the Endboss by changing its Y-position when dead.
      */
     endbossDeadSpeedY() {
         setTimeout(() => {
@@ -438,9 +437,8 @@ class Endboss extends MovableObject {
         }, 300);
         MovableObject.endbossIntervals.push(this.deadIntervalY);
     }
-
     /**
-     * Startet alle Animationen des Endbosses, wenn das Spiel beginnt.
+     * Starts all Endboss animations when the game begins.
      */
     startEndbossAnimations() {
         if (Character.endbossStart && !Character.endbossIsAnimate) {

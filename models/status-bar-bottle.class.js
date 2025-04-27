@@ -1,11 +1,11 @@
 /**
- * Klasse, die die Anzeige der Flaschen im Spiel darstellt.
- * Erbt von der `StatusBar`-Klasse und zeigt den aktuellen Stand der verfügbaren Flaschen als Statusleiste an.
+ * Class that represents the display of bottles in the game.
+ * Inherits from the `StatusBar` class and displays the current amount of available bottles as a status bar.
  */
 class StatusBarBottle extends StatusBar {
 
     /**
-     * @type {string[]} Liste der Bildpfade für die verschiedenen Flaschenstatus-Stufen.
+     * @type {string[]} List of image paths for the different bottle status levels.
      */
     IMAGES_BOTTLE = [
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/0.png',
@@ -17,13 +17,13 @@ class StatusBarBottle extends StatusBar {
     ];
 
     /**
-     * @type {number} Die Anzahl der verfügbaren Flaschen.
+     * @type {number} The number of available bottles.
      */
     bottleAmount = 3;
 
     /**
-     * Erstellt eine neue Instanz der StatusBarBottle-Klasse.
-     * Lädt die Bilder für die Flaschenanzeige und setzt die Anfangszahl der Flaschen.
+     * Creates a new instance of the StatusBarBottle class.
+     * Loads the images for the bottle display and sets the initial number of bottles.
      */
     constructor() {
         super();
@@ -33,9 +33,9 @@ class StatusBarBottle extends StatusBar {
     }
 
     /**
-     * Setzt die Anzahl der verfügbaren Flaschen und aktualisiert das angezeigte Bild der Flaschenstatus-Leiste.
+     * Sets the number of available bottles and updates the displayed image of the bottle status bar.
      * 
-     * @param {number} amount - Die neue Anzahl der verfügbaren Flaschen.
+     * @param {number} amount - The new number of available bottles.
      */
     setBottleAmount(amount) {
         this.bottleAmount = amount;
@@ -44,9 +44,9 @@ class StatusBarBottle extends StatusBar {
     }
 
     /**
-     * Bestimmt den Index des Bildes basierend auf der aktuellen Anzahl der verfügbaren Flaschen.
+     * Determines the index of the image based on the current number of available bottles.
      * 
-     * @returns {number} Der Index des Bildes, das den aktuellen Flaschenstatus darstellt.
+     * @returns {number} The index of the image representing the current bottle status.
      */
     resolveImageIndex() {
         if (this.bottleAmount >= 9) {
@@ -64,4 +64,3 @@ class StatusBarBottle extends StatusBar {
         }
     }
 }
-

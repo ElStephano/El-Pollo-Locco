@@ -1,12 +1,12 @@
 /**
- * Die Klasse `Coins` repräsentiert sammelbare Münzen im Spiel.
- * Sie erbt von `CollectibleObject` und enthält Animationen sowie
- * unterschiedliche Größen je nach aktuellem Bild.
+ * The `Coins` class represents collectible coins in the game.
+ * It inherits from `CollectibleObject` and includes animations as well as
+ * different sizes depending on the current image.
  */
 class Coins extends CollectibleObject {
 
     /**
-     * Bildpfade für Münzen-Animation.
+     * Image paths for coin animation.
      * @type {Array<string>}
      */
     IMAGES_COINS = [
@@ -15,7 +15,7 @@ class Coins extends CollectibleObject {
     ];
 
     /**
-     * Kollisionsoffset für präzise Hitbox.
+     * Collision offset for precise hitbox.
      * @type {{ top: number, right: number, bottom: number, left: number }}
      */
     offset = {
@@ -26,11 +26,11 @@ class Coins extends CollectibleObject {
     };
 
     /**
-     * Erstellt eine neue Münze mit gegebenen Koordinaten.
-     * Lädt Bilder, startet Animation und setzt Position.
+     * Creates a new coin at the given coordinates.
+     * Loads images, starts animation, and sets position.
      * 
-     * @param {number} x - Die X-Position der Münze.
-     * @param {number} y - Die Y-Position der Münze.
+     * @param {number} x - The X position of the coin.
+     * @param {number} y - The Y position of the coin.
      */
     constructor(x, y) {
         super();
@@ -42,7 +42,7 @@ class Coins extends CollectibleObject {
     }
 
     /**
-     * Setzt das Anfangsbild der Münze.
+     * Sets the initial image of the coin.
      */
     setCoins() {
         this.currentImageIndex = 0;
@@ -50,15 +50,13 @@ class Coins extends CollectibleObject {
     }
 
     /**
-     * Animiert die Münze durch Wechseln der Bilder im Intervall.
-     * Passt die Größe abhängig vom aktuellen Bild an.
+     * Animates the coin by switching images at an interval.
+     * Adjusts the size depending on the current image.
      */
     animate() {
         this.interval = setInterval(() => {
             this.currentImageIndex = (this.currentImageIndex + 1) % this.IMAGES_COINS.length;
             this.img = this.imageCache[this.IMAGES_COINS[this.currentImageIndex]];
-
-            // Anpassung der Größe je nach Bild
             let path = this.IMAGES_COINS[this.currentImageIndex];
             if (path === this.IMAGES_COINS[0]) {
                 this.width = 93;
@@ -71,3 +69,4 @@ class Coins extends CollectibleObject {
         MovableObject.backgroundIntervals.push(this.interval);
     }
 }
+

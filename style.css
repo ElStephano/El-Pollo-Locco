@@ -344,10 +344,6 @@ button:hover {
         width: 100%;
     }
 
-    .icons-container{
-        bottom: 60%;
-    }
-
     .button-container{
         top:85%;
         justify-content: space-between;
@@ -380,5 +376,8 @@ button:hover {
         height: 30px;
         font-size: 12px;
     }
-    
+}
+
+.icons-container-mobile{
+    bottom: 60%;
 }

@@ -1,27 +1,26 @@
 /**
- * Die `BackgroundObject`-Klasse repräsentiert ein einzelnes Hintergrundbild im Spiel.
- * Sie erbt von `MovableObject` und wird verwendet, um z. B. Landschafts-, Himmel- oder Bodenhintergründe darzustellen.
+ * The `BackgroundObject` class represents a single background image in the game.
+ * It inherits from `MovableObject` and is used to display elements such as landscapes, sky, or ground backgrounds.
  */
 class BackgroundObject extends MovableObject {
   
-  /** Höhe des Hintergrundobjekts in Pixel. */
+  /** Height of the background object in pixels. */
   height = 480;
 
-  /** Breite des Hintergrundobjekts in Pixel. */
+  /** Width of the background object in pixels. */
   width = 720;
 
   /**
-   * Erzeugt ein neues `BackgroundObject`.
-   * @param {string} imagePath - Der Pfad zum Bild des Hintergrundobjekts.
-   * @param {number} x - Die horizontale Position des Objekts im Spiel.
+   * Creates a new `BackgroundObject`.
+   * @param {string} imagePath - The path to the background object's image.
+   * @param {number} x - The horizontal position of the object in the game.
    */
   constructor(imagePath, x) {
     super().loadImage(imagePath);
     this.x = x;
 
     /**
-     * Setzt die vertikale Position des Objekts so,
-     * dass es am unteren Rand des sichtbaren Bereichs positioniert ist.
+     * Sets the vertical position of the object so that it is positioned at the bottom of the visible area.
      */
     this.y = 480 - this.height;
   }

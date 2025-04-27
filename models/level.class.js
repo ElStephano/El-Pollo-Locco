@@ -1,21 +1,21 @@
 /**
- * Repräsentiert ein Level im Spiel. Ein Level besteht aus verschiedenen Elementen wie Feinden, Wolken,
- * Hintergrundobjekten, Statusleisten für Gesundheit, Flaschen und Münzen sowie Sammelobjekten.
+ * Represents a level in the game. A level consists of various elements such as enemies, clouds,
+ * background objects, health status bars, bottles and coins, as well as collectible items.
  */
 class Level {
-    
+
     /**
-     * Erstellte Instanz eines Levels mit den gegebenen Parametern.
+     * Creates an instance of a level with the given parameters.
      * 
-     * @param {Array} enemies - Eine Liste von Feinden im Level.
-     * @param {Array} clouds - Eine Liste von Wolken im Level.
-     * @param {Array} backgroundObjects - Eine Liste von Hintergrundobjekten im Level.
-     * @param {StatusbarHealth} healthStatusBar - Die Statusleiste für die Gesundheit des Spielers.
-     * @param {StatusBarBottle} bottleStatusBar - Die Statusleiste für die Flaschen im Spiel.
-     * @param {StatusBarCoin} coinStatusBar - Die Statusleiste für die Münzen im Spiel.
-     * @param {StatusbarHealthEndboss} statusbarHealthEndboss - Die Statusleiste für die Gesundheit des Endgegners.
-     * @param {Object} collectibleObject - Das Sammelobjekt im Level (z. B. eine Flasche oder ein Power-Up).
-     * @param {number} level_end_x - Die X-Koordinate des Endes des Levels.
+     * @param {Array} enemies - A list of enemies in the level.
+     * @param {Array} clouds - A list of clouds in the level.
+     * @param {Array} backgroundObjects - A list of background objects in the level.
+     * @param {StatusbarHealth} healthStatusBar - The health status bar of the player.
+     * @param {StatusBarBottle} bottleStatusBar - The bottle status bar in the game.
+     * @param {StatusBarCoin} coinStatusBar - The coin status bar in the game.
+     * @param {StatusbarHealthEndboss} statusbarHealthEndboss - The health status bar of the final boss.
+     * @param {Object} collectibleObject - The collectible object in the level (e.g., a bottle or power-up).
+     * @param {number} level_end_x - The X-coordinate of the end of the level.
      * @constructor
      */
     constructor(enemies, clouds, backgroundObjects, healthStatusBar, bottleStatusBar, coinStatusBar, statusbarHealthEndboss, collectibleObject, level_end_x) {
@@ -30,3 +30,4 @@ class Level {
         this.level_end_x = level_end_x;
     }
 }
+

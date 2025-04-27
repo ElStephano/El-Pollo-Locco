@@ -255,7 +255,7 @@ class World {
  */
     checkCollectibleObjects() {
         this.level.collectibleObject.forEach((collectible) => {
-            if (this.character.isColliding(collectible)) {
+            if (this.character.isColliding(collectible)) {               
                 if (
                     collectible instanceof CollectibleBottles &&
                     this.level.bottleStatusBar.bottleAmount <= 9
@@ -291,9 +291,11 @@ class World {
             this.collectBottleSound.play();
             this.collectBottleSound.volume = 0.5;
         }
+        if (this.level.bottleStatusBar.bottleAmount < 10){
         this.level.bottleStatusBar.setBottleAmount(this.level.bottleStatusBar.bottleAmount + 1);
         this.level.collectibleObject.splice(this.level.collectibleObject.indexOf(collectible), 1);
         World.collectedBottles += 1;
+        }
     }
 
     /**

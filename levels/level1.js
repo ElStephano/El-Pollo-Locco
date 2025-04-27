@@ -1,18 +1,18 @@
 let level1;
 
 /**
- * Initialisiert das Level mit allen nötigen Spielobjekten:
- * - Gegner (Enemies)
- * - Endgegner (Endboss)
- * - Wolken (Clouds)
- * - Hintergrundebenen (BackgroundObjects)
- * - Statusleisten (Health, Coins, Bottles, Endboss-Health)
- * - Sammelbare Objekte (Bottles, Coins)
- * - Level-Ende Position
+ * Initializes the level with all necessary game objects:
+ * - Enemies
+ * - Endboss
+ * - Clouds
+ * - Background layers (BackgroundObjects)
+ * - Status bars (Health, Coins, Bottles, Endboss Health)
+ * - Collectible items (Bottles, Coins)
+ * - Level end position
  */
 function initLevel() {
     level1 = new Level(
-        // 🐍 Gegner
+        // 🐍 Enemies
         [
             new Enemy(600),
             new Enemy(800),
@@ -27,7 +27,7 @@ function initLevel() {
             new Endboss()
         ],
 
-        // ☁️ Wolken
+        // ☁️ Clouds
         [
             new Cloud(300),
             new Cloud(1200),
@@ -36,9 +36,9 @@ function initLevel() {
             new Cloud(4200)
         ],
 
-        // 🏞 Hintergrundobjekte (jeweils air + 3 Ebenen pro Segment)
+        // 🏞 Background objects (each segment has air + 3 layers)
         [
-            // Segment 1 (vor dem Start sichtbar)
+            // Segment 1 (visible before the start)
             new BackgroundObject('img/5_background/layers/air.png', -719),
             new BackgroundObject('img/5_background/layers/3_third_layer/2.png', -719),
             new BackgroundObject('img/5_background/layers/2_second_layer/2.png', -719),
@@ -63,38 +63,42 @@ function initLevel() {
             new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 1438),
 
             // Segment 5
-            new BackgroundObject('img/5_background/layers/air.png', 2156),
-            new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 2156),
-            new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 2156),
-            new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 2156),
+            new BackgroundObject('img/5_background/layers/air.png', 2157),
+            new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 2157),
+            new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 2157),
+            new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 2157),
 
             // Segment 6
-            new BackgroundObject('img/5_background/layers/air.png', 2875),
-            new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 2875),
-            new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 2875),
-            new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 2875),
+            new BackgroundObject('img/5_background/layers/air.png', 2876),
+            new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 2876),
+            new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 2876),
+            new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 2876),
 
             // Segment 7
-            new BackgroundObject('img/5_background/layers/air.png', 3549),
-            new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 3549),
-            new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 3549),
-            new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 3549)
+            new BackgroundObject('img/5_background/layers/air.png', 3595),
+            new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 3595),
+            new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 3595),
+            new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 3595)
         ],
 
-        // ❤️ Statusleiste Gesundheit (Spieler)
+        // ❤️ Health status bar (player)
         new StatusbarHealth(),
 
-        // 🍼 Statusleiste Flaschen
+        // 🍼 Bottle status bar
         new StatusBarBottle(),
 
-        // 🪙 Statusleiste Münzen
+        // 🪙 Coin status bar
         new StatusBarCoin(),
 
-        // 💀 Endboss-Lebensanzeige
+        // 💀 Endboss health bar
         new StatusbarHealthEndboss(),
 
-        // ✨ Sammelbare Objekte (Flaschen und Münzen)
+        // ✨ Collectible items (bottles and coins)
         [
+            new CollectibleBottles(),
+            new CollectibleBottles(),
+            new CollectibleBottles(),
+            new CollectibleBottles(),
             new CollectibleBottles(),
             new CollectibleBottles(),
             new CollectibleBottles(),
@@ -105,11 +109,16 @@ function initLevel() {
             new Coins(400, 150),
             new Coins(450, 130),
             new Coins(800, 200),
-            new Coins(1000, 250),
-            new Coins(1300, 250)
+            new Coins(1000, 130),
+            new Coins(1500, 150),
+            new Coins(1900, 130),
+            new Coins(2200, 130),
+            new Coins(2400, 200),
+            new Coins(2500, 130),
+            new Coins(3000, 110)
         ],
 
-        // 🏁 Level-Ende X-Position
+        // 🏁 Level end X-position
         3549
     );
 }

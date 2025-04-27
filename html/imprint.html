@@ -9,107 +9,115 @@
 </head>
 
 <style>
-body {
-    background-image: url('../img/01_page_background/page-background.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    color: white;
-    font-family: 'Chentenario';
-    overflow: scroll; 
-}
+    body {
+        background-image: url('../img/01_page_background/page-background.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: white;
+        font-family: 'Chentenario';
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
 
-@font-face {
-    font-family: 'Chentenario';
-    src: url('../fonts/Chentenario.otf') format('opentype');
-    font-weight: lighter;
-    font-style: italic;
-}
+    .main {
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
 
-h1, h2, p {
-    position: relative;
-    opacity: 0;
-    animation: slideIn 2s forwards;
-}
+    @font-face {
+        font-family: 'Chentenario';
+        src: url('../fonts/Chentenario.otf') format('opentype');
+        font-weight: lighter;
+        font-style: italic;
+    }
 
-h1 {
-    animation-delay: 0.5s;
-}
-
-h2 {
-    animation-delay: 1s;
-}
-
-p {
-    animation-delay: 1.5s;
-}
-
-@keyframes slideIn {
-    0% {
-        right: -100%;
+    h1,
+    h2,
+    p {
+        position: relative;
         opacity: 0;
+        animation: slideIn 2s forwards;
     }
-    100% {
-        right: 0;
-        opacity: 1;
+
+    h1 {
+        animation-delay: 0.5s;
     }
-}
 
-button {
-    background-color: rgb(224, 146, 51);
-    font-family: 'Chentenario', '';
-    border-radius: 4px;
-    cursor: pointer;
-    height: 32px;
-    width: 150px;
-    position:absolute;
-    bottom: 16px;
-    left: 16px;
-}
+    h2 {
+        animation-delay: 1s;
+    }
 
-button a {
-    color: white;
-    text-decoration: none;
-}
+    p {
+        animation-delay: 1.5s;
+    }
 
-button:hover {
-    transition: ease-in-out 0.2s;
-    transform: translate(1px, 1px);
-    background-color: gold;
-}
+    @keyframes slideIn {
+        0% {
+            right: -100%;
+            opacity: 0;
+        }
 
-@media only screen and (max-width: 720px){
+        100% {
+            right: 0;
+            opacity: 1;
+        }
+    }
+
     button {
-        bottom: 85%;
-        left: 74%;
+        background-color: rgb(224, 146, 51);
+        font-family: 'Chentenario', '';
+        border-radius: 4px;
+        cursor: pointer;
+        height: 32px;
+        width: 150px;
+        position: absolute;
+        bottom: 16px;
+        left: 16px;
     }
-}
 
-@media only screen and (max-height: 480px){
-    button {
-        bottom: 85%;
-        left: 74%;
+    button a {
+        color: white;
+        text-decoration: none;
     }
-}
 
+    button:hover {
+        transition: ease-in-out 0.2s;
+        transform: translate(1px, 1px);
+        background-color: gold;
+    }
+
+    @media only screen and (max-width: 720px) {
+        button {
+            bottom: 85%;
+            left: 74%;
+        }
+    }
+
+    @media only screen and (max-height: 480px) {
+        button {
+            bottom: 85%;
+            left: 74%;
+        }
+    }
 </style>
 
 <body>
-    <h1 id="impressum-heading">Impressum</h1>
-    <h2 id="m46">Diensteanbieter</h2>
-    <p>Stephan Steiner</p>
-    <p>Brandenburgerstraße 1 </p>
-    <p>98765 Buxdehude</p>
-    <p>Deutschland</p>
+    <div class="main">
+        <h1 id="impressum-heading">Impressum</h1>
+        <h2 id="m46">Diensteanbieter</h2>
+        <p>Stephan Steiner</p>
+        <p>Brandenburgerstraße 1 </p>
+        <p>98765 Buxdehude</p>
+        <p>Deutschland</p>
 
-    <h2 id="m56">Kontaktmöglichkeiten</h2>
-    <p>E-Mail-Adresse: <a href="mailto:elPolloLoco@gmx.de">elPolloLoco@gmx.de</a></p>
-    <p>Telefon: 0123456789</p>
+        <h2 id="m56">Kontaktmöglichkeiten</h2>
+        <p>E-Mail-Adresse: <a href="mailto:elPolloLoco@gmx.de">elPolloLoco@gmx.de</a></p>
+        <p>Telefon: 0123456789</p>
 
-    <p class="seal"></p>
-    <button><a href="../index.html">zurück</a></button>
-
-    <!-- <script src="script.js"></script> -->
+        <p class="seal"></p>
+        <button><a href="../index.html">zurück</a></button>
+    </div>
 </body>
 
 </html>

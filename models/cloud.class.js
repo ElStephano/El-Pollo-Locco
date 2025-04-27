@@ -1,26 +1,26 @@
 /**
- * Die Klasse `Cloud` repräsentiert eine bewegliche Wolke im Hintergrund des Spiels.
- * Sie erbt von `MovableObject` und bewegt sich kontinuierlich nach links.
+ * The `Cloud` class represents a moving cloud in the background of the game.
+ * It inherits from `MovableObject` and continuously moves to the left.
  */
 class Cloud extends MovableObject {
 
-    /** Die vertikale Position der Wolke. */
+    /** The vertical position of the cloud. */
     y = 25;
 
-    /** Die Höhe der Wolke in Pixel. */
+    /** The height of the cloud in pixels. */
     height = 300;
 
-    /** Die Breite der Wolke in Pixel. */
+    /** The width of the cloud in pixels. */
     width = 600;
 
-    /** Intervall-ID für die Animation der Wolke. */
+    /** Interval ID for the cloud's animation. */
     cloudInterval = null;
 
     /**
-     * Erstellt eine neue Instanz der Wolke an der gegebenen X-Position.
-     * Lädt das Bild der Wolke und startet die Bewegung.
+     * Creates a new instance of a cloud at the given X position.
+     * Loads the cloud image and starts the movement.
      * 
-     * @param {number} x - Die horizontale Startposition der Wolke.
+     * @param {number} x - The horizontal starting position of the cloud.
      */
     constructor(x) {
         super().loadImage('img/5_background/layers/4_clouds/1.png');
@@ -29,13 +29,14 @@ class Cloud extends MovableObject {
     }
 
     /**
-     * Startet die kontinuierliche Bewegung der Wolke nach links.
-     * Fügt das Animationsintervall dem Hintergrund-Intervall-Array hinzu.
+     * Starts the continuous movement of the cloud to the left.
+     * Adds the animation interval to the background intervals array.
      */
     animate() {
         this.cloudInterval = setInterval(() => {
             this.moveLeft();
-        }, 1000 / 60); // 60 FPS
+        }, 1000 / 60);
         MovableObject.backgroundIntervals.push(this.cloudInterval);
     }
 }
+

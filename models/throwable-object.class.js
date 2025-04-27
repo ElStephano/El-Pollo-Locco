@@ -1,16 +1,16 @@
 /**
- * Klasse, die ein Objekt beschreibt, das geworfen werden kann.
- * Erbt von der Klasse `MovableObject` und stellt ein geworfenes Objekt (z.B. eine Flasche) dar.
- * Das Objekt kann geworfen werden, trifft auf Hindernisse und spielt eine Animation ab, wenn es trifft.
+ * Class that describes an object that can be thrown.
+ * Inherits from the `MovableObject` class and represents a thrown object (e.g., a bottle).
+ * The object can be thrown, hits obstacles, and plays an animation when it hits something.
  */
 class ThrowableObject extends MovableObject {
     /**
-     * @type {boolean} Gibt an, ob das Objekt getroffen wurde.
+     * @type {boolean} Indicates whether the object has been hit.
      */
     isHit = false;
 
     /**
-     * @type {string[]} Liste der Bildpfade für die Rotationsanimation der Flasche.
+     * @type {string[]} List of image paths for the bottle's rotation animation.
      */
     IMAGES_BOTTLE_THROW = [
         'img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
@@ -20,7 +20,7 @@ class ThrowableObject extends MovableObject {
     ];
 
     /**
-     * @type {string[]} Liste der Bildpfade für die Spritzanimation der Flasche, wenn sie getroffen wurde.
+     * @type {string[]} List of image paths for the bottle's splash animation when it hits something.
      */
     IMAGES_BOTTLE_HIT = [
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
@@ -32,11 +32,11 @@ class ThrowableObject extends MovableObject {
     ];
 
     /**
-     * @type {Object} Offset-Werte, die die Position des Objekts beeinflussen.
-     * @property {number} top Abstand von der oberen Kante.
-     * @property {number} right Abstand von der rechten Kante.
-     * @property {number} bottom Abstand von der unteren Kante.
-     * @property {number} left Abstand von der linken Kante.
+     * @type {Object} Offset values that affect the position of the object.
+     * @property {number} top Distance from the top edge.
+     * @property {number} right Distance from the right edge.
+     * @property {number} bottom Distance from the bottom edge.
+     * @property {number} left Distance from the left edge.
      */
     offset = {
         'top': 10,
@@ -46,10 +46,10 @@ class ThrowableObject extends MovableObject {
     };
 
     /**
-     * Erstellt ein neues `ThrowableObject` an den angegebenen Positionen.
+     * Creates a new `ThrowableObject` at the specified positions.
      * 
-     * @param {number} x - Die X-Position des Objekts.
-     * @param {number} y - Die Y-Position des Objekts.
+     * @param {number} x - The X position of the object.
+     * @param {number} y - The Y position of the object.
      */
     constructor(x, y) {
         super();
@@ -67,10 +67,10 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Wirft das Objekt in die angegebene Richtung.
+     * Throws the object in the specified direction.
      * 
-     * @param {number} x - Die X-Position, in die das Objekt geworfen wird.
-     * @param {number} y - Die Y-Position, in die das Objekt geworfen wird.
+     * @param {number} x - The X position to throw the object to.
+     * @param {number} y - The Y position to throw the object to.
      */
     throw(x, y) {
         let direction = world.character.otherDirection;
@@ -86,9 +86,9 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Bestimmt die Richtung, in die das Objekt geworfen wird.
+     * Determines the direction in which the object will be thrown.
      * 
-     * @param {boolean} direction - Gibt an, ob das Objekt nach links oder rechts geworfen wird.
+     * @param {boolean} direction - Indicates whether the object is thrown left or right.
      */
     throwedDirection(direction) {
         if (!direction) {
@@ -99,7 +99,7 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Wirft das Objekt nach rechts.
+     * Throws the object to the right.
      */
     throwRightDirection() {
         this.throwInterval = setInterval(() => {
@@ -108,7 +108,7 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Wirft das Objekt nach links.
+     * Throws the object to the left.
      */
     throwLeftDirection() {
         this.throwInterval = setInterval(() => {
@@ -117,11 +117,11 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Wird aufgerufen, wenn das Objekt auf ein anderes Objekt trifft.
-     * Stoppt die Bewegung und spielt die Trefferanimation ab.
+     * Called when the object hits another object.
+     * Stops the movement and plays the hit animation.
      * 
-     * @param {number} x - Die X-Position des Treffers.
-     * @param {number} y - Die Y-Position des Treffers.
+     * @param {number} x - The X position of the hit.
+     * @param {number} y - The Y position of the hit.
      */
     bottleHit(x, y) {
         this.isHit = true;
@@ -136,7 +136,7 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Startet die Animation, die abgespielt wird, wenn die Flasche getroffen wird.
+     * Starts the animation that plays when the bottle is hit.
      */
     playHitAnimation() {
         let frameCount = 0;
@@ -146,11 +146,11 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Aktualisiert die Hit-Animation während der Spielzeit.
+     * Updates the hit animation during gameplay.
      * 
-     * @param {number} interval - Das Intervall für die Animationsaktualisierung.
-     * @param {number} frameCount - Der aktuelle Frame in der Animation.
-     * @param {number} maxFrames - Die maximale Anzahl der Frames in der Animation.
+     * @param {number} interval - The interval for the animation update.
+     * @param {number} frameCount - The current frame in the animation.
+     * @param {number} maxFrames - The maximum number of frames in the animation.
      */
     updateHitAnimation(interval, frameCount, maxFrames) {
         this.playAnimation(this.IMAGES_BOTTLE_HIT);
@@ -160,9 +160,9 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Entfernt das Objekt nach dem Ende der Trefferanimation.
+     * Removes the object after the hit animation ends.
      * 
-     * @param {number} interval - Das Intervall der Animationsaktualisierung, das gestoppt wird.
+     * @param {number} interval - The interval for the animation update that will be stopped.
      */
     removeAfterAnimation(interval) {
         clearInterval(interval);

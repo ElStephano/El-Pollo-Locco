@@ -1,54 +1,54 @@
 /**
- * Die Klasse `DrawableObject` stellt Objekte dar, die auf dem Canvas gezeichnet werden können.
- * Sie enthält Funktionen zum Laden von Bildern, Zeichnen von Objekten und das Zeichnen von Rahmen und inneren Rahmen für verschiedene Objektarten.
+ * The `DrawableObject` class represents objects that can be drawn on the canvas.
+ * It contains functions for loading images, drawing objects, and drawing borders and inner frames for different object types.
  */
 class DrawableObject {
     
     /**
-     * Das Bild, das für das Objekt verwendet wird.
+     * The image used for the object.
      * @type {HTMLImageElement}
      */
     img;
 
     /**
-     * Der Cache für die Bilder des Objekts.
+     * The cache for the object's images.
      * @type {Object<string, HTMLImageElement>}
      */
     imageCache = {};
 
     /**
-     * Der Index des aktuellen Bildes des Objekts.
+     * The index of the object's current image.
      * @type {number}
      */
     currentImage = 0;
 
     /**
-     * Die x-Koordinate des Objekts.
+     * The x-coordinate of the object.
      * @type {number}
      */
     x = 120;
 
     /**
-     * Die y-Koordinate des Objekts.
+     * The y-coordinate of the object.
      * @type {number}
      */
     y = 280;
 
     /**
-     * Die Höhe des Objekts.
+     * The height of the object.
      * @type {number}
      */
     height = 150;
 
     /**
-     * Die Breite des Objekts.
+     * The width of the object.
      * @type {number}
      */
     width = 100;
 
     /**
-     * Lädt ein Bild für das Objekt.
-     * @param {string} path Der Pfad zum Bild.
+     * Loads an image for the object.
+     * @param {string} path The path to the image.
      */
     loadImage(path) {
         this.img = new Image();
@@ -56,31 +56,31 @@ class DrawableObject {
     }
 
     /**
-     * Zeichnet das Objekt auf dem Canvas.
-     * @param {CanvasRenderingContext2D} ctx Der Canvas-Kontext, auf dem das Objekt gezeichnet wird.
+     * Draws the object on the canvas.
+     * @param {CanvasRenderingContext2D} ctx The canvas context on which the object is drawn.
      */
     draw(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
     /**
-     * Zeichnet einen Rahmen um das Objekt, wenn es eine Instanz von `Enemy`, `CollectibleObject`, `Character`, `Endboss` oder `ThrowableObject` ist.
-     * @param {CanvasRenderingContext2D} ctx Der Canvas-Kontext, auf dem der Rahmen gezeichnet wird.
+     * Draws a border around the object if it is an instance of `Enemy`, `CollectibleObject`, `Character`, `Endboss`, or `ThrowableObject`.
+     * @param {CanvasRenderingContext2D} ctx The canvas context on which the border is drawn.
      */
     drawFrame(ctx) {
         if (this instanceof Enemy || this instanceof CollectibleObject ||
             this instanceof Character || this instanceof Endboss || this instanceof ThrowableObject) {
             ctx.beginPath();
             ctx.lineWidth = '1';
-            ctx.strokeStyle = 'blue';
+            ctx.strokeStyle = 'transparent';
             ctx.rect(this.x, this.y, this.width, this.height);
             ctx.stroke();
         }
     }
 
     /**
-     * Zeichnet einen inneren Rahmen für verschiedene Objekttypen, um zusätzliche Details hervorzuheben.
-     * @param {CanvasRenderingContext2D} ctx Der Canvas-Kontext, auf dem der innere Rahmen gezeichnet wird.
+     * Draws an inner frame for various object types to highlight additional details.
+     * @param {CanvasRenderingContext2D} ctx The canvas context on which the inner frame is drawn.
      */
     drawInnerFrame(ctx) {
         if (this instanceof Character) {
@@ -95,45 +95,45 @@ class DrawableObject {
     }
 
     /**
-     * Zeichnet den inneren Rahmen für ein `ThrowableObject`.
-     * @param {CanvasRenderingContext2D} ctx Der Canvas-Kontext, auf dem der innere Rahmen gezeichnet wird.
+     * Draws the inner frame for a `ThrowableObject`.
+     * @param {CanvasRenderingContext2D} ctx The canvas context on which the inner frame is drawn.
      */
     drawInnerRectThrowableObject(ctx) {
         this.drawRedRect(ctx);
     }
 
     /**
-     * Zeichnet den inneren Rahmen für ein `Character`.
-     * @param {CanvasRenderingContext2D} ctx Der Canvas-Kontext, auf dem der innere Rahmen gezeichnet wird.
+     * Draws the inner frame for a `Character`.
+     * @param {CanvasRenderingContext2D} ctx The canvas context on which the inner frame is drawn.
      */
     drawInnerRectCharacter(ctx) {
         this.drawRedRect(ctx);
     }
 
     /**
-     * Zeichnet den inneren Rahmen für ein `Enemy` oder `CollectibleObject`.
-     * @param {CanvasRenderingContext2D} ctx Der Canvas-Kontext, auf dem der innere Rahmen gezeichnet wird.
+     * Draws the inner frame for an `Enemy` or `CollectibleObject`.
+     * @param {CanvasRenderingContext2D} ctx The canvas context on which the inner frame is drawn.
      */
     drawInnerRectEnemyOrCollectible(ctx) {
         this.drawRedRect(ctx);
     }
 
     /**
-     * Zeichnet den inneren Rahmen für ein `Endboss`.
-     * @param {CanvasRenderingContext2D} ctx Der Canvas-Kontext, auf dem der innere Rahmen gezeichnet wird.
+     * Draws the inner frame for an `Endboss`.
+     * @param {CanvasRenderingContext2D} ctx The canvas context on which the inner frame is drawn.
      */
     drawInnerRectEndboss(ctx) {
         this.drawRedRect(ctx);
     }
 
     /**
-     * Zeichnet ein rotes Rechteck als inneren Rahmen des Objekts.
-     * @param {CanvasRenderingContext2D} ctx Der Canvas-Kontext, auf dem das rote Rechteck gezeichnet wird.
+     * Draws a red rectangle as the inner frame of the object.
+     * @param {CanvasRenderingContext2D} ctx The canvas context on which the red rectangle is drawn.
      */
     drawRedRect(ctx) {
         ctx.beginPath();
         ctx.lineWidth = '1';
-        ctx.strokeStyle = 'red';
+        ctx.strokeStyle = 'transparent';
         ctx.rect(
             this.x + this.offset.left,
             this.y + this.offset.top,
@@ -144,8 +144,8 @@ class DrawableObject {
     }
 
     /**
-     * Lädt mehrere Bilder und speichert sie im Image-Cache.
-     * @param {Array<string>} arr Ein Array von Bildpfaden, die geladen werden sollen.
+     * Loads multiple images and stores them in the image cache.
+     * @param {Array<string>} arr An array of image paths to be loaded.
      */
     loadImages(arr) {
         arr.forEach((path) => {

@@ -1,11 +1,11 @@
 /**
- * Klasse, die die Anzeige der Münzen im Spiel darstellt.
- * Erbt von der `StatusBar`-Klasse und zeigt den aktuellen Stand der gesammelten Münzen als Statusleiste an.
+ * Class that represents the display of coins in the game.
+ * Inherits from the `StatusBar` class and shows the current number of collected coins as a status bar.
  */
 class StatusBarCoin extends StatusBar {
 
     /**
-     * @type {string[]} Liste der Bildpfade für die verschiedenen Münzstatus-Stufen.
+     * @type {string[]} List of image paths for the different coin status levels.
      */
     IMAGES_COIN_STATUSBAR = [
         'img/7_statusbars/1_statusbar/1_statusbar_coin/orange/0.png',
@@ -17,13 +17,13 @@ class StatusBarCoin extends StatusBar {
     ];
 
     /**
-     * @type {number} Die Anzahl der gesammelten Münzen (von 0 bis 5).
+     * @type {number} The number of collected coins (from 0 to 5).
      */
     coinAmount = 1;
 
     /**
-     * Erstellt eine neue Instanz der StatusBarCoin-Klasse.
-     * Lädt die Bilder für die Münzanzeige und setzt die Anfangszahl der Münzen auf 0.
+     * Creates a new instance of the StatusBarCoin class.
+     * Loads the images for the coin display and sets the initial number of coins to 0.
      */
     constructor() {
         super();
@@ -33,9 +33,9 @@ class StatusBarCoin extends StatusBar {
     }
 
     /**
-     * Setzt die Anzahl der gesammelten Münzen und aktualisiert das angezeigte Bild der Münzstatus-Leiste.
+     * Sets the number of collected coins and updates the displayed image of the coin status bar.
      * 
-     * @param {number} coinsAmount - Die neue Anzahl der gesammelten Münzen (zwischen 0 und 5).
+     * @param {number} coinsAmount - The new number of collected coins (between 0 and 5).
      */
     setCoins(coinsAmount) {
         this.coinAmount = coinsAmount;
@@ -44,23 +44,24 @@ class StatusBarCoin extends StatusBar {
     }
 
     /**
-     * Bestimmt den Index des Bildes basierend auf der aktuellen Anzahl der gesammelten Münzen.
+     * Determines the index of the image based on the current number of collected coins.
      * 
-     * @returns {number} Der Index des Bildes, das den aktuellen Münzstatus darstellt.
+     * @returns {number} The index of the image representing the current coin status.
      */
     resolveImageIndex() {
-        if (this.coinAmount == 5) {
+        if (this.coinAmount === 9 || this.coinAmount === 10)  {
             return 5;
-        } else if (this.coinAmount == 4) {
+        } else if (this.coinAmount === 7 || this.coinAmount === 8) {
             return 4;
-        } else if (this.coinAmount == 3) {
+        } else if (this.coinAmount === 5 || this.coinAmount === 6) {
             return 3;
-        } else if (this.coinAmount == 2) {
+        } else if (this.coinAmount === 3 || this.coinAmount === 4) {
             return 2;
-        } else if (this.coinAmount == 1) {
+        } else if (this.coinAmount === 1 || this.coinAmount === 2) {
             return 1;
         } else {
             return 0;
         }
     }
 }
+

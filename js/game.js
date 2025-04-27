@@ -1,29 +1,29 @@
 /**
- * Canvas-Element des Spiels
+ * Canvas element of the game
  * @type {HTMLCanvasElement}
  */
 let canvas;
 
 /**
- * Die Spielwelt
+ * The game world
  * @type {World}
  */
 let world;
 
 /**
- * Tastatursteuerung
+ * Keyboard control
  * @type {Keyboard}
  */
 keyboard = new Keyboard()
 
 /**
- * Mobile Steuerung
+ * Mobile control
  * @type {MobileControls}
  */
 let mobileControls;
 
 /**
- * Initialisiert das Spiel: Canvas, Welt und mobile Steuerung
+ * Initializes the game: Canvas, world and mobile controls
  */
 function init() {
     canvas = document.getElementById('canvas');
@@ -32,7 +32,7 @@ function init() {
 }
 
 /**
- * Initialisiert die Tastatursteuerung
+ * Initializes the keyboard control
  */
 function keySettings() {
     window.addEventListener('keydown', (event) => {
@@ -87,7 +87,7 @@ window.addEventListener('resize', checkOrientation);
 window.addEventListener('orientationchange', checkOrientation);
 
 /**
- * Zeigt eine Warnung, wenn das Gerät im Hochformat ist
+ * Displays a warning when the device is in portrait mode
  */
 function checkOrientation() {
     const warning = document.getElementById('orientation-warning');
@@ -99,7 +99,7 @@ function checkOrientation() {
 }
 
 /**
- * Startet das Spiel
+ * Start the game
  */
 function startGame() {
     removeOldTouchBtns()
@@ -112,7 +112,7 @@ function startGame() {
 }
 
 /**
- * Zeigt Touch-Buttons auf Mobilgeräten
+ * Shows touch buttons on mobile devices
  */
 function showTouchButtons() {
     let touch = document.getElementById("mobileControls")
@@ -122,7 +122,7 @@ function showTouchButtons() {
 }
 
 /**
- * Startet das Spiel neu
+ * Restart the game
  */
 function restartGame() {
     clearAllInterval()
@@ -137,7 +137,7 @@ function restartGame() {
 }
 
 /**
- * Setzt das Level zurück und initialisiert die Welt neu
+ * Resets the level and reinitializes the world
  */
 function resetLevel() {
     setTimeout(() => {
@@ -153,7 +153,7 @@ function resetLevel() {
 }
 
 /**
- * Überprüft und zeigt die mobile Steuerung, wenn nötig
+ * Checks and displays the mobile control if necessary
  */
 function checkMobileControl() {
     let touch = document.getElementById("mobileControls");
@@ -163,7 +163,7 @@ function checkMobileControl() {
 }
 
 /**
- * Entfernt den Gewinnbildschirm
+ * Removes the winning screen
  */
 function removeWinningScreen() {
     let btnContainer = document.getElementById('buttonContainer');
@@ -177,7 +177,7 @@ function removeWinningScreen() {
 }
 
 /**
- * Entfernt alte Touch-Buttons
+ * Stops all active intervals
  */
 function removeOldTouchBtns() {
     let oldControls = document.getElementById('mobileControls');
@@ -187,7 +187,7 @@ function removeOldTouchBtns() {
 }
 
 /**
- * Stoppt alle aktiven Intervalls
+ * Stops all active intervals
  */
 function clearAllInterval() {
     for (let i = 1; i < 99999; i++) {
@@ -196,7 +196,7 @@ function clearAllInterval() {
 }
 
 /**
- * Stoppt die Hintergrundmusik
+ * Stop the background music
  */
 function stopMusic() {
     if (world && world.backgroundMusic) {
@@ -206,7 +206,7 @@ function stopMusic() {
 }
 
 /**
- * Zeigt das Hauptmenü an
+ * Displays the main menu
  */
 function backToMainMenu() {
     document.getElementById('startScreen').classList.remove('d-none')
@@ -215,13 +215,13 @@ function backToMainMenu() {
 }
 
 /**
- * Zeigt oder versteckt die Tastenbelegung
+ * Shows or hides the key assignment
  */
 function keyAssignment() {
     document.getElementById('keyAssignment').classList.toggle('d-none')
 }
 
-// Mute-Button Event nach kleiner Verzögerung
+// Mute button event after a short delay
 setTimeout(() => {
     document.getElementById('muteButton').addEventListener('click', () => {
         if (world) {
@@ -231,7 +231,7 @@ setTimeout(() => {
 }, 100)
 
 /**
- * Schaltet zwischen Vollbildmodus und normalem Modus um
+ * Switches between full screen mode and normal mode
  */
 function toggleFullscreen() {
     let fullscreenContainer = document.getElementById('fullscreenContainer');
@@ -245,7 +245,7 @@ function toggleFullscreen() {
 }
 
 /**
- * Aktiviert den Vollbildmodus für ein Element
+ * Activates full screen mode for an element
  * @param {HTMLElement} element 
  */
 function enterFullscreen(element) {
@@ -259,7 +259,7 @@ function enterFullscreen(element) {
 }
 
 /**
- * Beendet den Vollbildmodus
+ * Exits full screen mode
  */
 function exitFullscreen() {
     if(document.exitFullscreen) {
@@ -270,7 +270,7 @@ function exitFullscreen() {
 }
 
 /**
- * Fügt dem Canvas und Overlay spezielle Vollbild-Stile hinzu
+ * Adds special fullscreen styles to the canvas and overlay
  */
 function fullscreenStyle() {
     let canvas = document.getElementById('canvas')
@@ -280,7 +280,7 @@ function fullscreenStyle() {
 }
 
 /**
- * Entfernt Vollbild-Stile von Canvas und Overlay
+ * Removes fullscreen styles from Canvas and Overlay
  */
 function closeFullscreen() {
     let canvas = document.getElementById('canvas')

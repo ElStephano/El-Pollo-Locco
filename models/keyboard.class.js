@@ -1,35 +1,35 @@
 /**
- * Repräsentiert die Tastaturzustände für die Steuerung des Spielers.
- * Die Klasse verfolgt, welche Tasten gedrückt sind, um die Bewegung und Aktionen des Spielers zu steuern.
+ * Represents the keyboard states for player control.
+ * The class tracks which keys are pressed to control the player's movement and actions.
  */
 class Keyboard {
-    
+
     /**
-     * Der aktuelle Zustand der 'Links'-Taste.
+     * The current state of the 'Left' key.
      * @type {boolean}
      */
     LEFT = false;
-    
+
     /**
-     * Der aktuelle Zustand der 'Rechts'-Taste.
+     * The current state of the 'Right' key.
      * @type {boolean}
      */
     RIGHT = false;
-    
+
     /**
-     * Der aktuelle Zustand der 'Hoch'-Taste.
+     * The current state of the 'Up' key.
      * @type {boolean}
      */
     UP = false;
-    
+
     /**
-     * Der aktuelle Zustand der 'Runter'-Taste.
+     * The current state of the 'Down' key.
      * @type {boolean}
      */
     DOWN = false;
-    
+
     /**
-     * Der aktuelle Zustand der 'Sprung'-Taste (Leertaste).
+     * The current state of the 'Jump' key (Space bar).
      * @type {boolean}
      */
     SPACE = false;
